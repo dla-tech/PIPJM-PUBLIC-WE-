@@ -25,7 +25,6 @@
       align-items: center;
       gap: 30px;
       background-color: rgba(0, 0, 0, 0.5);
-      z-index: 10;
     }
 
     .main-menu button {
@@ -46,18 +45,7 @@
       text-align: center;
     }
 
-    /* Contenedor para cargar el contenido externo */
-    #content {
-      display: none;
-      position: absolute;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      overflow-y: auto;
-      background-color: white;
-      z-index: 20;
-    }
-
+    /* Logo giratorio */
     .floating-logo {
       position: fixed;
       bottom: 20px;
@@ -79,55 +67,34 @@
 
   <!-- MENÚ PRINCIPAL -->
   <div class="main-menu" id="mainMenu">
-    <button onclick="loadScript('https://dla-tech.github.io/botones/programacion.js')">
+    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/programacion.js')">
       <span style="font-size: 40px;">📅</span><br>
       <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver programación de Cultos</span>
     </button>
 
-    <button onclick="loadScript('https://dla-tech.github.io/botones/info.js')">
+    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/info.js')">
       <span style="font-size: 40px;">📜</span><br>
       <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Info del templo y Congregación</span>
     </button>
 
-    <button onclick="loadScript('https://dla-tech.github.io/botones/peticiones.js')">
+    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/peticiones.js')">
       <span style="font-size: 40px;">🙏</span><br>
       <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Peticiones o Necesidad</span>
     </button>
 
-    <button onclick="loadScript('https://dla-tech.github.io/botones/vercultos.js')">
+    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/vercultos.js')">
       <span style="font-size: 40px;">🎞️</span><br>
       <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver cultos o En vivos</span>
     </button>
   </div>
 
-  <!-- CONTENEDOR PARA CARGAR EL CONTENIDO DE LOS BOTONES -->
-  <div id="content"></div>
-
-  <!-- SCRIPT PARA CARGAR CONTENIDO EXTERNO -->
+  <!-- FUNCION PARA CARGAR ARCHIVO JS EXTERNO -->
   <script>
     function loadScript(url) {
-      fetch(url)
-        .then(response => {
-          if (!response.ok) throw new Error("No se pudo cargar el contenido.");
-          return response.text();
-        })
-        .then(html => {
-          document.getElementById("mainMenu").style.display = "none";
-          const content = document.getElementById("content");
-          content.innerHTML = html;
-          content.style.display = "block";
-        })
-        .catch(err => {
-          alert("No se pudo cargar el contenido.");
-          console.error(err);
-        });
-    }
-
-    // Función global opcional para regresar al menú
-    function volverAlMenu() {
-      document.getElementById("content").style.display = "none";
-      document.getElementById("mainMenu").style.display = "flex";
-      document.getElementById("content").innerHTML = "";
+      const script = document.createElement('script');
+      script.src = url;
+      script.type = 'module';
+      document.body.appendChild(script);
     }
   </script>
 
