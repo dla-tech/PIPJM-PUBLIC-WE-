@@ -65,14 +65,26 @@ function renderFormSi() {
 
 function renderOpciones() {
   contentDiv.innerHTML = `
-    <div style="width:100%;min-height:100vh;padding:30px 20px;box-sizing:border-box;">
+    <div style="width:100%;min-height:100vh;padding:30px 20px;box-sizing:border-box;overflow-y:auto;">
       <h2>🙏 Petición o Necesidad</h2>
       <p>Selecciona tu necesidad:</p>
-      <div id="botonesOpciones" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
-        ${["Oración por enfermedad","Oración por la familia","Oración por matrimonio","Oración por hijos","Oración por salvación","Oración por liberación","Oración por reconciliación","Otros"].map(op => `
-          <button onclick="renderCustom('${op}')" style="padding:18px 28px;font-size:18px;width:100%;">${op}</button>`).join('')}
+      <div id="botonesOpciones" style="display:flex;flex-direction:column;gap:12px;margin-bottom:40px;">
+        ${[
+          "Oración por enfermedad",
+          "Oración por la familia",
+          "Oración por matrimonio",
+          "Oración por hijos",
+          "Oración por salvación",
+          "Oración por liberación",
+          "Oración por reconciliación",
+          "Otros"
+        ].map(op => `
+          <button onclick="renderCustom('${op}')" style="padding:18px 28px;font-size:18px;width:100%;">${op}</button>
+        `).join('')}
       </div>
-      <button onclick="mostrarPreguntaInicial()" style="padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;">⬅️ Volver</button>
+      <div style="text-align:center;margin-top:20px;">
+        <button onclick="mostrarPreguntaInicial()" style="padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;">⬅️ Volver</button>
+      </div>
     </div>
   `;
   window.scrollTo(0, 0);
