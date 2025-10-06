@@ -44,22 +44,25 @@ function mostrarPreguntaInicial() {
     </div>
   `;
 
-  document.getElementById("btnSi").onclick = () => {
-    etapa = 1;
-    document.getElementById("preguntaCongregacion").style.display = "none";
-    document.getElementById("botonesPregunta").style.display = "none";
-    renderFormSi();
-  };
+  // Esperar que el DOM esté cargado antes de asignar eventos
+  setTimeout(() => {
+    document.getElementById("btnSi").onclick = () => {
+      etapa = 1;
+      document.getElementById("preguntaCongregacion").style.display = "none";
+      document.getElementById("botonesPregunta").style.display = "none";
+      renderFormSi();
+    };
 
-  document.getElementById("btnNo").onclick = () => {
-    etapa = 1;
-    document.getElementById("preguntaCongregacion").style.display = "none";
-    document.getElementById("botonesPregunta").style.display = "none";
-    renderFormNo();
-  };
+    document.getElementById("btnNo").onclick = () => {
+      etapa = 1;
+      document.getElementById("preguntaCongregacion").style.display = "none";
+      document.getElementById("botonesPregunta").style.display = "none";
+      renderFormNo();
+    };
+  }, 0);
 }
 
-mostrarPreguntaInicial();
+setTimeout(mostrarPreguntaInicial, 0);
 
 function renderFormSi() {
   const formArea = document.getElementById("formArea");
@@ -145,8 +148,6 @@ function enviarPeticion(razon) {
   const mensaje = `Petición desde el formulario\nNombre: ${nombre}\nPetición: ${peticion}\nTeléfono: ${telefono || "No provisto"}`;
   const mailtoLink = `mailto:pipjm1@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
   window.location.href = mailtoLink;
-
-  // Aquí se podría también enviar a Firebase, PHP o backend si implementas la bandeja privada.
 }
 
 function volverAlMenu() {
