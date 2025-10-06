@@ -1,14 +1,10 @@
-// Verificar y crear el div #content si no existe
-let contentDiv = document.getElementById("content");
-if (!contentDiv) {
-  contentDiv = document.createElement("div");
-  contentDiv.id = "content";
-  document.body.appendChild(contentDiv);
-}
+// Crear el contenedor dinámicamente
+const contentDiv = document.createElement("div");
+contentDiv.id = "content";
+document.body.appendChild(contentDiv);
 
 // Ocultar menú principal
-const mainMenu = document.getElementById("mainMenu");
-if (mainMenu) mainMenu.style.display = "none";
+document.getElementById("mainMenu").style.display = "none";
 
 // Fondo blanco adaptado a móviles y scroll activado
 document.body.style.background = "#fff8e7";
@@ -30,13 +26,13 @@ function mostrarPreguntaInicial() {
       box-sizing:border-box;
     ">
       <h2 style="text-align:center;font-size:24px;">🙏 Petición o Necesidad</h2>
-      <p style="font-size:18px;">¿Asistes a una congregación?</p>
-      <div style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
+      <p id="preguntaTexto" style="font-size:18px;">¿Asistes a una congregación?</p>
+      <div id="botonesPregunta" style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
         <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
         <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
       </div>
       <div id="formArea" style="width:100%;max-width:600px;"></div>
-      <button onclick="volverAlMenu()" style="
+      <button id="btnVolver" style="
         margin-top:40px;
         padding:10px 20px;
         font-size:16px;
@@ -50,16 +46,21 @@ function mostrarPreguntaInicial() {
 
   document.getElementById("btnSi").onclick = () => {
     etapa = 1;
+    ocultarPregunta();
     renderFormSi();
   };
-
   document.getElementById("btnNo").onclick = () => {
     etapa = 1;
+    ocultarPregunta();
     renderFormNo();
   };
+  document.getElementById("btnVolver").onclick = volverAlMenu;
 }
 
-mostrarPreguntaInicial();
+function ocultarPregunta() {
+  document.getElementById("preguntaTexto").style.display = "none";
+  document.getElementById("botonesPregunta").style.display = "none";
+}
 
 function renderFormSi() {
   const formArea = document.getElementById("formArea");
@@ -129,18 +130,14 @@ function enviarPeticion(razon) {
 }
 
 function volverAlMenu() {
-  if (etapa === 1) {
-    mostrarPreguntaInicial();
-  } else {
-    const content = document.getElementById("content");
-    if (content) content.remove();
+  const content = document.getElementById("content");
+  if (content) content.remove();
 
-    const mainMenu = document.getElementById("mainMenu");
-    if (mainMenu) mainMenu.style.display = "flex";
+  const mainMenu = document.getElementById("mainMenu");
+  if (mainMenu) mainMenu.style.display = "flex";
 
-    // Restaurar fondo principal
-    document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
-    document.body.style.backgroundSize = "cover";
-    document.body.style.overflow = "hidden";
-  }
+  // Restaurar fondo principal
+  document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
+  document.body.style.backgroundSize = "cover";
+  document.body.style.overflow = "hidden";
 }
