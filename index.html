@@ -5,26 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iglesia</title>
   <style>
-    body, html {
+    html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      height: 100%;
       font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    #content {
+      width: 100vw;
+      height: 100vh;
+      overflow-y: auto;
+      position: relative;
       background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed;
       background-size: cover;
     }
 
     .main-menu {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       gap: 30px;
       background-color: rgba(0, 0, 0, 0.5);
+      padding: 40px 20px;
+      box-sizing: border-box;
     }
 
     .main-menu button {
@@ -45,6 +53,7 @@
       text-align: center;
     }
 
+    /* Logo giratorio */
     .floating-logo {
       position: fixed;
       bottom: 20px;
@@ -64,52 +73,43 @@
 </head>
 <body>
 
-  <!-- MENÚ PRINCIPAL -->
-  <div class="main-menu" id="mainMenu">
-    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/programacion.js')">
-      <span style="font-size: 40px;">📅</span><br>
-      <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver programación de Cultos</span>
-    </button>
+  <div id="content">
+    <!-- MENÚ PRINCIPAL -->
+    <div class="main-menu" id="mainMenu">
+      <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/programacion.js')">
+        <span style="font-size: 40px;">📅</span><br>
+        <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver programación de Cultos</span>
+      </button>
 
-    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/info.js')">
-      <span style="font-size: 40px;">📜</span><br>
-      <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Info del templo y Congregación</span>
-    </button>
+      <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/info.js')">
+        <span style="font-size: 40px;">📜</span><br>
+        <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Info del templo y Congregación</span>
+      </button>
 
-    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/peticiones.js')">
-      <span style="font-size: 40px;">🙏</span><br>
-      <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Peticiones o Necesidad</span>
-    </button>
+      <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/peticiones.js')">
+        <span style="font-size: 40px;">🙏</span><br>
+        <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Peticiones o Necesidad</span>
+      </button>
 
-    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/vercultos.js')">
-      <span style="font-size: 40px;">🎞️</span><br>
-      <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver cultos o En vivos</span>
-    </button>
+      <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/vercultos.js')">
+        <span style="font-size: 40px;">🎞️</span><br>
+        <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver cultos o En vivos</span>
+      </button>
+    </div>
   </div>
 
-  <!-- ÁREA PARA CARGAR LOS ARCHIVOS .JS -->
-  <div id="content" style="display: none;"></div>
-
-  <!-- FUNCIÓN PARA CARGAR ARCHIVO JS EXTERNO -->
+  <!-- FUNCION PARA CARGAR ARCHIVO JS EXTERNO -->
   <script>
     function loadScript(url) {
-      document.getElementById("mainMenu").style.display = "none";
-      document.getElementById("content").style.display = "block";
-      document.getElementById("content").innerHTML = ""; // limpiar antes
       const script = document.createElement('script');
       script.src = url;
-      script.type = 'text/javascript';
+      script.type = 'module';
       document.body.appendChild(script);
-    }
-
-    function volverAlMenu() {
-      document.getElementById("content").style.display = "none";
-      document.getElementById("mainMenu").style.display = "flex";
-      document.getElementById("content").innerHTML = "";
     }
   </script>
 
   <!-- LOGO GIRATORIO -->
   <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png" alt="Logo PIPJM" class="floating-logo">
+
 </body>
 </html>
