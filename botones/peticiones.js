@@ -125,18 +125,12 @@ function enviarPeticion(razon) {
 }
 
 function volverAlMenu() {
-  if (etapa === 1) {
-    mostrarPreguntaInicial(); // si ya está en formulario, vuelve a pregunta
-  } else {
-    const content = document.getElementById("content");
-    if (content) content.remove();
+  // Restaurar el fondo original
+  document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
+  document.body.style.backgroundSize = "cover";
 
-    const mainMenu = document.getElementById("mainMenu");
-    if (mainMenu) mainMenu.style.display = "flex";
-
-    // Restaurar fondo principal
-    document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
-    document.body.style.backgroundSize = "cover";
-    document.body.style.overflow = "hidden";
-  }
+  // Volver al menú principal
+  document.getElementById("content").innerHTML = "";
+  document.getElementById("mainMenu").style.display = "flex";
+}
 }
