@@ -1,5 +1,7 @@
-document.getElementById("content").innerHTML = `
-  <div style="
+document.getElementById("mainMenu").style.display = "none";
+
+document.body.innerHTML += `
+  <div id="content" style="
     width: 100vw;
     height: 100vh;
     overflow-y: auto;
@@ -8,20 +10,20 @@ document.getElementById("content").innerHTML = `
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 30px 20px;
+    padding: 30px 20px 60px;
     box-sizing: border-box;
   ">
-    <div id="stepInicio">
-      <h2 style="text-align:center;">🙏 Petición o Necesidad</h2>
+    <div id="pregunta" style="text-align: center;">
+      <h2>🙏 Petición o Necesidad</h2>
       <p>¿Asistes a una congregación?</p>
       <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
-        <button id="btnSi" style="padding:10px 20px;">Sí</button>
-        <button id="btnNo" style="padding:10px 20px;">No</button>
+        <button id="btnSi" style="padding:12px 24px; font-size:18px;">Sí</button>
+        <button id="btnNo" style="padding:12px 24px; font-size:18px;">No</button>
       </div>
     </div>
-    <div id="formArea" style="width:100%;max-width:600px;margin-top:20px;"></div>
-    <button onclick="handleVolver()" style="
-      margin:30px 0;
+    <div id="formArea" style="width:100%;max-width:600px;margin-top:30px;"></div>
+    <button id="btnVolver" style="
+      margin-top:30px;
       padding:10px 20px;
       font-size:16px;
       background:#333;
@@ -32,33 +34,15 @@ document.getElementById("content").innerHTML = `
   </div>
 `;
 
-let currentStep = "inicio";
+const pregunta = document.getElementById("pregunta");
 const formArea = document.getElementById("formArea");
-const stepInicio = document.getElementById("stepInicio");
+const btnVolver = document.getElementById("btnVolver");
+
+let estadoActual = "pregunta"; // para controlar navegación
 
 document.getElementById("btnSi").onclick = () => {
-  stepInicio.style.display = "none";
-  renderFormSi();
-  currentStep = "si";
-};
-
-document.getElementById("btnNo").onclick = () => {
-  stepInicio.style.display = "none";
-  renderFormNo();
-  currentStep = "no";
-};
-
-function handleVolver() {
-  if (currentStep === "si" || currentStep === "no") {
-    stepInicio.style.display = "block";
-    formArea.innerHTML = "";
-    currentStep = "inicio";
-  } else {
-    volverAlMenu();
-  }
-}
-
-function renderFormSi() {
+  estadoActual = "formSi";
+  pregunta.style.display = "none";
   formArea.innerHTML = `
     <label>Nombre completo (requerido):</label>
     <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
@@ -70,9 +54,11 @@ function renderFormSi() {
     <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
     <button onclick="enviarPeticion()" style="padding:10px 20px;">Enviar</button>
   `;
-}
+};
 
-function renderFormNo() {
+document.getElementById("btnNo").onclick = () => {
+  estadoActual = "formNo";
+  pregunta.style.display = "none";
   const opciones = [
     "Oración por enfermedad",
     "Oración por la familia",
@@ -85,11 +71,22 @@ function renderFormNo() {
   ];
   formArea.innerHTML = '<p>Selecciona tu necesidad:</p>';
   opciones.forEach(op => {
-    formArea.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:8px;padding:14px 20px;font-size:16px;">${op}</button>`;
+    formArea.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:8px;padding:12px 24px;font-size:17px;">${op}</button>`;
   });
-}
+};
+
+btnVolver.onclick = () => {
+  if (estadoActual === "pregunta") {
+    volverAlMenu();
+  } else {
+    estadoActual = "pregunta";
+    pregunta.style.display = "block";
+    formArea.innerHTML = "";
+  }
+};
 
 function renderCustom(razon) {
+  estadoActual = "custom";
   formArea.innerHTML = `<h3>${razon}</h3>
     <label>Nombre completo (requerido):</label>
     <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
@@ -104,7 +101,6 @@ function enviarPeticion(razon) {
   const nombre = document.getElementById("nombre").value.trim();
   const peticion = document.getElementById("peticion") ? document.getElementById("peticion").value.trim() : (razon || "");
   const telefono = document.getElementById("telefono") ? document.getElementById("telefono").value.trim() : "";
-
   if (!nombre || !peticion) {
     alert("Por favor completa los campos requeridos.");
     return;
@@ -113,7 +109,6 @@ function enviarPeticion(razon) {
     alert("Por razones de seguridad, por favor incluye un número telefónico.");
     return;
   }
-
   const mensaje = `Petición desde el formulario\nNombre: ${nombre}\nPetición: ${peticion}\nTeléfono: ${telefono || "No provisto"}`;
   const mailtoLink = `mailto:pipjm1@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
   window.location.href = mailtoLink;
