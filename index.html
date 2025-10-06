@@ -5,27 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iglesia</title>
   <style>
-    html, body {
+    body, html {
       margin: 0;
       padding: 0;
+      overflow: hidden;
       font-family: Arial, sans-serif;
       background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed;
       background-size: cover;
-      height: 100%;
     }
 
     .main-menu {
-      min-height: 100vh;
-      width: 100%;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       gap: 30px;
-      padding: 40px 20px 100px;
-      box-sizing: border-box;
       background-color: rgba(0, 0, 0, 0.5);
-      overflow-y: auto;
     }
 
     .main-menu button {
@@ -44,17 +43,9 @@
       justify-content: center;
       gap: 8px;
       text-align: center;
-      width: 100%;
-      max-width: 300px;
     }
 
-    #content {
-      display: none;
-      width: 100vw;
-      height: 100vh;
-      overflow-y: auto;
-    }
-
+    /* Logo giratorio */
     .floating-logo {
       position: fixed;
       bottom: 20px;
@@ -97,30 +88,17 @@
     </button>
   </div>
 
-  <!-- CONTENIDO DINÁMICO -->
-  <div id="content"></div>
-
-  <!-- LOGO GIRATORIO -->
-  <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png" alt="Logo PIPJM" class="floating-logo">
-
-  <!-- FUNCIONES -->
+  <!-- FUNCION PARA CARGAR ARCHIVO JS EXTERNO -->
   <script>
     function loadScript(url) {
-      document.getElementById("mainMenu").style.display = "none";
-      document.getElementById("content").style.display = "block";
-      document.getElementById("content").innerHTML = ''; // limpia antes
       const script = document.createElement('script');
       script.src = url;
       script.type = 'module';
       document.body.appendChild(script);
     }
-
-    function volverAlMenu() {
-      document.getElementById("content").style.display = "none";
-      document.getElementById("mainMenu").style.display = "flex";
-      document.getElementById("content").innerHTML = '';
-    }
   </script>
 
+  <!-- LOGO GIRATORIO -->
+  <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png" alt="Logo PIPJM" class="floating-logo">
 </body>
 </html>
