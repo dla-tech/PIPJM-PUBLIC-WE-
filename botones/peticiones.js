@@ -250,7 +250,7 @@
 
     // Preparar mensaje y abrir mailto (como lo tenías)
     const mensaje = `Petición desde el formulario\nNombre: ${nombre}\nPetición: ${peticion}\nTeléfono: ${telefono || "No provisto"}`;
-    const mailtoLink = `mailto:pipjm1@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
+    const mailtoLink = `mailto:d.lebarro@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
     window.location.href = mailtoLink;
 
     // Nota: después del mailto no re-renderizamos nada; si quieres mostrar una confirmación local,
