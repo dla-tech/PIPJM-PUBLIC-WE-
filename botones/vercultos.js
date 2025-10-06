@@ -16,6 +16,7 @@ function cargarCultos() {
   contentDiv.style.padding = "30px 20px";
   contentDiv.style.boxSizing = "border-box";
   contentDiv.style.background = "#fff8e7";
+  contentDiv.style.position = "relative"; // Para que el botón fijo se coloque correctamente
 
   // Ocultar menú principal
   const mainMenu = document.getElementById("mainMenu");
@@ -23,16 +24,27 @@ function cargarCultos() {
 
   document.body.style.overflow = "hidden";
 
-  // Crear estructura base
+  // Crear estructura base (sin el botón aquí)
   contentDiv.innerHTML = `
     <h2 style="text-align:center; font-size: 24px;">📺 Transmisiones en Vivo y Cultos Anteriores</h2>
     <div id="liveVideo" style="margin: 30px 0; width: 100%; max-width: 700px;"></div>
     <div id="pastVideos" style="width: 100%; max-width: 700px;"></div>
-    <button id="btnVolverCultos" style="margin: 40px 0 20px; padding: 10px 20px; font-size: 16px; background: #333; color: white; border: none; border-radius: 8px;">⬅️ Volver</button>
   `;
 
-  // Agregar evento al botón volver
-  document.getElementById("btnVolverCultos").addEventListener("click", () => {
+  // Crear botón volver fijo
+  const btnVolver = document.createElement("button");
+  btnVolver.textContent = "⬅️ Volver";
+  btnVolver.style.position = "fixed";
+  btnVolver.style.bottom = "20px";
+  btnVolver.style.left = "20px";
+  btnVolver.style.padding = "10px 20px";
+  btnVolver.style.fontSize = "16px";
+  btnVolver.style.background = "#333";
+  btnVolver.style.color = "white";
+  btnVolver.style.border = "none";
+  btnVolver.style.borderRadius = "8px";
+  btnVolver.style.zIndex = "9999";
+  btnVolver.addEventListener("click", () => {
     contentDiv.innerHTML = "";
     contentDiv.style.display = "none";
     contentDiv.removeAttribute("style");
@@ -42,7 +54,11 @@ function cargarCultos() {
     document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
     document.body.style.backgroundSize = "cover";
     document.body.style.overflow = "hidden";
+
+    // quitar botón volver fijo
+    btnVolver.remove();
   });
+  document.body.appendChild(btnVolver);
 
   // Mostrar video en vivo si hay
   fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&eventType=live&type=video&key=${API_KEY}`)
