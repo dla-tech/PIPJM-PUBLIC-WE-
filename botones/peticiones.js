@@ -10,10 +10,12 @@ document.getElementById("mainMenu").style.display = "none";
 document.body.style.background = "#fff8e7";
 document.body.style.overflowY = "auto";
 
-let etapa = 0; // 0 = pregunta, 1 = formulario
+let etapa = 0; // 0 = pregunta inicial, 1 = formulario o selector de peticiones
+let ultimaEtapaNo = false; // para saber si venimos de peticiones (No)
 
 function mostrarPreguntaInicial() {
   etapa = 0;
+  ultimaEtapaNo = false;
   contentDiv.innerHTML = `
     <div style="
       width:100%;
@@ -44,27 +46,26 @@ function mostrarPreguntaInicial() {
     </div>
   `;
 
-  // Esperar que el DOM esté cargado antes de asignar eventos
-  setTimeout(() => {
-    document.getElementById("btnSi").onclick = () => {
-      etapa = 1;
-      document.getElementById("preguntaCongregacion").style.display = "none";
-      document.getElementById("botonesPregunta").style.display = "none";
-      renderFormSi();
-    };
+  document.getElementById("btnSi").onclick = () => {
+    etapa = 1;
+    document.getElementById("preguntaCongregacion").style.display = "none";
+    document.getElementById("botonesPregunta").style.display = "none";
+    renderFormSi();
+  };
 
-    document.getElementById("btnNo").onclick = () => {
-      etapa = 1;
-      document.getElementById("preguntaCongregacion").style.display = "none";
-      document.getElementById("botonesPregunta").style.display = "none";
-      renderFormNo();
-    };
-  }, 0);
+  document.getElementById("btnNo").onclick = () => {
+    etapa = 1;
+    ultimaEtapaNo = true;
+    document.getElementById("preguntaCongregacion").style.display = "none";
+    document.getElementById("botonesPregunta").style.display = "none";
+    renderFormNo();
+  };
 }
 
-setTimeout(mostrarPreguntaInicial, 0);
+mostrarPreguntaInicial();
 
 function renderFormSi() {
+  ultimaEtapaNo = false;
   const formArea = document.getElementById("formArea");
   formArea.innerHTML = `
     <label>Nombre completo (requerido):</label>
@@ -100,11 +101,10 @@ function renderFormNo() {
   opciones.forEach(op => {
     formArea.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:8px;padding:18px 28px;font-size:18px;width:100%;">${op}</button>`;
   });
-  document.body.style.overflow = "hidden";
+  document.body.style.overflow = "auto";
 }
 
 function renderCustom(razon) {
-  document.body.style.overflow = "auto";
   const formArea = document.getElementById("formArea");
   let extra = "";
   if (razon === "Otros") {
@@ -119,7 +119,10 @@ function renderCustom(razon) {
     <label>Número telefónico ${telLabel}:</label>
     <input type="text" id="telefono" ${telReq} style="width:100%;margin-bottom:10px;">
     ${extra}
-    <button id="enviarBtn" onclick="enviarPeticion('${razon}')" style="padding:10px 20px;" disabled>Enviar</button>
+    <div style="display:flex;justify-content:space-between;margin-top:20px;">
+      <button onclick="renderFormNo()" style="padding:10px 20px;background:#ccc;border:none;border-radius:8px;">⬅️ Volver</button>
+      <button id="enviarBtn" onclick="enviarPeticion('${razon}')" style="padding:10px 20px;" disabled>Enviar</button>
+    </div>
   `;
   document.getElementById("nombre").addEventListener("input", activarBtnEnviar);
   if (razon === "Otros") {
@@ -152,7 +155,11 @@ function enviarPeticion(razon) {
 
 function volverAlMenu() {
   if (etapa === 1) {
-    mostrarPreguntaInicial();
+    if (ultimaEtapaNo) {
+      renderFormNo();
+    } else {
+      mostrarPreguntaInicial();
+    }
   } else {
     const content = document.getElementById("content");
     if (content) content.remove();
