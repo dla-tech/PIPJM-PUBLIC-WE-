@@ -1,32 +1,22 @@
-// Crear el contenedor dinámicamente
+// Crear el contenedor
 const contentDiv = document.createElement("div");
 contentDiv.id = "content";
 document.body.appendChild(contentDiv);
 
-// Ocultar menú principal
+// Ocultar el menú principal
 document.getElementById("mainMenu").style.display = "none";
 
-// Fondo blanco adaptado a móviles y scroll activado
 document.body.style.background = "#fff8e7";
 document.body.style.overflowY = "auto";
 
-let etapa = 0; // 0 = pregunta inicial, 1 = formulario o selector de peticiones
-let ultimaEtapaNo = false; // para saber si venimos de peticiones (No)
+let etapa = 0;
+let estadoFormulario = null;
 
 function mostrarPreguntaInicial() {
   etapa = 0;
-  ultimaEtapaNo = false;
+  estadoFormulario = null;
   contentDiv.innerHTML = `
-    <div style="
-      width:100%;
-      min-height:100vh;
-      padding:30px 20px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      box-sizing:border-box;
-    ">
+    <div style="width:100%;min-height:100vh;padding:30px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-sizing:border-box;">
       <h2 style="text-align:center;font-size:24px;">🙏 Petición o Necesidad</h2>
       <p id="preguntaCongregacion" style="font-size:18px;">¿Asistes a una congregación?</p>
       <div id="botonesPregunta" style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
@@ -34,15 +24,7 @@ function mostrarPreguntaInicial() {
         <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
       </div>
       <div id="formArea" style="width:100%;max-width:600px;"></div>
-      <button onclick="volverAlMenu()" style="
-        margin-top:40px;
-        padding:10px 20px;
-        font-size:16px;
-        background:#333;
-        color:white;
-        border:none;
-        border-radius:8px;
-      ">⬅️ Volver</button>
+      <button onclick="volverAlMenu()" style="margin-top:40px;padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;">⬅️ Volver</button>
     </div>
   `;
 
@@ -55,7 +37,7 @@ function mostrarPreguntaInicial() {
 
   document.getElementById("btnNo").onclick = () => {
     etapa = 1;
-    ultimaEtapaNo = true;
+    estadoFormulario = "no";
     document.getElementById("preguntaCongregacion").style.display = "none";
     document.getElementById("botonesPregunta").style.display = "none";
     renderFormNo();
@@ -65,7 +47,7 @@ function mostrarPreguntaInicial() {
 mostrarPreguntaInicial();
 
 function renderFormSi() {
-  ultimaEtapaNo = false;
+  estadoFormulario = "si";
   const formArea = document.getElementById("formArea");
   formArea.innerHTML = `
     <label>Nombre completo (requerido):</label>
@@ -101,10 +83,20 @@ function renderFormNo() {
   opciones.forEach(op => {
     formArea.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:8px;padding:18px 28px;font-size:18px;width:100%;">${op}</button>`;
   });
-  document.body.style.overflow = "auto";
+
+  // Solo permitir scroll vertical
+  document.body.style.overflowY = "auto";
+  document.body.style.overflowX = "hidden";
+
+  // Agregar el botón negro de volver aquí solamente
+  formArea.innerHTML += `
+    <button onclick="volverAlMenu()" style="margin-top:30px;padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;width:100%;">⬅️ Volver</button>
+  `;
 }
 
 function renderCustom(razon) {
+  estadoFormulario = razon;
+  document.body.style.overflowY = "auto";
   const formArea = document.getElementById("formArea");
   let extra = "";
   if (razon === "Otros") {
@@ -119,10 +111,7 @@ function renderCustom(razon) {
     <label>Número telefónico ${telLabel}:</label>
     <input type="text" id="telefono" ${telReq} style="width:100%;margin-bottom:10px;">
     ${extra}
-    <div style="display:flex;justify-content:space-between;margin-top:20px;">
-      <button onclick="renderFormNo()" style="padding:10px 20px;background:#ccc;border:none;border-radius:8px;">⬅️ Volver</button>
-      <button id="enviarBtn" onclick="enviarPeticion('${razon}')" style="padding:10px 20px;" disabled>Enviar</button>
-    </div>
+    <button id="enviarBtn" onclick="enviarPeticion('${razon}')" style="padding:10px 20px;" disabled>Enviar</button>
   `;
   document.getElementById("nombre").addEventListener("input", activarBtnEnviar);
   if (razon === "Otros") {
@@ -155,7 +144,7 @@ function enviarPeticion(razon) {
 
 function volverAlMenu() {
   if (etapa === 1) {
-    if (ultimaEtapaNo) {
+    if (estadoFormulario && estadoFormulario !== "si" && estadoFormulario !== "no") {
       renderFormNo();
     } else {
       mostrarPreguntaInicial();
