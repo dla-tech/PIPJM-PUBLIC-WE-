@@ -65,7 +65,7 @@ function renderFormSi() {
 
 function renderOpciones() {
   contentDiv.innerHTML = `
-    <div style="width:100%;min-height:100vh;padding:30px 20px;box-sizing:border-box;overflow-y:auto;">
+    <div style="width:100%;min-height:100vh;padding:30px 20px;box-sizing:border-box;overflow-y:auto;max-height:100vh;">
       <h2>🙏 Petición o Necesidad</h2>
       <p>Selecciona tu necesidad:</p>
       <div id="botonesOpciones" style="display:flex;flex-direction:column;gap:12px;margin-bottom:40px;">
