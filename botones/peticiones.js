@@ -1,4 +1,4 @@
-// Crear el contenedor dinámicamente si no existe
+// Verificar y crear el div #content si no existe
 let contentDiv = document.getElementById("content");
 if (!contentDiv) {
   contentDiv = document.createElement("div");
@@ -12,12 +12,7 @@ if (mainMenu) mainMenu.style.display = "none";
 
 // Fondo blanco adaptado a móviles y scroll activado
 document.body.style.background = "#fff8e7";
-document.body.style.overflow = "auto";
-
-// Estilo scroll para el contenedor
-contentDiv.style.overflowY = "auto";
-contentDiv.style.maxHeight = "100vh";
-contentDiv.style.width = "100%";
+document.body.style.overflowY = "auto";
 
 let etapa = 0; // 0 = pregunta, 1 = formulario
 
@@ -35,8 +30,8 @@ function mostrarPreguntaInicial() {
       box-sizing:border-box;
     ">
       <h2 style="text-align:center;font-size:24px;">🙏 Petición o Necesidad</h2>
-      <p id="preguntaText" style="font-size:18px;">¿Asistes a una congregación?</p>
-      <div id="opcionesPregunta" style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
+      <p style="font-size:18px;">¿Asistes a una congregación?</p>
+      <div style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
         <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
         <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
       </div>
@@ -55,22 +50,13 @@ function mostrarPreguntaInicial() {
 
   document.getElementById("btnSi").onclick = () => {
     etapa = 1;
-    ocultarPregunta();
     renderFormSi();
   };
 
   document.getElementById("btnNo").onclick = () => {
     etapa = 1;
-    ocultarPregunta();
     renderFormNo();
   };
-}
-
-function ocultarPregunta() {
-  const preguntaText = document.getElementById("preguntaText");
-  const opcionesPregunta = document.getElementById("opcionesPregunta");
-  if (preguntaText) preguntaText.style.display = "none";
-  if (opcionesPregunta) opcionesPregunta.style.display = "none";
 }
 
 mostrarPreguntaInicial();
@@ -146,8 +132,10 @@ function volverAlMenu() {
   if (etapa === 1) {
     mostrarPreguntaInicial();
   } else {
-    contentDiv.innerHTML = "";
-    contentDiv.remove();
+    const content = document.getElementById("content");
+    if (content) content.remove();
+
+    const mainMenu = document.getElementById("mainMenu");
     if (mainMenu) mainMenu.style.display = "flex";
 
     // Restaurar fondo principal
