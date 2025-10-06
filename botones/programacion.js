@@ -20,7 +20,7 @@ document.getElementById("content").innerHTML = `
       color: black;
       font-size: 18px;
       line-height: 1.6;
-      background-color: rgba(255,255,255,0.7);
+      background-color: none;
       padding: 20px;
       border-radius: 10px;
     ">
