@@ -6,152 +6,97 @@ document.body.appendChild(contentDiv);
 // Ocultar menú principal
 document.getElementById("mainMenu").style.display = "none";
 
-// Fondo blanco adaptado a móviles y scroll activado
+// Fondo claro y scroll habilitado
 document.body.style.background = "#fff8e7";
 document.body.style.overflowY = "auto";
+document.body.style.overflowX = "hidden";
 
-let etapa = 0; // 0 = pregunta, 1 = opciones/formulario
-let tipoFormulario = null; // Para controlar a dónde volver
+let etapa = 0; // 0 = pregunta, 1 = opciones, 2 = formulario
+let ultimaEtapa = 0;
 
 function mostrarPreguntaInicial() {
   etapa = 0;
-  tipoFormulario = null;
-
   contentDiv.innerHTML = `
-    <div style="
-      width:100%;
-      min-height:100vh;
-      padding:30px 20px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      box-sizing:border-box;
-    ">
+    <div style="width:100%;min-height:100vh;padding:30px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-sizing:border-box;">
       <h2 style="text-align:center;font-size:24px;">🙏 Petición o Necesidad</h2>
       <p id="preguntaCongregacion" style="font-size:18px;">¿Asistes a una congregación?</p>
       <div id="botonesPregunta" style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
         <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
         <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
       </div>
-      <div id="formArea" style="width:100%;max-width:600px;"></div>
+      <button onclick="volverAlMenu()" style="margin-top:40px;padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;">⬅️ Volver</button>
     </div>
   `;
 
   document.getElementById("btnSi").onclick = () => {
-    etapa = 1;
-    tipoFormulario = "si";
-    document.getElementById("preguntaCongregacion").style.display = "none";
-    document.getElementById("botonesPregunta").style.display = "none";
+    ultimaEtapa = etapa;
+    etapa = 2;
     renderFormSi();
   };
 
   document.getElementById("btnNo").onclick = () => {
+    ultimaEtapa = etapa;
     etapa = 1;
-    tipoFormulario = "no";
-    document.getElementById("preguntaCongregacion").style.display = "none";
-    document.getElementById("botonesPregunta").style.display = "none";
-    renderFormNo();
+    renderOpciones();
   };
 }
 
-mostrarPreguntaInicial();
-
 function renderFormSi() {
-  const formArea = document.getElementById("formArea");
-  formArea.innerHTML = `
-    <label>Nombre completo (requerido):</label>
-    <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
-    <label>Nombre de tu congregación:</label>
-    <input type="text" id="congregacion" style="width:100%;margin-bottom:10px;">
-    <label>Escribe tu petición o necesidad:</label>
-    <textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>
-    <label>Número telefónico (opcional):</label>
-    <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
-    <button id="enviarBtn" onclick="enviarPeticion()" style="padding:10px 20px;" disabled>Enviar</button>
-    <button onclick="volverAlMenu()" style="
-      margin-top:20px;
-      padding:10px 20px;
-      font-size:16px;
-      background:#333;
-      color:white;
-      border:none;
-      border-radius:8px;
-    ">⬅️ Volver</button>
+  contentDiv.innerHTML = `
+    <div style="width:100%;min-height:100vh;padding:30px 20px;box-sizing:border-box;">
+      <h2>🙏 Petición o Necesidad</h2>
+      <label>Nombre completo (requerido):</label>
+      <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
+      <label>Nombre de tu congregación:</label>
+      <input type="text" id="congregacion" style="width:100%;margin-bottom:10px;">
+      <label>Escribe tu petición o necesidad:</label>
+      <textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>
+      <label>Número telefónico (opcional):</label>
+      <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
+      <button id="enviarBtn" onclick="enviarPeticion()" disabled>Enviar</button>
+      <button onclick="mostrarPreguntaInicial()" style="margin-top:20px;padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;">⬅️ Volver</button>
+    </div>
   `;
-
   document.getElementById("nombre").addEventListener("input", () => {
     const nombre = document.getElementById("nombre").value.trim();
     document.getElementById("enviarBtn").disabled = nombre === "";
   });
 }
 
-function renderFormNo() {
-  const formArea = document.getElementById("formArea");
-  const opciones = [
-    "Oración por enfermedad",
-    "Oración por la familia",
-    "Oración por matrimonio",
-    "Oración por hijos",
-    "Oración por salvación",
-    "Oración por liberación",
-    "Oración por reconciliación",
-    "Otros"
-  ];
-
-  formArea.innerHTML = `
-    <div id="contenedorOpciones" style="
-      max-height: 70vh;
-      overflow-y: auto;
-      padding-right: 10px;
-    ">
+function renderOpciones() {
+  contentDiv.innerHTML = `
+    <div style="width:100%;min-height:100vh;padding:30px 20px;box-sizing:border-box;">
+      <h2>🙏 Petición o Necesidad</h2>
       <p>Selecciona tu necesidad:</p>
-      ${opciones.map(op => `
-        <button onclick="renderCustom('${op}')" style="margin:8px 0; padding:18px 28px; font-size:18px; width:100%;">
-          ${op}
-        </button>
-      `).join('')}
+      <div id="botonesOpciones" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+        ${["Oración por enfermedad","Oración por la familia","Oración por matrimonio","Oración por hijos","Oración por salvación","Oración por liberación","Oración por reconciliación","Otros"].map(op => `
+          <button onclick="renderCustom('${op}')" style="padding:18px 28px;font-size:18px;width:100%;">${op}</button>`).join('')}
+      </div>
+      <button onclick="mostrarPreguntaInicial()" style="padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;">⬅️ Volver</button>
     </div>
-    <button onclick="volverAlMenu()" style="
-      margin-top:20px;
-      padding:10px 20px;
-      font-size:16px;
-      background:#333;
-      color:white;
-      border:none;
-      border-radius:8px;
-    ">⬅️ Volver</button>
   `;
+  window.scrollTo(0, 0);
 }
 
 function renderCustom(razon) {
-  const formArea = document.getElementById("formArea");
-  let extra = "";
-  if (razon === "Otros") {
-    extra = '<label>Escribe tu necesidad:</label><textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>';
-  }
+  ultimaEtapa = etapa;
+  etapa = 2;
   const telLabel = (["Oración por salvación", "Oración por reconciliación"].includes(razon)) ? "(requerido)" : "(opcional)";
   const telReq = (["Oración por salvación", "Oración por reconciliación"].includes(razon)) ? "required" : "";
-
-  formArea.innerHTML = `
-    <h3 style="margin-top:20px;">${razon}</h3>
-    <label>Nombre completo (requerido):</label>
-    <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
-    <label>Número telefónico ${telLabel}:</label>
-    <input type="text" id="telefono" ${telReq} style="width:100%;margin-bottom:10px;">
-    ${extra}
-    <button id="enviarBtn" onclick="enviarPeticion('${razon}')" style="padding:10px 20px;" disabled>Enviar</button>
-    <button onclick="renderFormNo()" style="
-      margin-top:20px;
-      padding:10px 20px;
-      font-size:16px;
-      background:#333;
-      color:white;
-      border:none;
-      border-radius:8px;
-    ">⬅️ Volver</button>
+  const extra = (razon === "Otros") ? '<label>Escribe tu necesidad:</label><textarea id="peticion" rows="4" style="width:100%;margin-bottom:10px;"></textarea>' : '';
+  contentDiv.innerHTML = `
+    <div style="width:100%;min-height:100vh;padding:30px 20px;box-sizing:border-box;">
+      <h2>🙏 Petición o Necesidad</h2>
+      <h3>${razon}</h3>
+      <label>Nombre completo (requerido):</label>
+      <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
+      <label>Número telefónico ${telLabel}:</label>
+      <input type="text" id="telefono" ${telReq} style="width:100%;margin-bottom:10px;">
+      ${extra}
+      <button id="enviarBtn" onclick="enviarPeticion('${razon}')" disabled>Enviar</button>
+      <button onclick="renderOpciones()" style="margin-top:20px;padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;">⬅️ Volver</button>
+    </div>
   `;
-
   document.getElementById("nombre").addEventListener("input", activarBtnEnviar);
   if (razon === "Otros") {
     document.getElementById("peticion").addEventListener("input", activarBtnEnviar);
@@ -182,19 +127,13 @@ function enviarPeticion(razon) {
 }
 
 function volverAlMenu() {
-  if (etapa === 1) {
-    if (tipoFormulario === "si") {
-      mostrarPreguntaInicial();
-    } else if (tipoFormulario === "no") {
-      renderFormNo();
-    }
-  } else {
-    const content = document.getElementById("content");
-    if (content) content.remove();
-    const mainMenu = document.getElementById("mainMenu");
-    if (mainMenu) mainMenu.style.display = "flex";
-    document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
-    document.body.style.backgroundSize = "cover";
-    document.body.style.overflow = "hidden";
-  }
+  const content = document.getElementById("content");
+  if (content) content.remove();
+  const mainMenu = document.getElementById("mainMenu");
+  if (mainMenu) mainMenu.style.display = "flex";
+  document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
+  document.body.style.backgroundSize = "cover";
+  document.body.style.overflow = "hidden";
 }
+
+mostrarPreguntaInicial();
