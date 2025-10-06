@@ -25,6 +25,7 @@
       align-items: center;
       gap: 30px;
       background-color: rgba(0, 0, 0, 0.5);
+      z-index: 10;
     }
 
     .main-menu button {
@@ -45,7 +46,18 @@
       text-align: center;
     }
 
-    /* Logo giratorio */
+    /* Contenedor para cargar el contenido externo */
+    #content {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow-y: auto;
+      background-color: white;
+      z-index: 20;
+    }
+
     .floating-logo {
       position: fixed;
       bottom: 20px;
@@ -60,14 +72,6 @@
     @keyframes rotate {
       from { transform: rotateY(0deg); }
       to { transform: rotateY(360deg); }
-    }
-
-    #content {
-      display: none;
-      width: 100vw;
-      height: 100vh;
-      overflow-y: auto;
-      background-color: white;
     }
   </style>
 </head>
@@ -96,37 +100,38 @@
     </button>
   </div>
 
-  <!-- Aquí se carga el contenido -->
+  <!-- CONTENEDOR PARA CARGAR EL CONTENIDO DE LOS BOTONES -->
   <div id="content"></div>
 
+  <!-- SCRIPT PARA CARGAR CONTENIDO EXTERNO -->
   <script>
     function loadScript(url) {
-      // Oculta el menú principal
-      document.getElementById("mainMenu").style.display = "none";
-
-      // Muestra el contenedor
-      const content = document.getElementById("content");
-      content.style.display = "block";
-      content.innerHTML = ''; // Limpia contenido anterior si hay
-
-      // Carga el script
-      const script = document.createElement('script');
-      script.src = url;
-      script.type = 'text/javascript'; // ✅ Esto permite ejecución directa
-      script.onerror = () => {
-        content.innerHTML = '<p style="color:red">No se pudo cargar el contenido</p>';
-      };
-      document.body.appendChild(script);
+      fetch(url)
+        .then(response => {
+          if (!response.ok) throw new Error("No se pudo cargar el contenido.");
+          return response.text();
+        })
+        .then(html => {
+          document.getElementById("mainMenu").style.display = "none";
+          const content = document.getElementById("content");
+          content.innerHTML = html;
+          content.style.display = "block";
+        })
+        .catch(err => {
+          alert("No se pudo cargar el contenido.");
+          console.error(err);
+        });
     }
 
-    function goBackToMenu() {
+    // Función global opcional para regresar al menú
+    function volverAlMenu() {
       document.getElementById("content").style.display = "none";
       document.getElementById("mainMenu").style.display = "flex";
+      document.getElementById("content").innerHTML = "";
     }
   </script>
 
   <!-- LOGO GIRATORIO -->
   <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png" alt="Logo PIPJM" class="floating-logo">
-
 </body>
 </html>
