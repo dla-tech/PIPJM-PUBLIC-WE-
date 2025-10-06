@@ -2,7 +2,7 @@ document.getElementById("content").innerHTML = `
   <div style="
     width: 100vw;
     height: 100vh;
-    background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/pergamino.png') no-repeat center center;
+    background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/papel-pergamino-enrollado-realista-aislado_23-2151866373.jpg') no-repeat center center;
     background-size: cover;
     overflow-y: auto;
     display: flex;
