@@ -32,6 +32,9 @@ function renderPreguntaInicial() {
     </div>
   `;
 
+  // al mostrar la pregunta inicial, actualizamos paso
+  pasoActual = "pregunta";
+
   document.getElementById("btnSi").onclick = renderFormSi;
   document.getElementById("btnNo").onclick = renderFormNo;
 }
@@ -41,6 +44,7 @@ function renderFormSi() {
   if (form) {
     form.parentElement.querySelector("p").style.display = "none";
     form.parentElement.querySelector("div").style.display = "none";
+    pasoActual = "form"; // ahora estamos en formulario
     form.innerHTML = `
       <label>Nombre completo (requerido):</label>
       <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
@@ -60,6 +64,7 @@ function renderFormNo() {
   if (form) {
     form.parentElement.querySelector("p").style.display = "none";
     form.parentElement.querySelector("div").style.display = "none";
+    pasoActual = "form"; // ahora estamos en formulario
     const opciones = [
       "Oración por enfermedad", "Oración por la familia", "Oración por matrimonio",
       "Oración por hijos", "Oración por salvación", "Oración por liberación",
@@ -73,6 +78,7 @@ function renderFormNo() {
 }
 
 function renderCustom(razon) {
+  pasoActual = "form";
   document.getElementById("formArea").innerHTML = `
     <h3>${razon}</h3>
     <label>Nombre completo (requerido):</label>
@@ -103,16 +109,19 @@ function enviarPeticion(razon) {
 }
 
 // Navegación con historial
-let pasoActual = "menu";
+let pasoActual = "pregunta";
 
 function volverAlMenu() {
   if (pasoActual === "form") {
-    renderPreguntaInicial();
-    pasoActual = "pregunta";
+    renderPreguntaInicial(); // vuelve a la pregunta inicial
   } else if (pasoActual === "pregunta") {
-    location.reload(); // O llama a la función del menú principal si la tienes
+    volverAlMenuPrincipal(); // vuelve al menú principal del HTML
   }
 }
 
-pasoActual = "pregunta";
-renderPreguntaInicial();
+// esta función la tienes en el HTML principal:
+function volverAlMenuPrincipal() {
+  document.getElementById("content").style.display = "none";
+  document.getElementById("mainMenu").style.display = "flex";
+  document.getElementById("content").innerHTML = '';
+}
