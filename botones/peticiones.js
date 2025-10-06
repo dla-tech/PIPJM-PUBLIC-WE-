@@ -1,20 +1,14 @@
-// Eliminar contenido anterior si existe
-const anterior = document.getElementById("content");
-if (anterior) anterior.remove();
-
 // Crear el contenedor dinámicamente
 const contentDiv = document.createElement("div");
 contentDiv.id = "content";
 document.body.appendChild(contentDiv);
 
 // Ocultar menú principal
-const mainMenu = document.getElementById("mainMenu");
-if (mainMenu) mainMenu.style.display = "none";
+document.getElementById("mainMenu").style.display = "none";
 
 // Fondo blanco adaptado a móviles y scroll activado
 document.body.style.background = "#fff8e7";
 document.body.style.overflowY = "auto";
-document.body.style.overflowX = "hidden";
 
 let etapa = 0; // 0 = pregunta, 1 = formulario
 
@@ -32,8 +26,8 @@ function mostrarPreguntaInicial() {
       box-sizing:border-box;
     ">
       <h2 style="text-align:center;font-size:24px;">🙏 Petición o Necesidad</h2>
-      <p style="font-size:18px;">¿Asistes a una congregación?</p>
-      <div style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;flex-wrap:wrap;">
+      <p id="preguntaCongregacion" style="font-size:18px;">¿Asistes a una congregación?</p>
+      <div id="botonesPregunta" style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
         <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
         <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
       </div>
@@ -52,11 +46,15 @@ function mostrarPreguntaInicial() {
 
   document.getElementById("btnSi").onclick = () => {
     etapa = 1;
+    document.getElementById("preguntaCongregacion").style.display = "none";
+    document.getElementById("botonesPregunta").style.display = "none";
     renderFormSi();
   };
 
   document.getElementById("btnNo").onclick = () => {
     etapa = 1;
+    document.getElementById("preguntaCongregacion").style.display = "none";
+    document.getElementById("botonesPregunta").style.display = "none";
     renderFormNo();
   };
 }
@@ -74,8 +72,13 @@ function renderFormSi() {
     <textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>
     <label>Número telefónico (opcional):</label>
     <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
-    <button onclick="enviarPeticion()" style="padding:10px 20px;">Enviar</button>
+    <button id="enviarBtn" onclick="enviarPeticion()" style="padding:10px 20px;" disabled>Enviar</button>
   `;
+
+  document.getElementById("nombre").addEventListener("input", () => {
+    const nombre = document.getElementById("nombre").value.trim();
+    document.getElementById("enviarBtn").disabled = nombre === "";
+  });
 }
 
 function renderFormNo() {
@@ -92,42 +95,58 @@ function renderFormNo() {
   ];
   formArea.innerHTML = '<p>Selecciona tu necesidad:</p>';
   opciones.forEach(op => {
-    formArea.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:8px;padding:14px 20px;font-size:16px;">${op}</button>`;
+    formArea.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:8px;padding:18px 28px;font-size:18px;width:100%;">${op}</button>`;
   });
+  document.body.style.overflow = "hidden";
 }
 
 function renderCustom(razon) {
+  document.body.style.overflow = "auto";
   const formArea = document.getElementById("formArea");
+  let extra = "";
+  if (razon === "Otros") {
+    extra = '<label>Escribe tu necesidad:</label><textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>';
+  }
+  const telLabel = (["Oración por salvación", "Oración por reconciliación"].includes(razon)) ? "(requerido)" : "(opcional)";
+  const telReq = (["Oración por salvación", "Oración por reconciliación"].includes(razon)) ? "required" : "";
   formArea.innerHTML = `
     <h3 style="margin-top:20px;">${razon}</h3>
     <label>Nombre completo (requerido):</label>
     <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
-    ${(["Oración por salvación","Oración por reconciliación"].includes(razon)) ?
-      '<label>Número telefónico (requerido):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;" required>' :
-      '<label>Número telefónico (opcional):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;">'}
-    ${razon==="Otros" ? '<label>Escribe tu necesidad:</label><textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>' : ''}
-    <button onclick="enviarPeticion('${razon}')" style="padding:10px 20px;">Enviar</button>
+    <label>Número telefónico ${telLabel}:</label>
+    <input type="text" id="telefono" ${telReq} style="width:100%;margin-bottom:10px;">
+    ${extra}
+    <button id="enviarBtn" onclick="enviarPeticion('${razon}')" style="padding:10px 20px;" disabled>Enviar</button>
   `;
+  document.getElementById("nombre").addEventListener("input", activarBtnEnviar);
+  if (razon === "Otros") {
+    document.getElementById("peticion").addEventListener("input", activarBtnEnviar);
+  }
+}
+
+function activarBtnEnviar() {
+  const nombre = document.getElementById("nombre")?.value.trim();
+  const peticion = document.getElementById("peticion")?.value.trim() || "x";
+  document.getElementById("enviarBtn").disabled = nombre === "" || (document.getElementById("peticion") && peticion === "");
 }
 
 function enviarPeticion(razon) {
   const nombre = document.getElementById("nombre")?.value.trim();
-  const peticion = document.getElementById("peticion")?.value.trim() || (razon || "");
+  const peticion = document.getElementById("peticion")?.value.trim() || razon || "";
   const telefono = document.getElementById("telefono")?.value.trim() || "";
-
   if (!nombre || !peticion) {
     alert("Por favor completa los campos requeridos.");
     return;
   }
-
-  if (peticion.toLowerCase().includes("suicidio") && !telefono) {
+  if (peticion.toLowerCase().includes("suicidio") && telefono === "") {
     alert("Por razones de seguridad, por favor incluye un número telefónico.");
     return;
   }
-
   const mensaje = `Petición desde el formulario\nNombre: ${nombre}\nPetición: ${peticion}\nTeléfono: ${telefono || "No provisto"}`;
   const mailtoLink = `mailto:pipjm1@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
   window.location.href = mailtoLink;
+
+  // Aquí se podría también enviar a Firebase, PHP o backend si implementas la bandeja privada.
 }
 
 function volverAlMenu() {
@@ -136,11 +155,8 @@ function volverAlMenu() {
   } else {
     const content = document.getElementById("content");
     if (content) content.remove();
-
     const mainMenu = document.getElementById("mainMenu");
     if (mainMenu) mainMenu.style.display = "flex";
-
-    // Restaurar fondo principal
     document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
     document.body.style.backgroundSize = "cover";
     document.body.style.overflow = "hidden";
