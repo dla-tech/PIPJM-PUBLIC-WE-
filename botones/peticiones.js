@@ -1,4 +1,4 @@
- function renderPreguntaInicial() {
+function renderPreguntaInicial() {
   document.getElementById("content").innerHTML = `
     <div style="
       width: 100vw;
@@ -20,7 +20,7 @@
         <button id="btnNo" style="padding:10px 20px;">No</button>
       </div>
       <div id="formArea" style="width:100%;max-width:600px;"></div>
-      <button onclick="window.history.back()">⬅️ Volver al Menú</button>
+      <button onclick="window.history.back()" style="
         margin-top:30px;
         padding:10px 20px;
         font-size:16px;
