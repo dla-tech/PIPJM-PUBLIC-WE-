@@ -18,18 +18,44 @@ function renderPreguntaInicial() {
       <div style="display:flex;gap:20px;justify-content:center;margin-bottom:20px;">
         <button id="btnSi" style="padding:10px 20px;">Sí</button>
         <button id="btnNo" style="padding:10px 20px;">No</button>
-      </div>
-      <div id="formArea" style="width:100%;max-width:600px;"></div>
-      <button onclick="window.history.back()" style="
-        margin-top:30px;
-        padding:10px 20px;
-        font-size:16px;
-        background:#333;
-        color:white;
-        border:none;
-        border-radius:8px;
-      ">⬅️ Volver</button>
-    </div>
+     </div>
+    <div id="formArea" style="width:100%;max-width:600px;margin-top:20px;"></div>
+    <button onclick="volverPaso()" style="
+      margin-top:30px;
+      padding:10px 20px;
+      font-size:16px;
+      background:#333;
+      color:white;
+      border:none;
+      border-radius:8px;
+    ">⬅️ Volver</button>
+  </div>
+`;
+
+const preguntaInicio = document.getElementById("preguntaInicio");
+const formArea = document.getElementById("formArea");
+
+document.getElementById("btnSi").onclick = () => {
+  pasoActual = 1;
+  preguntaInicio.style.display = "none";
+  renderFormSi();
+};
+
+document.getElementById("btnNo").onclick = () => {
+  pasoActual = 1;
+  preguntaInicio.style.display = "none";
+  renderFormNo();
+};
+
+function volverPaso() {
+  if (pasoActual === 1) {
+    formArea.innerHTML = "";
+    preguntaInicio.style.display = "block";
+    pasoActual = 0;
+  } else {
+    location.reload(); // volver al menú principal
+  }
+}
   `;
 
   document.getElementById("btnSi").onclick = renderFormSi;
