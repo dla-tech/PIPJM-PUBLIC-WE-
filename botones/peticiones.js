@@ -1,22 +1,33 @@
-// Crear el contenedor
+// Crear el contenedor dinámicamente
 const contentDiv = document.createElement("div");
 contentDiv.id = "content";
 document.body.appendChild(contentDiv);
 
-// Ocultar el menú principal
+// Ocultar menú principal
 document.getElementById("mainMenu").style.display = "none";
 
+// Fondo blanco adaptado a móviles y scroll activado
 document.body.style.background = "#fff8e7";
 document.body.style.overflowY = "auto";
 
-let etapa = 0;
-let estadoFormulario = null;
+let etapa = 0; // 0 = pregunta, 1 = opciones/formulario
+let tipoFormulario = null; // Para controlar a dónde volver
 
 function mostrarPreguntaInicial() {
   etapa = 0;
-  estadoFormulario = null;
+  tipoFormulario = null;
+
   contentDiv.innerHTML = `
-    <div style="width:100%;min-height:100vh;padding:30px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-sizing:border-box;">
+    <div style="
+      width:100%;
+      min-height:100vh;
+      padding:30px 20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      box-sizing:border-box;
+    ">
       <h2 style="text-align:center;font-size:24px;">🙏 Petición o Necesidad</h2>
       <p id="preguntaCongregacion" style="font-size:18px;">¿Asistes a una congregación?</p>
       <div id="botonesPregunta" style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
@@ -24,12 +35,12 @@ function mostrarPreguntaInicial() {
         <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
       </div>
       <div id="formArea" style="width:100%;max-width:600px;"></div>
-      <button onclick="volverAlMenu()" style="margin-top:40px;padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;">⬅️ Volver</button>
     </div>
   `;
 
   document.getElementById("btnSi").onclick = () => {
     etapa = 1;
+    tipoFormulario = "si";
     document.getElementById("preguntaCongregacion").style.display = "none";
     document.getElementById("botonesPregunta").style.display = "none";
     renderFormSi();
@@ -37,7 +48,7 @@ function mostrarPreguntaInicial() {
 
   document.getElementById("btnNo").onclick = () => {
     etapa = 1;
-    estadoFormulario = "no";
+    tipoFormulario = "no";
     document.getElementById("preguntaCongregacion").style.display = "none";
     document.getElementById("botonesPregunta").style.display = "none";
     renderFormNo();
@@ -47,7 +58,6 @@ function mostrarPreguntaInicial() {
 mostrarPreguntaInicial();
 
 function renderFormSi() {
-  estadoFormulario = "si";
   const formArea = document.getElementById("formArea");
   formArea.innerHTML = `
     <label>Nombre completo (requerido):</label>
@@ -59,6 +69,15 @@ function renderFormSi() {
     <label>Número telefónico (opcional):</label>
     <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
     <button id="enviarBtn" onclick="enviarPeticion()" style="padding:10px 20px;" disabled>Enviar</button>
+    <button onclick="volverAlMenu()" style="
+      margin-top:20px;
+      padding:10px 20px;
+      font-size:16px;
+      background:#333;
+      color:white;
+      border:none;
+      border-radius:8px;
+    ">⬅️ Volver</button>
   `;
 
   document.getElementById("nombre").addEventListener("input", () => {
@@ -79,24 +98,33 @@ function renderFormNo() {
     "Oración por reconciliación",
     "Otros"
   ];
-  formArea.innerHTML = '<p>Selecciona tu necesidad:</p>';
-  opciones.forEach(op => {
-    formArea.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:8px;padding:18px 28px;font-size:18px;width:100%;">${op}</button>`;
-  });
 
-  // Solo permitir scroll vertical
-  document.body.style.overflowY = "auto";
-  document.body.style.overflowX = "hidden";
-
-  // Agregar el botón negro de volver aquí solamente
-  formArea.innerHTML += `
-    <button onclick="volverAlMenu()" style="margin-top:30px;padding:10px 20px;font-size:16px;background:#333;color:white;border:none;border-radius:8px;width:100%;">⬅️ Volver</button>
+  formArea.innerHTML = `
+    <div id="contenedorOpciones" style="
+      max-height: 70vh;
+      overflow-y: auto;
+      padding-right: 10px;
+    ">
+      <p>Selecciona tu necesidad:</p>
+      ${opciones.map(op => `
+        <button onclick="renderCustom('${op}')" style="margin:8px 0; padding:18px 28px; font-size:18px; width:100%;">
+          ${op}
+        </button>
+      `).join('')}
+    </div>
+    <button onclick="volverAlMenu()" style="
+      margin-top:20px;
+      padding:10px 20px;
+      font-size:16px;
+      background:#333;
+      color:white;
+      border:none;
+      border-radius:8px;
+    ">⬅️ Volver</button>
   `;
 }
 
 function renderCustom(razon) {
-  estadoFormulario = razon;
-  document.body.style.overflowY = "auto";
   const formArea = document.getElementById("formArea");
   let extra = "";
   if (razon === "Otros") {
@@ -104,6 +132,7 @@ function renderCustom(razon) {
   }
   const telLabel = (["Oración por salvación", "Oración por reconciliación"].includes(razon)) ? "(requerido)" : "(opcional)";
   const telReq = (["Oración por salvación", "Oración por reconciliación"].includes(razon)) ? "required" : "";
+
   formArea.innerHTML = `
     <h3 style="margin-top:20px;">${razon}</h3>
     <label>Nombre completo (requerido):</label>
@@ -112,7 +141,17 @@ function renderCustom(razon) {
     <input type="text" id="telefono" ${telReq} style="width:100%;margin-bottom:10px;">
     ${extra}
     <button id="enviarBtn" onclick="enviarPeticion('${razon}')" style="padding:10px 20px;" disabled>Enviar</button>
+    <button onclick="renderFormNo()" style="
+      margin-top:20px;
+      padding:10px 20px;
+      font-size:16px;
+      background:#333;
+      color:white;
+      border:none;
+      border-radius:8px;
+    ">⬅️ Volver</button>
   `;
+
   document.getElementById("nombre").addEventListener("input", activarBtnEnviar);
   if (razon === "Otros") {
     document.getElementById("peticion").addEventListener("input", activarBtnEnviar);
@@ -144,10 +183,10 @@ function enviarPeticion(razon) {
 
 function volverAlMenu() {
   if (etapa === 1) {
-    if (estadoFormulario && estadoFormulario !== "si" && estadoFormulario !== "no") {
-      renderFormNo();
-    } else {
+    if (tipoFormulario === "si") {
       mostrarPreguntaInicial();
+    } else if (tipoFormulario === "no") {
+      renderFormNo();
     }
   } else {
     const content = document.getElementById("content");
