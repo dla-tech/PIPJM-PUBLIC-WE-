@@ -1,9 +1,10 @@
 const API_KEY = "AIzaSyCB6xSzxeycNfGMYCMAXsDQjx3-dHFflj0";
 const CHANNEL_ID = "UCIecC8LfuWsK82SnPIjbqGQ";
 
-// Crear el contenedor principal con scroll
-const contentDiv = document.createElement("div");
-contentDiv.id = "content";
+// Seleccionar el contenedor ya existente
+const contentDiv = document.getElementById("content");
+contentDiv.innerHTML = ""; // Limpiar por si acaso
+contentDiv.style.display = "block";
 contentDiv.style.width = "100%";
 contentDiv.style.height = "100vh";
 contentDiv.style.overflowY = "scroll";
@@ -13,7 +14,6 @@ contentDiv.style.display = "flex";
 contentDiv.style.flexDirection = "column";
 contentDiv.style.alignItems = "center";
 contentDiv.style.background = "#fff8e7";
-document.body.appendChild(contentDiv);
 
 // Ocultar menú principal
 document.getElementById("mainMenu").style.display = "none";
@@ -85,21 +85,19 @@ fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${C
   });
 
 function volverAlMenu() {
-  // Limpiar toda la pantalla de cultos
   const content = document.getElementById("content");
-  if (content) content.remove();
+  if (content) {
+    content.innerHTML = "";
+    content.style.display = "none";
+    content.removeAttribute("style");
+  }
 
-  // Mostrar el menú principal
   const mainMenu = document.getElementById("mainMenu");
   if (mainMenu) {
     mainMenu.style.display = "flex";
-    mainMenu.style.zIndex = "1";
   }
 
-  // Restaurar fondo de pantalla
   document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
   document.body.style.backgroundSize = "cover";
-
-  // Ocultar scroll del body
   document.body.style.overflow = "hidden";
 }
