@@ -1,22 +1,30 @@
 const API_KEY = "AIzaSyCB6xSzxeycNfGMYCMAXsDQjx3-dHFflj0";
 const CHANNEL_ID = "UCIecC8LfuWsK82SnPIjbqGQ";
 
+// Crear el contenedor principal con scroll
 const contentDiv = document.createElement("div");
 contentDiv.id = "content";
+contentDiv.style.width = "100%";
+contentDiv.style.height = "100vh";
+contentDiv.style.overflowY = "auto";
+contentDiv.style.padding = "30px 20px";
+contentDiv.style.boxSizing = "border-box";
+contentDiv.style.display = "flex";
+contentDiv.style.flexDirection = "column";
+contentDiv.style.alignItems = "center";
+contentDiv.style.background = "#fff8e7";
 document.body.appendChild(contentDiv);
+
+// Ocultar menú principal
 document.getElementById("mainMenu").style.display = "none";
+document.body.style.overflow = "hidden";
 
-document.body.style.background = "#fff8e7";
-document.body.style.overflowY = "auto";
-document.body.style.overflowX = "hidden";
-
+// Estructura base
 contentDiv.innerHTML = `
-  <div style="width: 100%; min-height: 100vh; padding: 30px 20px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center;">
-    <h2 style="text-align:center; font-size: 24px;">📺 Transmisiones en Vivo y Cultos Anteriores</h2>
-    <div id="liveVideo" style="margin-bottom: 40px; width: 100%; max-width: 700px;"></div>
-    <div id="pastVideos" style="width: 100%; max-width: 700px;"></div>
-    <button onclick="volverAlMenu()" style="margin-top: 40px; padding: 10px 20px; font-size: 16px; background: #333; color: white; border: none; border-radius: 8px;">⬅️ Volver</button>
-  </div>
+  <h2 style="text-align:center; font-size: 24px;">📺 Transmisiones en Vivo y Cultos Anteriores</h2>
+  <div id="liveVideo" style="margin: 30px 0; width: 100%; max-width: 700px;"></div>
+  <div id="pastVideos" style="width: 100%; max-width: 700px;"></div>
+  <button onclick="volverAlMenu()" style="margin: 40px 0 20px; padding: 10px 20px; font-size: 16px; background: #333; color: white; border: none; border-radius: 8px;">⬅️ Volver</button>
 `;
 
 // Mostrar video en vivo si hay
@@ -40,10 +48,9 @@ fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHA
 const fechaActual = new Date();
 const fechaLimite = new Date();
 fechaLimite.setMonth(fechaActual.getMonth() - 2);
-
 const isoLimite = fechaLimite.toISOString();
 
-fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&maxResults=20&type=video&publishedAfter=${isoLimite}`)
+fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&maxResults=30&type=video&publishedAfter=${isoLimite}`)
   .then(response => response.json())
   .then(data => {
     const pastContainer = document.getElementById("pastVideos");
