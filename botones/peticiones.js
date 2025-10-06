@@ -1,5 +1,5 @@
 // Crear el contenedor dinámicamente
-const contentDiv = document.createElement("div");
+let contentDiv = document.createElement("div");
 contentDiv.id = "content";
 document.body.appendChild(contentDiv);
 
@@ -53,6 +53,9 @@ function mostrarPreguntaInicial() {
     etapa = 1;
     renderFormNo();
   };
+
+  // Forzar scroll activado en mobile
+  document.body.style.overflowY = "auto";
 }
 
 mostrarPreguntaInicial();
@@ -126,7 +129,8 @@ function enviarPeticion(razon) {
 
 function volverAlMenu() {
   if (etapa === 1) {
-    mostrarPreguntaInicial(); // si ya está en formulario, vuelve a pregunta
+    etapa = 0;
+    mostrarPreguntaInicial();
   } else {
     const content = document.getElementById("content");
     if (content) content.remove();
@@ -139,4 +143,10 @@ function volverAlMenu() {
     document.body.style.backgroundSize = "cover";
     document.body.style.overflow = "hidden";
   }
+}
+
+// Reparar bug donde peticiones no reabría tras volver
+if (!window._peticionesInicializado) {
+  window._peticionesInicializado = true;
+  mostrarPreguntaInicial();
 }
