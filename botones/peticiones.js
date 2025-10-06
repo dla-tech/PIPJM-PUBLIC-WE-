@@ -20,7 +20,7 @@ function renderPreguntaInicial() {
         <button id="btnNo" style="padding:10px 20px;">No</button>
       </div>
       <div id="formArea" style="width:100%;max-width:600px;"></div>
-      <button onclick="volverAlMenuInterno()" style="
+      <button onclick="volverAlMenu()" style="
         margin-top:30px;
         padding:10px 20px;
         font-size:16px;
@@ -32,7 +32,6 @@ function renderPreguntaInicial() {
     </div>
   `;
 
-  pasoActual = "pregunta";
   document.getElementById("btnSi").onclick = renderFormSi;
   document.getElementById("btnNo").onclick = renderFormNo;
 }
@@ -53,7 +52,6 @@ function renderFormSi() {
       <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
       <button onclick="enviarPeticion()" style="padding:10px 20px;">Enviar</button>
     `;
-    pasoActual = "form";
   }
 }
 
@@ -71,7 +69,6 @@ function renderFormNo() {
     opciones.forEach(op => {
       form.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:10px; padding:12px 24px; font-size:16px;">${op}</button>`;
     });
-    pasoActual = "form";
   }
 }
 
@@ -83,10 +80,9 @@ function renderCustom(razon) {
     ${(["Oración por salvación", "Oración por reconciliación"].includes(razon)) ?
       '<label>Número telefónico (requerido):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;" required>' :
       '<label>Número telefónico (opcional):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;">'}
-    ${razon === "Otros" ? '<label>Escribe tu necesidad:</label><textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>' : ''}
+    ${razon==="Otros" ? '<label>Escribe tu necesidad:</label><textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>' : ''}
     <button onclick="enviarPeticion('${razon}')" style="padding:10px 20px;">Enviar</button>
   `;
-  pasoActual = "form";
 }
 
 function enviarPeticion(razon) {
@@ -102,20 +98,21 @@ function enviarPeticion(razon) {
     return;
   }
   const mensaje = `Petición desde el formulario\nNombre: ${nombre}\nPetición: ${peticion}\nTeléfono: ${telefono || "No provisto"}`;
-  const mailtoLink = `mailto:pipjm1@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
+  const mailtoLink = `mailto:pipjm1@gmail.com?cc=otrocorreo@example.com&subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
   window.location.href = mailtoLink;
 }
 
-// Manejo del historial de pasos
+// Navegación con historial
 let pasoActual = "menu";
 
-function volverAlMenuInterno() {
+function volverAlMenu() {
   if (pasoActual === "form") {
     renderPreguntaInicial();
     pasoActual = "pregunta";
-  } else {
-    location.reload();
+  } else if (pasoActual === "pregunta") {
+    location.reload(); // O llama a la función del menú principal si la tienes
   }
 }
 
+pasoActual = "pregunta";
 renderPreguntaInicial();
