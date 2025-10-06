@@ -45,7 +45,6 @@
       text-align: center;
     }
 
-    /* Logo giratorio */
     .floating-logo {
       position: fixed;
       bottom: 20px;
@@ -88,13 +87,25 @@
     </button>
   </div>
 
-  <!-- FUNCION PARA CARGAR ARCHIVO JS EXTERNO -->
+  <!-- ÁREA PARA CARGAR LOS ARCHIVOS .JS -->
+  <div id="content" style="display: none;"></div>
+
+  <!-- FUNCIÓN PARA CARGAR ARCHIVO JS EXTERNO -->
   <script>
     function loadScript(url) {
+      document.getElementById("mainMenu").style.display = "none";
+      document.getElementById("content").style.display = "block";
+      document.getElementById("content").innerHTML = ""; // limpiar antes
       const script = document.createElement('script');
       script.src = url;
-      script.type = 'module';
+      script.type = 'text/javascript';
       document.body.appendChild(script);
+    }
+
+    function volverAlMenu() {
+      document.getElementById("content").style.display = "none";
+      document.getElementById("mainMenu").style.display = "flex";
+      document.getElementById("content").innerHTML = "";
     }
   </script>
 
