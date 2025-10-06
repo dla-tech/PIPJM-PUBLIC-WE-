@@ -6,7 +6,7 @@ const contentDiv = document.createElement("div");
 contentDiv.id = "content";
 contentDiv.style.width = "100%";
 contentDiv.style.height = "100vh";
-contentDiv.style.overflowY = "auto";
+contentDiv.style.overflowY = "scroll";
 contentDiv.style.padding = "30px 20px";
 contentDiv.style.boxSizing = "border-box";
 contentDiv.style.display = "flex";
@@ -85,11 +85,21 @@ fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${C
   });
 
 function volverAlMenu() {
+  // Limpiar toda la pantalla de cultos
   const content = document.getElementById("content");
   if (content) content.remove();
+
+  // Mostrar el menú principal
   const mainMenu = document.getElementById("mainMenu");
-  if (mainMenu) mainMenu.style.display = "flex";
+  if (mainMenu) {
+    mainMenu.style.display = "flex";
+    mainMenu.style.zIndex = "1";
+  }
+
+  // Restaurar fondo de pantalla
   document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
   document.body.style.backgroundSize = "cover";
+
+  // Ocultar scroll del body
   document.body.style.overflow = "hidden";
 }
