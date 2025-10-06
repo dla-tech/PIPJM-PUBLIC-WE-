@@ -1,7 +1,16 @@
-// peticiones.js (versión corregida)
+// peticiones.js (versión corregida con EmailJS)
 // Usa el <div id="content"> que ya existe en el HTML (NO crear uno nuevo)
 
+// Inicializar EmailJS al cargar
 (() => {
+  // Cargar script de EmailJS
+  const scriptEmailJS = document.createElement('script');
+  scriptEmailJS.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
+  scriptEmailJS.onload = () => {
+    emailjs.init('AzWZTx6GexhwPU2UJ'); // Public Key
+  };
+  document.head.appendChild(scriptEmailJS);
+
   // --- Configuración inicial ---
   const originalBodyBg = getComputedStyle(document.body).backgroundImage || '';
   const contentDiv = document.getElementById("content");
@@ -31,9 +40,8 @@
   document.body.style.overflow = "hidden";
 
   // Estado de la navegación dentro de peticiones:
-  // etapa: 0 = pregunta inicial, 1 = opciones (No), 2 = formulario (Sí o detalle seleccionado)
   let etapa = 0;
-  let ultimaEtapa = 0; // para recordar si venimos de opciones o pregunta
+  let ultimaEtapa = 0;
 
   // --- Funciones de render ---
   function mostrarPreguntaInicial() {
@@ -55,12 +63,10 @@
         </div>
       </div>
     `;
-    // Asignar handlers
     document.getElementById("btnSi").onclick = () => {
       ultimaEtapa = etapa;
       etapa = 2;
       renderFormSi();
-      // aseguramos scroll top
       contentDiv.scrollTop = 0;
     };
     document.getElementById("btnNo").onclick = () => {
@@ -97,29 +103,23 @@
       </div>
     `;
 
-    // activar validación simple: nombre requerido
     const nombreInput = document.getElementById("nombre");
     const enviarBtn = document.getElementById("enviarBtn");
     const peticionTxt = document.getElementById("peticion");
-    const telefonoInput = document.getElementById("telefono");
 
     nombreInput.addEventListener("input", () => {
       enviarBtn.disabled = nombreInput.value.trim() === "" || (peticionTxt && peticionTxt.value.trim() === "");
     });
-
-    // Si escriben peticion también se valida (opcional aquí)
     if (peticionTxt) {
       peticionTxt.addEventListener("input", () => {
         enviarBtn.disabled = nombreInput.value.trim() === "" || (peticionTxt && peticionTxt.value.trim() === "");
       });
     }
-
     enviarBtn.addEventListener("click", () => {
       enviarPeticion();
     });
 
     document.getElementById("backBtn").addEventListener("click", () => {
-      // si venimos desde opciones (ultimaEtapa==1) volvemos a opciones, sino a pregunta
       if (ultimaEtapa === 1) renderOpciones();
       else mostrarPreguntaInicial();
       contentDiv.scrollTop = 0;
@@ -163,14 +163,10 @@
       };
       contBtns.appendChild(b);
     });
-
-    // El botón de volver en esta pantalla regresa a la pregunta inicial
     document.getElementById("backToQuestion").addEventListener("click", () => {
       mostrarPreguntaInicial();
       contentDiv.scrollTop = 0;
     });
-
-    // Aseguramos que el contenedor pueda scrollear si hay muchos botones
     contentDiv.style.overflowY = "auto";
   }
 
@@ -201,7 +197,6 @@
       </div>
     `;
 
-    // handlers para validación y botones
     document.getElementById("nombre").addEventListener("input", activarBtnEnviar);
     if (razon === "Otros") {
       document.getElementById("peticion").addEventListener("input", activarBtnEnviar);
@@ -212,12 +207,9 @@
     });
 
     document.getElementById("backToOptions").addEventListener("click", () => {
-      // Al volver desde formulario de una opción, ir a la pantalla de opciones (no a la pregunta)
       renderOpciones();
       contentDiv.scrollTop = 0;
     });
-
-    // Garantizar scroll interno si contenido largo
     contentDiv.style.overflowY = "auto";
   }
 
@@ -226,7 +218,6 @@
     const peticion = document.getElementById("peticion")?.value.trim();
     const enviarBtn = document.getElementById("enviarBtn");
     if (!enviarBtn) return;
-    // si existe textarea peticion (en "Otros") hay que validar que no esté vacío
     if (document.getElementById("peticion")) {
       enviarBtn.disabled = !nombre || nombre === "" || !peticion || peticion === "";
     } else {
@@ -234,54 +225,60 @@
     }
   }
 
+  // ✅ Cambiada función enviarPeticion:
   function enviarPeticion(razon) {
     const nombre = document.getElementById("nombre")?.value.trim();
     const peticion = document.getElementById("peticion")?.value.trim() || (razon || "");
     const telefono = document.getElementById("telefono")?.value.trim() || "";
+
     if (!nombre || !peticion) {
       alert("Por favor completa los campos requeridos.");
       return;
     }
-    // Si detecta "suicidio" en el texto, exigir teléfono
     if (peticion.toLowerCase().includes("suicidio") && telefono === "") {
       alert("Por razones de seguridad, por favor incluye un número telefónico.");
       return;
     }
 
-    // Preparar mensaje y abrir mailto (como lo tenías)
-    const mensaje = `Petición desde el formulario\nNombre: ${nombre}\nPetición: ${peticion}\nTeléfono: ${telefono || "No provisto"}`;
-    const mailtoLink = `mailto:d.lebarro@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
-    window.location.href = mailtoLink;
+    const enviarBtn = document.getElementById("enviarBtn");
+    enviarBtn.disabled = true;
+    enviarBtn.textContent = "Enviando...";
 
-    // Nota: después del mailto no re-renderizamos nada; si quieres mostrar una confirmación local,
-    // lo podemos añadir aquí antes de redirigir.
+    emailjs.send('service_wjbpiik', 'template_89ugs9a', {
+      nombre: nombre,
+      telefono: telefono,
+      razon: razon || "Petición directa",
+      mensaje: peticion
+    }).then(() => {
+      alert("✅ ¡Petición enviada con éxito!");
+      mostrarPreguntaInicial();
+    }).catch((err) => {
+      console.error("Error al enviar:", err);
+      alert("❌ Hubo un error al enviar. Intenta más tarde.");
+    }).finally(() => {
+      enviarBtn.disabled = false;
+      enviarBtn.textContent = "Enviar";
+    });
   }
 
-  // goBack: navegación de retroceso paso a paso
   window.goBack = function() {
     if (etapa === 2) {
-      // Si estamos en formulario: volver a opciones si venimos de opciones, si no volver a pregunta
       if (ultimaEtapa === 1) {
         renderOpciones();
       } else {
         mostrarPreguntaInicial();
       }
     } else if (etapa === 1) {
-      // Si estamos en opciones, volver a pregunta inicial
       mostrarPreguntaInicial();
     } else {
-      // etapa === 0 -> volver al menú principal
       volverAlMenu();
     }
     contentDiv.scrollTop = 0;
   };
 
-  // volverAlMenu: NO eliminar #content, solo ocultarlo y limpiarlo
   function volverAlMenu() {
-    // limpiar y ocultar contenido
     contentDiv.innerHTML = "";
     contentDiv.style.display = "none";
-    // restaurar estilos por defecto del body (fondo original y scroll oculto)
     if (originalBodyBg && originalBodyBg !== 'none') {
       document.body.style.background = originalBodyBg;
     } else {
@@ -289,18 +286,11 @@
       document.body.style.backgroundSize = "cover";
     }
     document.body.style.overflow = "hidden";
-
-    // mostrar menú principal
     if (mainMenu) mainMenu.style.display = "flex";
-
-    // reset estado
     etapa = 0;
     ultimaEtapa = 0;
   }
 
-  // Exponer volverAlMenu globalmente (para botones que usen onclick="volverAlMenu()")
   window.volverAlMenu = volverAlMenu;
-
-  // iniciar mostrando la pregunta inicial
   mostrarPreguntaInicial();
 })();
