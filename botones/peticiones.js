@@ -9,10 +9,12 @@ document.getElementById("content").innerHTML = `
     justify-content:flex-start;
     padding:30px;
     box-sizing:border-box;
+    font-size:clamp(1rem, 2.5vw, 1.25rem);
+    line-height:1.6;
   ">
-    <h2 style="text-align:center;">🙏 Petición o Necesidad</h2>
+    <h2 style="text-align:center;font-size:clamp(1.5rem, 3vw, 2rem);">🙏 Petición o Necesidad</h2>
     <p>¿Asistes a una congregación?</p>
-    <div style="display:flex;gap:20px;justify-content:center;">
+    <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
       <button id="btnSi" style="padding:10px 20px;">Sí</button>
       <button id="btnNo" style="padding:10px 20px;">No</button>
     </div>
@@ -20,7 +22,7 @@ document.getElementById("content").innerHTML = `
     <button onclick="volverAlMenu()" style="
       margin-top:30px;
       padding:10px 20px;
-      font-size:16px;
+      font-size:clamp(1rem, 2.5vw, 1.1rem);
       background:#333;
       color:white;
       border:none;
@@ -34,7 +36,7 @@ const formArea = document.getElementById("formArea");
 function renderFormSi() {
   formArea.innerHTML = `
     <label>Nombre completo (requerido):</label>
-    <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
+    <input type="text" id="nombre" style="width:100%;margin-bottom:10px;">
     <label>Nombre de tu congregación:</label>
     <input type="text" id="congregacion" style="width:100%;margin-bottom:10px;">
     <label>Escribe tu petición o necesidad:</label>
@@ -65,7 +67,7 @@ function renderFormNo() {
 function renderCustom(razon) {
   formArea.innerHTML = `<h3>${razon}</h3>
     <label>Nombre completo (requerido):</label>
-    <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
+    <input type="text" id="nombre" style="width:100%;margin-bottom:10px;">
     ${(["Oración por salvación","Oración por reconciliación"].includes(razon)) ?
       '<label>Número telefónico (requerido):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;" required>' :
       '<label>Número telefónico (opcional):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;">'}
