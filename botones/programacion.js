@@ -1,4 +1,3 @@
-// Cargar contenido de Programación
 document.getElementById("content").innerHTML = `
   <div style="
     width: 100vw;
@@ -12,7 +11,6 @@ document.getElementById("content").innerHTML = `
     align-items: center;
     box-sizing: border-box;
     padding: 2.5cm 20px 40px;
-    position: relative;
   ">
     <div style="
       width: 100%;
@@ -34,27 +32,18 @@ document.getElementById("content").innerHTML = `
       <p><strong>Sábado:</strong> Altar Familiar todo el día / Ayuno congregacional (1 sábado al mes) — 6:00 a.m.</p>
       <p><strong>Domingo:</strong> Oración — 6:00 a.m. / Escuela Bíblica — 8:45 a.m. / Cierre — 10:45 a.m. / Culto de Adoración — 11:30 a.m.</p>
     </div>
+
+    <button onclick="volverAlMenu()" style="
+      margin: 40px 0;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    ">⬅️ Volver</button>
   </div>
 `;
 
-// Crear botón volver fijo (no afectado por scroll)
-const volverBtn = document.createElement("button");
-volverBtn.textContent = "⬅️ Volver";
-volverBtn.style.position = "fixed";
-volverBtn.style.bottom = "20px";
-volverBtn.style.left = "20px";
-volverBtn.style.padding = "10px 20px";
-volverBtn.style.fontSize = "16px";
-volverBtn.style.background = "#333";
-volverBtn.style.color = "white";
-volverBtn.style.border = "none";
-volverBtn.style.borderRadius = "8px";
-volverBtn.style.zIndex = "9999";
-volverBtn.addEventListener("click", () => {
-  volverAlMenu();
-  volverBtn.remove(); // se elimina para que no quede “pegado” en el menú
-});
-document.body.appendChild(volverBtn);
-
-// Evitar scroll horizontal en todo el body
+// Aplicar estilos para evitar scroll horizontal en todo el body
 document.body.style.overflowX = "hidden";
