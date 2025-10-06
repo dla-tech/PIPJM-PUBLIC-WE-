@@ -20,7 +20,7 @@ function renderPreguntaInicial() {
         <button id="btnNo" style="padding:10px 20px;">No</button>
       </div>
       <div id="formArea" style="width:100%;max-width:600px;"></div>
-      <button onclick="volverAlMenu()" style="
+      <button onclick="volverAlMenuInterno()" style="
         margin-top:30px;
         padding:10px 20px;
         font-size:16px;
@@ -32,9 +32,7 @@ function renderPreguntaInicial() {
     </div>
   `;
 
-  // al mostrar la pregunta inicial, actualizamos paso
   pasoActual = "pregunta";
-
   document.getElementById("btnSi").onclick = renderFormSi;
   document.getElementById("btnNo").onclick = renderFormNo;
 }
@@ -44,7 +42,6 @@ function renderFormSi() {
   if (form) {
     form.parentElement.querySelector("p").style.display = "none";
     form.parentElement.querySelector("div").style.display = "none";
-    pasoActual = "form"; // ahora estamos en formulario
     form.innerHTML = `
       <label>Nombre completo (requerido):</label>
       <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
@@ -56,6 +53,7 @@ function renderFormSi() {
       <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
       <button onclick="enviarPeticion()" style="padding:10px 20px;">Enviar</button>
     `;
+    pasoActual = "form";
   }
 }
 
@@ -64,7 +62,6 @@ function renderFormNo() {
   if (form) {
     form.parentElement.querySelector("p").style.display = "none";
     form.parentElement.querySelector("div").style.display = "none";
-    pasoActual = "form"; // ahora estamos en formulario
     const opciones = [
       "Oración por enfermedad", "Oración por la familia", "Oración por matrimonio",
       "Oración por hijos", "Oración por salvación", "Oración por liberación",
@@ -74,11 +71,11 @@ function renderFormNo() {
     opciones.forEach(op => {
       form.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:10px; padding:12px 24px; font-size:16px;">${op}</button>`;
     });
+    pasoActual = "form";
   }
 }
 
 function renderCustom(razon) {
-  pasoActual = "form";
   document.getElementById("formArea").innerHTML = `
     <h3>${razon}</h3>
     <label>Nombre completo (requerido):</label>
@@ -86,9 +83,10 @@ function renderCustom(razon) {
     ${(["Oración por salvación", "Oración por reconciliación"].includes(razon)) ?
       '<label>Número telefónico (requerido):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;" required>' :
       '<label>Número telefónico (opcional):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;">'}
-    ${razon==="Otros" ? '<label>Escribe tu necesidad:</label><textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>' : ''}
+    ${razon === "Otros" ? '<label>Escribe tu necesidad:</label><textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>' : ''}
     <button onclick="enviarPeticion('${razon}')" style="padding:10px 20px;">Enviar</button>
   `;
+  pasoActual = "form";
 }
 
 function enviarPeticion(razon) {
@@ -104,24 +102,20 @@ function enviarPeticion(razon) {
     return;
   }
   const mensaje = `Petición desde el formulario\nNombre: ${nombre}\nPetición: ${peticion}\nTeléfono: ${telefono || "No provisto"}`;
-  const mailtoLink = `mailto:pipjm1@gmail.com?cc=otrocorreo@example.com&subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
+  const mailtoLink = `mailto:pipjm1@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
   window.location.href = mailtoLink;
 }
 
-// Navegación con historial
-let pasoActual = "pregunta";
+// Manejo del historial de pasos
+let pasoActual = "menu";
 
-function volverAlMenu() {
+function volverAlMenuInterno() {
   if (pasoActual === "form") {
-    renderPreguntaInicial(); // vuelve a la pregunta inicial
-  } else if (pasoActual === "pregunta") {
-    volverAlMenuPrincipal(); // vuelve al menú principal del HTML
+    renderPreguntaInicial();
+    pasoActual = "pregunta";
+  } else {
+    location.reload();
   }
 }
 
-// esta función la tienes en el HTML principal:
-function volverAlMenuPrincipal() {
-  document.getElementById("content").style.display = "none";
-  document.getElementById("mainMenu").style.display = "flex";
-  document.getElementById("content").innerHTML = '';
-}
+renderPreguntaInicial();
