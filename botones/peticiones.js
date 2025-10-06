@@ -1,48 +1,64 @@
+// Crear el contenedor dinámicamente
+const contentDiv = document.createElement("div");
+contentDiv.id = "content";
+document.body.appendChild(contentDiv);
+
+// Ocultar menú principal
 document.getElementById("mainMenu").style.display = "none";
 
-document.body.innerHTML += `
-  <div id="content" style="
-    width: 100vw;
-    height: 100vh;
-    overflow-y: auto;
-    background: #fff8e7;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 30px 20px 60px;
-    box-sizing: border-box;
-  ">
-    <div id="pregunta" style="text-align: center;">
-      <h2>🙏 Petición o Necesidad</h2>
-      <p>¿Asistes a una congregación?</p>
-      <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
-        <button id="btnSi" style="padding:12px 24px; font-size:18px;">Sí</button>
-        <button id="btnNo" style="padding:12px 24px; font-size:18px;">No</button>
+// Fondo blanco adaptado a móviles y scroll activado
+document.body.style.background = "#fff8e7";
+document.body.style.overflowY = "auto";
+
+let etapa = 0; // 0 = pregunta, 1 = formulario
+
+function mostrarPreguntaInicial() {
+  etapa = 0;
+  contentDiv.innerHTML = `
+    <div style="
+      width:100%;
+      min-height:100vh;
+      padding:30px 20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      box-sizing:border-box;
+    ">
+      <h2 style="text-align:center;font-size:24px;">🙏 Petición o Necesidad</h2>
+      <p style="font-size:18px;">¿Asistes a una congregación?</p>
+      <div style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
+        <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
+        <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
       </div>
+      <div id="formArea" style="width:100%;max-width:600px;"></div>
+      <button onclick="volverAlMenu()" style="
+        margin-top:40px;
+        padding:10px 20px;
+        font-size:16px;
+        background:#333;
+        color:white;
+        border:none;
+        border-radius:8px;
+      ">⬅️ Volver</button>
     </div>
-    <div id="formArea" style="width:100%;max-width:600px;margin-top:30px;"></div>
-    <button id="btnVolver" style="
-      margin-top:30px;
-      padding:10px 20px;
-      font-size:16px;
-      background:#333;
-      color:white;
-      border:none;
-      border-radius:8px;
-    ">⬅️ Volver</button>
-  </div>
-`;
+  `;
 
-const pregunta = document.getElementById("pregunta");
-const formArea = document.getElementById("formArea");
-const btnVolver = document.getElementById("btnVolver");
+  document.getElementById("btnSi").onclick = () => {
+    etapa = 1;
+    renderFormSi();
+  };
 
-let estadoActual = "pregunta"; // para controlar navegación
+  document.getElementById("btnNo").onclick = () => {
+    etapa = 1;
+    renderFormNo();
+  };
+}
 
-document.getElementById("btnSi").onclick = () => {
-  estadoActual = "formSi";
-  pregunta.style.display = "none";
+mostrarPreguntaInicial();
+
+function renderFormSi() {
+  const formArea = document.getElementById("formArea");
   formArea.innerHTML = `
     <label>Nombre completo (requerido):</label>
     <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
@@ -54,11 +70,10 @@ document.getElementById("btnSi").onclick = () => {
     <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
     <button onclick="enviarPeticion()" style="padding:10px 20px;">Enviar</button>
   `;
-};
+}
 
-document.getElementById("btnNo").onclick = () => {
-  estadoActual = "formNo";
-  pregunta.style.display = "none";
+function renderFormNo() {
+  const formArea = document.getElementById("formArea");
   const opciones = [
     "Oración por enfermedad",
     "Oración por la familia",
@@ -71,45 +86,57 @@ document.getElementById("btnNo").onclick = () => {
   ];
   formArea.innerHTML = '<p>Selecciona tu necesidad:</p>';
   opciones.forEach(op => {
-    formArea.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:8px;padding:12px 24px;font-size:17px;">${op}</button>`;
+    formArea.innerHTML += `<button onclick="renderCustom('${op}')" style="margin:8px;padding:14px 20px;font-size:16px;">${op}</button>`;
   });
-};
-
-btnVolver.onclick = () => {
-  if (estadoActual === "pregunta") {
-    volverAlMenu();
-  } else {
-    estadoActual = "pregunta";
-    pregunta.style.display = "block";
-    formArea.innerHTML = "";
-  }
-};
+}
 
 function renderCustom(razon) {
-  estadoActual = "custom";
-  formArea.innerHTML = `<h3>${razon}</h3>
+  const formArea = document.getElementById("formArea");
+  formArea.innerHTML = `
+    <h3 style="margin-top:20px;">${razon}</h3>
     <label>Nombre completo (requerido):</label>
     <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
     ${(["Oración por salvación","Oración por reconciliación"].includes(razon)) ?
       '<label>Número telefónico (requerido):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;" required>' :
       '<label>Número telefónico (opcional):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;">'}
     ${razon==="Otros" ? '<label>Escribe tu necesidad:</label><textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>' : ''}
-    <button onclick="enviarPeticion('${razon}')" style="padding:10px 20px;">Enviar</button>`;
+    <button onclick="enviarPeticion('${razon}')" style="padding:10px 20px;">Enviar</button>
+  `;
 }
 
 function enviarPeticion(razon) {
-  const nombre = document.getElementById("nombre").value.trim();
-  const peticion = document.getElementById("peticion") ? document.getElementById("peticion").value.trim() : (razon || "");
-  const telefono = document.getElementById("telefono") ? document.getElementById("telefono").value.trim() : "";
+  const nombre = document.getElementById("nombre")?.value.trim();
+  const peticion = document.getElementById("peticion")?.value.trim() || (razon || "");
+  const telefono = document.getElementById("telefono")?.value.trim() || "";
+
   if (!nombre || !peticion) {
     alert("Por favor completa los campos requeridos.");
     return;
   }
+
   if (peticion.toLowerCase().includes("suicidio") && !telefono) {
     alert("Por razones de seguridad, por favor incluye un número telefónico.");
     return;
   }
+
   const mensaje = `Petición desde el formulario\nNombre: ${nombre}\nPetición: ${peticion}\nTeléfono: ${telefono || "No provisto"}`;
   const mailtoLink = `mailto:pipjm1@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
   window.location.href = mailtoLink;
+}
+
+function volverAlMenu() {
+  if (etapa === 1) {
+    mostrarPreguntaInicial(); // si ya está en formulario, vuelve a pregunta
+  } else {
+    const content = document.getElementById("content");
+    if (content) content.remove();
+
+    const mainMenu = document.getElementById("mainMenu");
+    if (mainMenu) mainMenu.style.display = "flex";
+
+    // Restaurar fondo principal
+    document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.overflow = "hidden";
+  }
 }
