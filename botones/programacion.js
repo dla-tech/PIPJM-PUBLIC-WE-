@@ -1,3 +1,4 @@
+// Cargar contenido de Programación
 document.getElementById("content").innerHTML = `
   <div style="
     width: 100vw;
@@ -36,7 +37,7 @@ document.getElementById("content").innerHTML = `
   </div>
 `;
 
-// Crear botón volver fijo
+// Crear botón volver fijo (no afectado por scroll)
 const volverBtn = document.createElement("button");
 volverBtn.textContent = "⬅️ Volver";
 volverBtn.style.position = "fixed";
@@ -49,8 +50,11 @@ volverBtn.style.color = "white";
 volverBtn.style.border = "none";
 volverBtn.style.borderRadius = "8px";
 volverBtn.style.zIndex = "9999";
-volverBtn.addEventListener("click", volverAlMenu);
+volverBtn.addEventListener("click", () => {
+  volverAlMenu();
+  volverBtn.remove(); // se elimina para que no quede “pegado” en el menú
+});
 document.body.appendChild(volverBtn);
 
-// Quitar scroll horizontal del body
+// Evitar scroll horizontal en todo el body
 document.body.style.overflowX = "hidden";
