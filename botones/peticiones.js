@@ -1,4 +1,4 @@
-function renderPreguntaInicial() {
+ function renderPreguntaInicial() {
   document.getElementById("content").innerHTML = `
     <div style="
       width: 100vw;
@@ -20,7 +20,7 @@ function renderPreguntaInicial() {
         <button id="btnNo" style="padding:10px 20px;">No</button>
       </div>
       <div id="formArea" style="width:100%;max-width:600px;"></div>
-      <button onclick="volverAlMenu()" style="
+     <button onclick="volverAlMenu()" style="...">⬅️ Volver al Menú</button>
         margin-top:30px;
         padding:10px 20px;
         font-size:16px;
