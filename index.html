@@ -8,11 +8,10 @@
     html, body {
       margin: 0;
       padding: 0;
-      height: 100vh;
-      overflow-y: auto;
       font-family: Arial, sans-serif;
       background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed;
       background-size: cover;
+      height: 100%;
     }
 
     .main-menu {
@@ -23,9 +22,10 @@
       justify-content: center;
       align-items: center;
       gap: 30px;
-      padding: 40px 20px;
+      padding: 40px 20px 100px;
       box-sizing: border-box;
       background-color: rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
     }
 
     .main-menu button {
@@ -46,6 +46,13 @@
       text-align: center;
       width: 100%;
       max-width: 300px;
+    }
+
+    #content {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      overflow-y: auto;
     }
 
     .floating-logo {
@@ -90,12 +97,18 @@
     </button>
   </div>
 
+  <!-- CONTENIDO DINÁMICO -->
+  <div id="content"></div>
+
   <!-- LOGO GIRATORIO -->
   <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png" alt="Logo PIPJM" class="floating-logo">
 
   <!-- FUNCIONES -->
   <script>
     function loadScript(url) {
+      document.getElementById("mainMenu").style.display = "none";
+      document.getElementById("content").style.display = "block";
+      document.getElementById("content").innerHTML = ''; // limpia antes
       const script = document.createElement('script');
       script.src = url;
       script.type = 'module';
@@ -103,7 +116,9 @@
     }
 
     function volverAlMenu() {
-      location.reload(); // Recarga todo para volver al menú
+      document.getElementById("content").style.display = "none";
+      document.getElementById("mainMenu").style.display = "flex";
+      document.getElementById("content").innerHTML = '';
     }
   </script>
 
