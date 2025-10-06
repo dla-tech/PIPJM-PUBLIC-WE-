@@ -1,64 +1,80 @@
-// Crear el contenedor dinámicamente
-const contentDiv = document.createElement("div");
-contentDiv.id = "content";
-document.body.appendChild(contentDiv);
-
 // Ocultar menú principal
 document.getElementById("mainMenu").style.display = "none";
 
-// Fondo blanco adaptado a móviles y scroll activado
-document.body.style.background = "#fff8e7";
+// Cambiar fondo solo para esta sección
+document.body.style.background = "#fff8e7";  
+document.body.style.overflowX = "hidden";
 document.body.style.overflowY = "auto";
 
-let etapa = 0; // 0 = pregunta, 1 = formulario
+let etapa = "pregunta";
 
-function mostrarPreguntaInicial() {
-  etapa = 0;
-  contentDiv.innerHTML = `
-    <div style="
-      width:100%;
-      min-height:100vh;
-      padding:30px 20px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      box-sizing:border-box;
-    ">
-      <h2 style="text-align:center;font-size:24px;">🙏 Petición o Necesidad</h2>
-      <p style="font-size:18px;">¿Asistes a una congregación?</p>
-      <div style="display:flex;gap:20px;justify-content:center;margin-top:10px;margin-bottom:20px;">
+document.getElementById("content").innerHTML = `
+  <div style="
+    width:100%;
+    height:100vh;
+    overflow-y:auto;
+    padding:30px 20px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+  ">
+    <div id="preguntaInicial" style="text-align:center;">
+      <h2>🙏 Petición o Necesidad</h2>
+      <p>¿Asistes a una congregación?</p>
+      <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
         <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
         <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
       </div>
-      <div id="formArea" style="width:100%;max-width:600px;"></div>
-      <button onclick="volverAlMenu()" style="
-        margin-top:40px;
-        padding:10px 20px;
-        font-size:16px;
-        background:#333;
-        color:white;
-        border:none;
-        border-radius:8px;
-      ">⬅️ Volver</button>
     </div>
-  `;
+    <div id="formArea" style="width:100%;max-width:600px;margin-top:20px;"></div>
+    <button id="btnVolver" style="
+      margin-top:30px;
+      padding:10px 20px;
+      font-size:16px;
+      background:#333;
+      color:white;
+      border:none;
+      border-radius:8px;
+    ">⬅️ Volver</button>
+  </div>
+`;
 
-  document.getElementById("btnSi").onclick = () => {
-    etapa = 1;
-    renderFormSi();
-  };
+const preguntaInicial = document.getElementById("preguntaInicial");
+const formArea = document.getElementById("formArea");
+const btnVolver = document.getElementById("btnVolver");
 
-  document.getElementById("btnNo").onclick = () => {
-    etapa = 1;
-    renderFormNo();
-  };
-}
+document.getElementById("btnSi").onclick = () => {
+  etapa = "form_si";
+  preguntaInicial.style.display = "none";
+  renderFormSi();
+};
 
-mostrarPreguntaInicial();
+document.getElementById("btnNo").onclick = () => {
+  etapa = "form_no";
+  preguntaInicial.style.display = "none";
+  renderFormNo();
+};
+
+btnVolver.onclick = () => {
+  if (etapa === "form_si" || etapa === "form_no") {
+    // Volver a la pregunta inicial
+    etapa = "pregunta";
+    preguntaInicial.style.display = "block";
+    formArea.innerHTML = "";
+  } else {
+    // Volver al menú principal
+    document.getElementById("content").innerHTML = "";
+    document.getElementById("mainMenu").style.display = "flex";
+    // Restaurar fondo original (web principal)
+    document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.overflow = "hidden";
+  }
+};
 
 function renderFormSi() {
-  const formArea = document.getElementById("formArea");
   formArea.innerHTML = `
     <label>Nombre completo (requerido):</label>
     <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
@@ -73,7 +89,6 @@ function renderFormSi() {
 }
 
 function renderFormNo() {
-  const formArea = document.getElementById("formArea");
   const opciones = [
     "Oración por enfermedad",
     "Oración por la familia",
@@ -91,46 +106,29 @@ function renderFormNo() {
 }
 
 function renderCustom(razon) {
-  const formArea = document.getElementById("formArea");
-  formArea.innerHTML = `
-    <h3 style="margin-top:20px;">${razon}</h3>
+  formArea.innerHTML = `<h3>${razon}</h3>
     <label>Nombre completo (requerido):</label>
     <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
     ${(["Oración por salvación","Oración por reconciliación"].includes(razon)) ?
       '<label>Número telefónico (requerido):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;" required>' :
       '<label>Número telefónico (opcional):</label><input type="text" id="telefono" style="width:100%;margin-bottom:10px;">'}
     ${razon==="Otros" ? '<label>Escribe tu necesidad:</label><textarea id="peticion" style="width:100%;margin-bottom:10px;" rows="4"></textarea>' : ''}
-    <button onclick="enviarPeticion('${razon}')" style="padding:10px 20px;">Enviar</button>
-  `;
+    <button onclick="enviarPeticion('${razon}')" style="padding:10px 20px;">Enviar</button>`;
 }
 
 function enviarPeticion(razon) {
   const nombre = document.getElementById("nombre")?.value.trim();
   const peticion = document.getElementById("peticion")?.value.trim() || (razon || "");
   const telefono = document.getElementById("telefono")?.value.trim() || "";
-
   if (!nombre || !peticion) {
     alert("Por favor completa los campos requeridos.");
     return;
   }
-
   if (peticion.toLowerCase().includes("suicidio") && !telefono) {
     alert("Por razones de seguridad, por favor incluye un número telefónico.");
     return;
   }
-
   const mensaje = `Petición desde el formulario\nNombre: ${nombre}\nPetición: ${peticion}\nTeléfono: ${telefono || "No provisto"}`;
   const mailtoLink = `mailto:pipjm1@gmail.com?subject=Petición desde formulario&body=${encodeURIComponent(mensaje)}`;
   window.location.href = mailtoLink;
-}
-
-function volverAlMenu() {
-  // Restaurar el fondo original
-  document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
-  document.body.style.backgroundSize = "cover";
-
-  // Volver al menú principal
-  document.getElementById("content").innerHTML = "";
-  document.getElementById("mainMenu").style.display = "flex";
-}
 }
