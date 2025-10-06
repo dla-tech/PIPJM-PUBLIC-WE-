@@ -2,12 +2,9 @@ function cargarCultos() {
   const API_KEY = "AIzaSyCB6xSzxeycNfGMYCMAXsDQjx3-dHFflj0";
   const CHANNEL_ID = "UCIecC8LfuWsK82SnPIjbqGQ";
 
-  // Ocultar menú principal
-  const mainMenu = document.getElementById("mainMenu");
-  if (mainMenu) mainMenu.style.display = "none";
-
-  // Preparar contenedor limpio
   const contentDiv = document.getElementById("content");
+
+  // Resetear todo el contenedor
   contentDiv.innerHTML = "";
   contentDiv.removeAttribute("style");
   contentDiv.style.display = "flex";
@@ -19,17 +16,35 @@ function cargarCultos() {
   contentDiv.style.padding = "30px 20px";
   contentDiv.style.boxSizing = "border-box";
   contentDiv.style.background = "#fff8e7";
+
+  // Ocultar menú principal
+  const mainMenu = document.getElementById("mainMenu");
+  if (mainMenu) mainMenu.style.display = "none";
+
   document.body.style.overflow = "hidden";
 
-  // Contenido base
+  // Crear estructura base
   contentDiv.innerHTML = `
     <h2 style="text-align:center; font-size: 24px;">📺 Transmisiones en Vivo y Cultos Anteriores</h2>
     <div id="liveVideo" style="margin: 30px 0; width: 100%; max-width: 700px;"></div>
     <div id="pastVideos" style="width: 100%; max-width: 700px;"></div>
-    <button onclick="volverAlMenu()" style="margin: 40px 0 20px; padding: 10px 20px; font-size: 16px; background: #333; color: white; border: none; border-radius: 8px;">⬅️ Volver</button>
+    <button id="btnVolverCultos" style="margin: 40px 0 20px; padding: 10px 20px; font-size: 16px; background: #333; color: white; border: none; border-radius: 8px;">⬅️ Volver</button>
   `;
 
-  // Transmisión en vivo
+  // Agregar evento al botón volver
+  document.getElementById("btnVolverCultos").addEventListener("click", () => {
+    contentDiv.innerHTML = "";
+    contentDiv.style.display = "none";
+    contentDiv.removeAttribute("style");
+
+    mainMenu.style.display = "flex";
+
+    document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.overflow = "hidden";
+  });
+
+  // Mostrar video en vivo si hay
   fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&eventType=live&type=video&key=${API_KEY}`)
     .then(response => response.json())
     .then(data => {
@@ -46,7 +61,7 @@ function cargarCultos() {
       }
     });
 
-  // Videos pasados (últimos 2 meses)
+  // Mostrar videos anteriores (últimos 2 meses)
   const fechaActual = new Date();
   const fechaLimite = new Date();
   fechaLimite.setMonth(fechaActual.getMonth() - 2);
@@ -87,21 +102,5 @@ function cargarCultos() {
     });
 }
 
-// Función para volver
-function volverAlMenu() {
-  const content = document.getElementById("content");
-  if (content) {
-    content.innerHTML = "";
-    content.style.display = "none";
-    content.removeAttribute("style");
-  }
-
-  const mainMenu = document.getElementById("mainMenu");
-  if (mainMenu) {
-    mainMenu.style.display = "flex";
-  }
-
-  document.body.style.background = "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
-  document.body.style.backgroundSize = "cover";
-  document.body.style.overflow = "hidden";
-}
+// Autoejecutar al cargar el archivo
+cargarCultos();
