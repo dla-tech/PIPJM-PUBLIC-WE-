@@ -66,7 +66,7 @@
       <label>Número telefónico (opcional):</label>
       <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
 
-      <button id="enviarBtn" disabled>Enviar</button>
+      <button id="enviarBtn" disabled style="background:#d1d5db;color:white;padding:10px 20px;border:none;border-radius:8px;">Enviar</button>
     `;
     agregarBotonVolver();
 
@@ -74,33 +74,23 @@
     const peticionInput = document.getElementById("peticion");
     const enviarBtn = document.getElementById("enviarBtn");
 
-  function validar() {
-  if (peticionInput) {
-    if (nombreInput.value.trim() !== "" && peticionInput.value.trim() !== "") {
-      enviarBtn.disabled = false;
-      enviarBtn.style.backgroundColor = "#28a745";
-      enviarBtn.style.color = "#fff";
-      enviarBtn.style.cursor = "pointer";
-    } else {
-      enviarBtn.disabled = true;
-      enviarBtn.style.backgroundColor = "";
-      enviarBtn.style.color = "";
-      enviarBtn.style.cursor = "";
+    function validar() {
+      if (nombreInput.value.trim() !== "" && peticionInput.value.trim() !== "") {
+        enviarBtn.disabled = false;
+        enviarBtn.style.backgroundColor = "#0b74de"; // azul activo
+      } else {
+        enviarBtn.disabled = true;
+        enviarBtn.style.backgroundColor = "#d1d5db"; // gris desactivado
+      }
     }
-  } else {
-    if (nombreInput.value.trim() !== "") {
-      enviarBtn.disabled = false;
-      enviarBtn.style.backgroundColor = "#28a745";
-      enviarBtn.style.color = "#fff";
-      enviarBtn.style.cursor = "pointer";
-    } else {
-      enviarBtn.disabled = true;
-      enviarBtn.style.backgroundColor = "";
-      enviarBtn.style.color = "";
-      enviarBtn.style.cursor = "";
-    }
+    nombreInput.addEventListener("input", validar);
+    peticionInput.addEventListener("input", validar);
+
+    enviarBtn.addEventListener("click", () => {
+      enviarPeticion();
+    });
   }
-}
+
   function renderOpciones() {
     etapa = 1;
     contentDiv.innerHTML = `<h2>🙏 Petición o Necesidad</h2><p>Selecciona tu necesidad:</p>`;
@@ -144,7 +134,7 @@
       <label>Número telefónico ${telLabel}:</label>
       <input type="text" id="telefono" ${telReqAttr} style="width:100%;margin-bottom:10px;">
 
-      <button id="enviarBtn" disabled>Enviar</button>
+      <button id="enviarBtn" disabled style="background:#d1d5db;color:white;padding:10px 20px;border:none;border-radius:8px;">Enviar</button>
     `;
     agregarBotonVolver();
 
@@ -154,9 +144,21 @@
 
     function validar() {
       if (peticionInput) {
-        enviarBtn.disabled = nombreInput.value.trim() === "" || peticionInput.value.trim() === "";
+        if (nombreInput.value.trim() !== "" && peticionInput.value.trim() !== "") {
+          enviarBtn.disabled = false;
+          enviarBtn.style.backgroundColor = "#0b74de"; // azul activo
+        } else {
+          enviarBtn.disabled = true;
+          enviarBtn.style.backgroundColor = "#d1d5db"; // gris desactivado
+        }
       } else {
-        enviarBtn.disabled = nombreInput.value.trim() === "";
+        if (nombreInput.value.trim() !== "") {
+          enviarBtn.disabled = false;
+          enviarBtn.style.backgroundColor = "#0b74de";
+        } else {
+          enviarBtn.disabled = true;
+          enviarBtn.style.backgroundColor = "#d1d5db";
+        }
       }
     }
     nombreInput.addEventListener("input", validar);
@@ -202,6 +204,7 @@
     }).finally(() => {
       btn.disabled = false;
       btn.textContent = "Enviar";
+      btn.style.backgroundColor = "#0b74de";
     });
   }
 
