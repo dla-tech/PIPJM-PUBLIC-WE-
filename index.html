@@ -2,64 +2,70 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Iglesia</title>
   <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
+    /* Base y fondo: capa fija para cubrir toda la pantalla (iOS Safari incluido) */
+    html, body{
+      margin:0; padding:0; overflow:hidden;
       font-family: Arial, sans-serif;
-      background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed;
-      background-size: cover;
+      background:#000;                 /* color base para evitar parpadeos blancos */
+      overscroll-behavior: none;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') center/cover no-repeat;
+      z-index:-1;                      /* detrás de todo */
     }
 
     /* Evitar zoom en iOS al enfocar inputs */
     #content input,
     #content textarea,
     #content select,
-    #content button {
-      font-size: 16px;
+    #content button { font-size:16px; }
+
+    /* Contenedores principales: ocupar siempre alto de pantalla (iOS: 100dvh) */
+    .main-menu, #content { min-height:100dvh; }
+    @supports not (height: 100dvh){
+      .main-menu, #content { min-height:100vh; }
     }
 
     .main-menu {
       position: absolute;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
-      gap: 22px; /* compacto */
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 16px;
+      gap: 22px;
+      padding-top: 18px;
+      background-color: rgba(0,0,0,0.45);
       box-sizing: border-box;
-      text-align: center;
     }
 
-    /* Título del templo: azul oscuro + contorno blanco */
-    .temple-title {
-      max-width: 900px;
-      color: #0b3d91;                 /* 🔵 azul oscuro */
-      font-weight: 700;
-      line-height: 1.2;
-      margin: 4px 12px 6px;
-      padding: 0 8px;
-      -webkit-text-stroke: 1px #ffffff;
+    /* Título de la iglesia */
+    .site-title{
+      text-align:center;
+      font-weight:800;
+      line-height:1.2;
+      color:#0b3c7d; /* azul oscuro */
       text-shadow:
-        0 0 1px #ffffff,
-        0 0 2px #ffffff;
-      font-size: clamp(18px, 3.2vw, 28px);
+        0 0 2px #fff,
+        0 0 6px rgba(255,255,255,.85);
+      margin: 10px 12px 6px;
+      max-width: 92vw;
+      font-size: clamp(18px, 3.6vw, 28px);
     }
 
     .main-menu button {
-      font-size: 14px;                 /* un poco más pequeño */
-      padding: 12px 18px;              /* un poco más pequeño */
+      font-size: 16px;
+      padding: 14px 22px;           /* un poco más pequeños */
       border-radius: 12px;
-      color: white;
+      color: #fff;
       cursor: pointer;
-      background-color: rgba(0, 0, 0, 0.5);
+      background: rgba(0,0,0,0.5);
       border: none;
       font-weight: bold;
       font-family: inherit;
@@ -67,8 +73,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       text-align: center;
+      width: min(88vw, 680px);
+      backdrop-filter: blur(2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.35) inset, 0 2px 10px rgba(0,0,0,.35);
     }
 
     /* Logo flotante */
@@ -81,12 +90,11 @@
       z-index: 1000;
       opacity: 0.9;
       animation: rotate 6s linear infinite;
-      pointer-events: none;
+      pointer-events: none; /* no tapa clics del UI */
     }
-
     @keyframes rotate {
       from { transform: rotateY(0deg); }
-      to { transform: rotateY(360deg); }
+      to   { transform: rotateY(360deg); }
     }
   </style>
 </head>
@@ -94,42 +102,45 @@
 
   <!-- MENÚ PRINCIPAL -->
   <div class="main-menu" id="mainMenu">
-
-    <!-- 🏛️ Título del templo -->
-    <h1 class="temple-title">
-      Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc
+    <h1 class="site-title">
+      Primera Iglesia Pentecostal de<br>
+      Jesucristo de Maunabo, P.R. Inc
     </h1>
 
     <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/programacion.js')">
-      <span style="font-size: 34px;">📅</span><br>
-      <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver programación de Cultos</span>
+      <span style="font-size: 40px;">📅</span>
+      <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Ver programación de Cultos</span>
     </button>
 
     <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/info.js')">
-      <span style="font-size: 34px;">📜</span><br>
-      <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Info del templo y Congregación</span>
+      <span style="font-size: 40px;">📜</span>
+      <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Info del templo y Congregación</span>
     </button>
 
     <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/peticiones.js')">
-      <span style="font-size: 34px;">🙏</span><br>
-      <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Peticiones o Necesidad</span>
+      <span style="font-size: 40px;">🙏</span>
+      <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Peticiones o Necesidad</span>
     </button>
 
     <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/vercultos.js')">
-      <span style="font-size: 34px;">🎞️</span><br>
-      <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver cultos o En vivos</span>
+      <span style="font-size: 40px;">🎞️</span>
+      <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Ver cultos o En vivos</span>
     </button>
   </div>
 
   <!-- ÁREA PARA CARGAR LOS ARCHIVOS .JS -->
-  <div id="content" style="display: none;"></div>
+  <div id="content" style="display:none;"></div>
 
-  <!-- FUNCIÓN PARA CARGAR ARCHIVO JS EXTERNO -->
+  <!-- CARGA DE SCRIPTS DE CADA SECCIÓN -->
   <script>
     function loadScript(url) {
-      document.getElementById("mainMenu").style.display = "none";
-      document.getElementById("content").style.display = "block";
-      document.getElementById("content").innerHTML = ""; // limpiar antes
+      const mainMenu = document.getElementById("mainMenu");
+      const content  = document.getElementById("content");
+
+      mainMenu.style.display = "none";
+      content.style.display  = "block";
+      content.innerHTML = ""; // limpiar
+
       const script = document.createElement('script');
       script.src = url;
       script.type = 'text/javascript';
@@ -137,9 +148,11 @@
     }
 
     function volverAlMenu() {
-      document.getElementById("content").style.display = "none";
-      document.getElementById("mainMenu").style.display = "flex";
-      document.getElementById("content").innerHTML = "";
+      const mainMenu = document.getElementById("mainMenu");
+      const content  = document.getElementById("content");
+      content.style.display = "none";
+      content.innerHTML = "";
+      mainMenu.style.display = "flex";
     }
   </script>
 
