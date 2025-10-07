@@ -38,7 +38,7 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      gap: 22px;
+      gap: 16px; /* adjusted for better spacing */
       padding-top: 18px;
       background-color: rgba(0,0,0,0.45);
       box-sizing: border-box;
@@ -68,10 +68,11 @@
       }
     }
 
+    /* ✅ Adjusted button size and spacing for English version */
     .main-menu button {
-      font-size: 16px;
-      padding: 14px 22px;
-      border-radius: 12px;
+      font-size: 15px;
+      padding: 10px 18px;
+      border-radius: 10px;
       color: #fff;
       cursor: pointer;
       background: rgba(0,0,0,0.5);
@@ -82,9 +83,10 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       text-align: center;
-      width: min(88vw, 680px);
+      width: min(85vw, 640px);
+      margin: 4px 0;
       backdrop-filter: blur(2px);
       box-shadow: 0 8px 28px rgba(0,0,0,.35) inset, 0 2px 10px rgba(0,0,0,.35);
     }
@@ -111,12 +113,11 @@
   <!-- MAIN MENU -->
   <div class="main-menu" id="mainMenu">
     <h1 class="site-title">
-Primera Iglesia Pentecostal de<br>
+      Primera Iglesia Pentecostal de<br>
       Jesucrito de Maunabo, P.R. Inc.<br>
-    <small> (First Pentecostal Church of<br>
-      Jesus Christ of Maunabo, P.R. Inc.) </samll>
+      <small> (First Pentecostal Church of<br>
+        Jesus Christ of Maunabo, P.R. Inc.) </small>
     </h1>
-        
 
     <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/programacion_en.js')">
       <span style="font-size: 40px;">📅</span>
