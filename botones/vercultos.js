@@ -107,9 +107,11 @@ function cargarCultos() {
           };
 
           videoCard.innerHTML = `
-            <img src="${thumbnail}" alt="${title}" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
-            <p style="font-size: 16px;">${title}</p>
-          `;
+  <img src="${thumbnail}" alt="${title}" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
+  <p style="font-size:16px; color:#fff; margin:8px 0 0;">
+    <strong>${title}</strong>
+  </p>
+`;
 
           pastContainer.appendChild(videoCard);
         });
