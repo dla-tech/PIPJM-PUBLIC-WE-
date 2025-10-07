@@ -69,7 +69,7 @@ function cargarCultos() {
       if (data.items && data.items.length > 0) {
         const videoId = data.items[0].id.videoId;
         liveContainer.innerHTML = `
-          <div style="background: #ffdddd; border: 3px solid red; padding: 10px; border-radius: 10px;">
+          <div style="background: #c90808; border: 3px solid red; padding: 10px; border-radius: 10px;">
             <iframe width="100%" height="400" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allowfullscreen></iframe>
           </div>
         `;
