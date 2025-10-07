@@ -2,18 +2,25 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
   <title>Iglesia</title>
   <style>
-    /* Fondo base */
+    /* Fondo base y safe-areas */
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed;
-      background-size: cover;
       height: 100%;
+      min-height: 100dvh;                 /* alto dinámico real */
+      overflow: hidden;
+      overscroll-behavior: none;          /* evita “bounce” blanco */
+      font-family: Arial, sans-serif;
+      background: #000
+        url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg')
+        no-repeat center center fixed;
+      background-size: cover;
     }
 
     /* Evitar zoom en iOS al enfocar inputs */
@@ -29,7 +36,7 @@
       position: absolute;
       inset: 0;
       width: 100vw;
-      height: 100vh;
+      height: 100dvh;                     /* usa dvh para cubrir todo */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -42,7 +49,6 @@
       text-align: center;
       font-size: 22px;
       color: #fff;
-      /* Offset blanco 100% (contorno) */
       text-shadow:
         1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
         1px 1px #fff, -1px 1px #fff, 1px -1px #fff, -1px -1px #fff;
@@ -67,8 +73,8 @@
       position: absolute;
       inset: 0;
       width: 100vw;
-      height: 100vh;
-      display: none;            /* oculto hasta elegir idioma */
+      height: 100dvh;                     /* cubre todo sin franjas */
+      display: none;                      /* oculto hasta elegir idioma */
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -79,13 +85,12 @@
 
     /* Nombre del templo (azul oscuro con contorno blanco) */
     .church-name {
-      color: #0b2e74; /* azul oscuro */
+      color: #0b2e74;
       font-size: 18px;
       font-weight: 700;
       margin: 0 16px 8px 16px;
       line-height: 1.35;
       text-align: center;
-      /* Offset/blanco 100% (contorno) */
       text-shadow:
         1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
         1px 1px #fff, -1px 1px #fff, 1px -1px #fff, -1px -1px #fff;
@@ -93,7 +98,7 @@
 
     .main-menu button {
       font-size: 16px;
-      padding: 14px 22px;       /* un poco más pequeños */
+      padding: 14px 22px;
       border-radius: 12px;
       color: white;
       cursor: pointer;
@@ -119,7 +124,7 @@
       z-index: 1000;
       opacity: 0.9;
       animation: rotate 6s linear infinite;
-      pointer-events: none; /* no bloquea clics */
+      pointer-events: none;
     }
     @keyframes rotate {
       from { transform: rotateY(0deg); }
@@ -139,54 +144,36 @@
   </div>
 
   <!-- MENÚ PRINCIPAL (se llena según idioma) -->
-  <div class="main-menu" id="mainMenu">
-    <!-- Se inyecta vía JS el nombre del templo y los botones -->
-  </div>
+  <div class="main-menu" id="mainMenu"></div>
 
   <!-- ÁREA PARA CARGAR LOS ARCHIVOS .JS -->
   <div id="content" style="display: none;"></div>
 
-  <!-- SCRIPTS -->
   <script>
-    // Bases por idioma
     const BASES = {
       es: 'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/',
       en: 'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/'
     };
-
-    // Archivos por idioma
     const FILES = {
-      es: {
-        programacion: 'programacion.js',
-        info: 'info.js',
-        peticiones: 'peticiones.js',
-        vercultos: 'vercultos.js'
-      },
-      en: {
-        programacion: 'programacion_en.js',
-        info: 'info_en.js',
-        peticiones: 'peticiones_en.js',
-        vercultos: 'vercultos_en.js'
-      }
+      es: { programacion:'programacion.js', info:'info.js', peticiones:'peticiones.js', vercultos:'vercultos.js' },
+      en: { programacion:'programacion_en.js', info:'info_en.js', peticiones:'peticiones_en.js', vercultos:'vercultos_en.js' }
     };
-
-    // Etiquetas por idioma
     const LABELS = {
       es: {
-        churchName: 'Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc',
-        programacion: 'Ver programación de Cultos',
-        info: 'Info del templo y Congregación',
-        peticiones: 'Peticiones o Necesidad',
-        vercultos: 'Ver cultos o En vivos',
-        icons: ['📅','📜','🙏','🎞️']
+        churchName:'Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc',
+        programacion:'Ver programación de Cultos',
+        info:'Info del templo y Congregación',
+        peticiones:'Peticiones o Necesidad',
+        vercultos:'Ver cultos o En vivos',
+        icons:['📅','📜','🙏','🎞️']
       },
       en: {
-        churchName: 'First Pentecostal Church of Jesus Christ of Maunabo, P.R. Inc.',
-        programacion: 'View Service Schedule',
-        info: 'Temple & Congregation Info',
-        peticiones: 'Prayer Requests',
-        vercultos: 'Watch Services & Live',
-        icons: ['📅','📜','🙏','🎞️']
+        churchName:'First Pentecostal Church of Jesus Christ of Maunabo, P.R. Inc.',
+        programacion:'View Service Schedule',
+        info:'Temple & Congregation Info',
+        peticiones:'Prayer Requests',
+        vercultos:'Watch Services & Live',
+        icons:['📅','📜','🙏','🎞️']
       }
     };
 
@@ -202,7 +189,6 @@
     function buildMainMenu(lang) {
       const L = LABELS[lang];
       const mm = document.getElementById('mainMenu');
-
       mm.innerHTML = `
         <div class="church-name">${L.churchName}</div>
 
@@ -231,21 +217,17 @@
     function loadScript(key) {
       const content = document.getElementById("content");
       const mainMenu = document.getElementById("mainMenu");
-
       mainMenu.style.display = "none";
       content.style.display = "block";
-      content.innerHTML = ""; // limpiar antes
-
+      content.innerHTML = "";
       const base = BASES[currentLang];
       const file = FILES[currentLang][key];
-
       const script = document.createElement('script');
       script.src = base + file;
       script.type = 'text/javascript';
       document.body.appendChild(script);
     }
 
-    // Usado por los .js externos para volver al menú (en el idioma elegido)
     function volverAlMenu() {
       const content = document.getElementById("content");
       const mainMenu = document.getElementById("mainMenu");
