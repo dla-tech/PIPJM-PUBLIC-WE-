@@ -28,14 +28,14 @@
     etapa = 0;
     contentDiv.innerHTML = `
       <div style="text-align:center;">
-      <h3 style="margin-bottom: 20px;">Pastora: Nélida Brito Morales Copastor: Marcos Rivera</h3>
+        <h3 style="margin-bottom: 20px;">Pastora: Nélida Brito Morales Copastor: Marcos Rivera</h3>
         <h2>🙏 Petición o Necesidad</h2>
         <p style="font-size:18px;">¿Asistes a una congregación?</p>
         <div style="margin:20px;">
           <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
           <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
         </div>
-        <small <strong style="color:#6b7280">“Los campos solicitados nos permiten brindarle un mejor servicio acorde a sus necesidades. Le agradecemos completar todos ellos, si es posible. ¡Gracias!”<\strong/</small>
+        <small><strong style="color:#6b7280">“Los campos solicitados nos permiten brindarle un mejor servicio acorde a sus necesidades. Le agradecemos completar todos ellos, si es posible. ¡Gracias!”</strong></small>
       </div>
     `;
     agregarBotonVolver();
@@ -78,10 +78,10 @@
     function validar() {
       if (nombreInput.value.trim() !== "" && peticionInput.value.trim() !== "") {
         enviarBtn.disabled = false;
-        enviarBtn.style.backgroundColor = "#0b74de"; // azul activo
+        enviarBtn.style.backgroundColor = "#0b74de";
       } else {
         enviarBtn.disabled = true;
-        enviarBtn.style.backgroundColor = "#d1d5db"; // gris desactivado
+        enviarBtn.style.backgroundColor = "#d1d5db";
       }
     }
     nombreInput.addEventListener("input", validar);
@@ -110,7 +110,7 @@
       b.textContent = op;
       b.style.cssText = "display:block;width:100%;padding:15px;margin:8px 0;font-size:16px;";
       b.onclick = () => {
-        ultimaEtapa = etapa; // Guardamos que venimos de esta lista
+        ultimaEtapa = etapa;
         renderFormularioPredeterminado(op);
       };
       contentDiv.appendChild(b);
@@ -137,9 +137,9 @@
       <label>Número telefónico ${telLabel}:</label>
       <input type="text" id="telefono" ${telReqAttr} style="width:100%;margin-bottom:10px;">
 
-      <!-- 🆕 CAMPO NUEVO DETALLES -->
+      <!-- 🆕 CAMPO UNIFICADO (id='peticion') -->
       <label>Detalles (situación o enfermedad específica) <span style="color:#007a00">(opcional)</span>:</label>
-      <textarea id="detalles" rows="4" placeholder="Escriba aquí su situación o enfermedad..." style="width:100%;margin-bottom:10px;"></textarea>
+      <textarea id="peticion" rows="4" placeholder="Escriba aquí su situación o enfermedad..." style="width:100%;margin-bottom:10px;"></textarea>
 
       <button id="enviarBtn" disabled style="background:#d1d5db;color:white;padding:10px 20px;border:none;border-radius:8px;">Enviar</button>
     `;
@@ -153,10 +153,10 @@
       if (peticionInput) {
         if (nombreInput.value.trim() !== "" && peticionInput.value.trim() !== "") {
           enviarBtn.disabled = false;
-          enviarBtn.style.backgroundColor = "#0b74de"; // azul activo
+          enviarBtn.style.backgroundColor = "#0b74de";
         } else {
           enviarBtn.disabled = true;
-          enviarBtn.style.backgroundColor = "#d1d5db"; // gris desactivado
+          enviarBtn.style.backgroundColor = "#d1d5db";
         }
       } else {
         if (nombreInput.value.trim() !== "") {
@@ -181,7 +181,6 @@
     const peticion = document.getElementById("peticion")?.value.trim() || razon || "";
     const telefono = document.getElementById("telefono")?.value.trim() || "";
     const congregacion = document.getElementById("congregacion")?.value.trim() || "";
-    const detalles = document.getElementById("detalles")?.value.trim() || ""; // 🆕 nuevo campo
 
     if (!nombre || !peticion) {
       alert("Por favor completa los campos requeridos.");
@@ -202,7 +201,6 @@
       telefono,
       razon: razon || "Petición directa",
       mensaje: peticion,
-      detalles, // 🆕 agregado al envío
       congregacion
     }).then(() => {
       alert("✅ ¡Petición enviada con éxito!");
