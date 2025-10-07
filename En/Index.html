@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Church</title>
+  <style>
+    /* Base & background */
+    html, body{
+      margin:0; padding:0; overflow:hidden;
+      font-family: Arial, sans-serif;
+      background:#000;
+      overscroll-behavior: none;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') center/cover no-repeat;
+      z-index:-1;
+    }
+
+    /* Avoid iOS zoom on inputs */
+    #content input,
+    #content textarea,
+    #content select,
+    #content button { font-size:16px; }
+
+    .main-menu, #content { min-height:100dvh; }
+    @supports not (height: 100dvh){
+      .main-menu, #content { min-height:100vh; }
+    }
+
+    .main-menu {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 22px;
+      padding-top: 18px;
+      background-color: rgba(0,0,0,0.45);
+      box-sizing: border-box;
+    }
+
+    /* Church title — dark blue with white outline (no shadow) */
+    .site-title{
+      text-align:center;
+      font-weight:800;
+      line-height:1.2;
+      color:#0b3c7d;                /* dark blue */
+      text-shadow: none;            /* no glow */
+      -webkit-text-stroke: 1.6px #fff; /* solid white outline */
+      paint-order: stroke fill;     /* draw outline first */
+      margin: 10px 12px 6px;
+      max-width: 92vw;
+      font-size: clamp(18px, 3.6vw, 28px);
+    }
+    /* Fallback if browser doesn’t support text-stroke */
+    @supports not (-webkit-text-stroke: 1px white){
+      .site-title{
+        text-shadow:
+          -1px -1px 0 #fff,  1px -1px 0 #fff,
+          -1px  1px 0 #fff,  1px  1px 0 #fff,
+           0   -2px 0 #fff,  0     2px 0 #fff,
+          -2px   0  0 #fff,  2px   0  0 #fff;
+      }
+    }
+
+    .main-menu button {
+      font-size: 16px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      color: #fff;
+      cursor: pointer;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      font-weight: bold;
+      font-family: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      width: min(88vw, 680px);
+      backdrop-filter: blur(2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.35) inset, 0 2px 10px rgba(0,0,0,.35);
+    }
+
+    .floating-logo {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 80px;
+      height: auto;
+      z-index: 1000;
+      opacity: 0.9;
+      animation: rotate 6s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes rotate {
+      from { transform: rotateY(0deg); }
+      to   { transform: rotateY(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MAIN MENU -->
+  <div class="main-menu" id="mainMenu">
+    <h1 class="site-title">
+      First Pentecostal Church of<br>
+      Jesus Christ of Maunabo, P.R. Inc.
+    </h1>
+
+    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/programacion_en.js')">
+      <span style="font-size: 40px;">📅</span>
+      <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">View Service Schedule</span>
+    </button>
+
+    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/info_en.js')">
+      <span style="font-size: 40px;">📜</span>
+      <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Temple & Congregation Info</span>
+    </button>
+
+    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/peticiones_en.js')">
+      <span style="font-size: 40px;">🙏</span>
+      <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Prayer Requests</span>
+    </button>
+
+    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/vercultos_en.js')">
+      <span style="font-size: 40px;">🎞️</span>
+      <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Watch Services & Live</span>
+    </button>
+  </div>
+
+  <!-- AREA TO LOAD SECTION JS -->
+  <div id="content" style="display:none;"></div>
+
+  <!-- SECTION LOADER -->
+  <script>
+    function loadScript(url) {
+      const mainMenu = document.getElementById("mainMenu");
+      const content  = document.getElementById("content");
+
+      mainMenu.style.display = "none";
+      content.style.display  = "block";
+      content.innerHTML = "";
+
+      const script = document.createElement('script');
+      script.src = url;
+      script.type = 'text/javascript';
+      document.body.appendChild(script);
+    }
+
+    function volverAlMenu() {
+      const mainMenu = document.getElementById("mainMenu");
+      const content  = document.getElementById("content");
+      content.style.display = "none";
+      content.innerHTML = "";
+      mainMenu.style.display = "flex";
+    }
+  </script>
+
+  <!-- ROTATING LOGO -->
+  <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png" alt="PIPJM Logo" class="floating-logo">
+</body>
+</html>
