@@ -32,7 +32,7 @@
       <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_7782.jpeg" 
            alt="Ubicación del templo" 
            style="width:100%;display:block;cursor:pointer;">
-    <h4 style="margin-bottom: 20px;">Pastora: Nelida Brito Morales Copastor: Marcos River</h4>      
+    <h4 style="margin-bottom: 20px;">Pastora: Nelida Brito Morales    Copastor: Marcos River</h4>      
     </a>
   `;
 
