@@ -23,7 +23,7 @@ document.getElementById("content").innerHTML = `
       padding: 0 10px;
       box-sizing: border-box;
     ">
-      <h4 style="margin-bottom: 20px;">Pastora: Nelida Brito Morales Copastor: Marcos River</h4>
+      <h4 style="margin-bottom: 20px;">Pastora: Nélida Brito Morales Copastor: Marcos River</h4>
       <h2 style="margin-bottom: 20px;">📅 Programación General de Cultos</h2>
       <p><strong>Lunes:</strong> Culto de Oración — 7:00 p.m. en el templo</p>
       <p><strong>Martes:</strong> Culto Evangelístico — 7:00 p.m. en las calles</p>
