@@ -2,123 +2,106 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Seleccione idioma</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Selecciona idioma</title>
   <style>
-    /* Base y fondo a pantalla completa (sin barras blancas) */
+    /* Fondo a pantalla completa, sin barras blancas */
     html, body {
       margin: 0; padding: 0;
       height: 100%;
       overflow: hidden;
-      font-family: Arial, sans-serif;
       background: #000;
+      font-family: Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
       overscroll-behavior: none;
     }
-    body::before {
-      content: "";
+    body::before{
+      content:"";
       position: fixed;
       inset: 0;
-      background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg')
-                  center / cover no-repeat;
+      background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') center/cover no-repeat;
       z-index: -1;
     }
 
-    /* Contenedor centrado */
-    .gate {
+    /* Contenedor del gate */
+    .gate{
+      position: absolute;
+      inset: 0;
       min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      position: relative;
-    }
-    @supports not (height: 100dvh) {
-      .gate { min-height: 100vh; }
-    }
-    .panel {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 18px;
-      padding: 24px 20px;
-      background: rgba(255,255,255,0.12); /* muy liviano, solo para contraste */
-      border-radius: 16px;
-      backdrop-filter: blur(2px);
+      background: rgba(0,0,0,0.45);
+      box-sizing: border-box;
+      padding: 16px;
+      text-align: center;
+    }
+    @supports not (height: 100dvh){
+      .gate{ min-height: 100vh; }
     }
 
-    /* Texto negro con offset/blanco 100% (contorno) */
-    .title, .btn {
-      color: #000;
+    /* Texto negro con offset blanco 100% */
+    .outline {
+      color: #000;               /* negro */
       -webkit-text-stroke: 1.6px #fff; /* contorno blanco sólido */
       paint-order: stroke fill;
-      text-align: center;
-      letter-spacing: 0.2px;
     }
     /* Fallback si no hay text-stroke */
-    @supports not (-webkit-text-stroke: 1px #fff) {
-      .title, .btn {
+    @supports not (-webkit-text-stroke: 1px white) {
+      .outline {
         text-shadow:
           1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
           1px 1px #fff, -1px 1px #fff, 1px -1px #fff, -1px -1px #fff;
       }
     }
 
-    .title {
-      margin: 0 12px 6px;
+    h1 {
+      margin: 0 0 8px 0;
       font-size: clamp(20px, 4.5vw, 28px);
-      font-weight: 800;
-      line-height: 1.2;
+    }
+    p.sub {
+      margin: 0 0 12px 0;
+      font-size: clamp(14px, 3.8vw, 18px);
     }
 
-    .subtitle {
-      margin: 0 10px 8px;
-      font-size: clamp(16px, 3.8vw, 20px);
-      font-weight: 700;
-      color: #000;
-      -webkit-text-stroke: 1.4px #fff;
-      paint-order: stroke fill;
-      text-align: center;
-    }
-
-    .buttons {
+    .btns{
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       justify-content: center;
     }
+
     .btn {
-      font: inherit;
-      font-weight: 800;
-      font-size: clamp(16px, 3.8vw, 20px);
-      background: rgba(255,255,255,0.18);
-      border: 2px solid rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.20);
+      border: 2px solid rgba(255,255,255,0.65);
       border-radius: 12px;
       padding: 12px 18px;
+      font-size: 16px;       /* >=16px evita zoom en iOS */
+      font-weight: 700;
       cursor: pointer;
-      user-select: none;
-      transition: transform .08s ease;
+      backdrop-filter: blur(2px);
+      transition: transform .08s ease, background .15s ease;
+      color: #000;
+      -webkit-text-stroke: 1.4px #fff;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 140px;
     }
     .btn:active { transform: scale(0.98); }
+    .btn:hover  { background: rgba(255,255,255,0.28); }
   </style>
 </head>
 <body>
   <div class="gate">
-    <div class="panel">
-      <div class="title">Seleccione idioma / Select language</div>
-      <div class="subtitle">Elija una opción</div>
-      <div class="buttons">
-        <button class="btn" onclick="go('es')">Español</button>
-        <button class="btn" onclick="go('en')">English</button>
-      </div>
+    <h1 class="outline">Seleccione idioma / Select language</h1>
+    <p class="sub outline">Elige tu preferencia para continuar</p>
+    <div class="btns">
+      <!-- RUTAS: español en /es/index.html y inglés en /en/index.html -->
+      <a class="btn outline" href="./es/index.html">Español</a>
+      <a class="btn outline" href="./en/index.html">English</a>
     </div>
   </div>
-
-  <script>
-    /* Ajusta estas rutas si cambias tu estructura */
-    const ES_URL = './';                // Español en la raíz
-    const EN_URL = './en/Index.html';   // Inglés en /en/Index.html (I mayúscula)
-
-    function go(lang) {
-      location.href = (lang === 'es') ? ES_URL : EN_URL;
-    }
-  </script>
 </body>
 </html>
