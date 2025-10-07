@@ -54,16 +54,16 @@
     etapa = 2;
     contentDiv.innerHTML = `
       <h2>🙏 Petición o Necesidad</h2>
-      <label>Nombre completo (oblogatorio):</label>
+      <label>Nombre completo <span style="color:#d00">(obligatorio)</span>:</label>
       <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
 
-      <label>Nombre de tu congregación (opcional):</label>
+      <label>Nombre de tu congregación <span style="color:#007a00">(opcional)</span>:</label>
       <input type="text" id="congregacion" style="width:100%;margin-bottom:10px;">
 
-      <label>Escribe tu petición o necesidad (obligatorio):</label>
+      <label>Escribe tu petición o necesidad <span style="color:#d00">(obligatorio)</span>:</label>
       <textarea id="peticion" rows="5" style="width:100%;margin-bottom:10px;"></textarea>
 
-      <label>Número telefónico (opcional):</label>
+      <label>Número telefónico <span style="color:#007a00">(opcional)</span>:</label>
       <input type="text" id="telefono" style="width:100%;margin-bottom:10px;">
 
       <button id="enviarBtn" disabled style="background:#d1d5db;color:white;padding:10px 20px;border:none;border-radius:8px;">Enviar</button>
@@ -119,16 +119,18 @@
 
   function renderFormularioPredeterminado(razon) {
     etapa = 2;
-    const telLabel = (["Oración por salvación", "Oración por reconciliación"].includes(razon)) ? "(requerido)" : "(opcional)";
+    const telLabel = (["Oración por salvación", "Oración por reconciliación"].includes(razon))
+      ? '<span style="color:#d00">(obligatorio)</span>'
+      : '<span style="color:#007a00">(opcional)</span>';
     const telReqAttr = (["Oración por salvación", "Oración por reconciliación"].includes(razon)) ? "required" : "";
     const extra = razon === "Otros"
-      ? `<label>Escribe tu necesidad:</label><textarea id="peticion" rows="4" style="width:100%;margin-bottom:10px;"></textarea>`
+      ? `<label>Escribe tu necesidad <span style="color:#d00">(obligatorio)</span>:</label><textarea id="peticion" rows="4" style="width:100%;margin-bottom:10px;"></textarea>`
       : `<div style="margin-bottom:10px;font-weight:600;color:#111;">${razon}</div>`;
 
     contentDiv.innerHTML = `
       <h2>🙏 Petición o Necesidad</h2>
       ${extra}
-      <label>Nombre completo (obligatorio):</label>
+      <label>Nombre completo <span style="color:#d00">(obligatorio)</span>:</label>
       <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
 
       <label>Número telefónico ${telLabel}:</label>
