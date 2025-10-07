@@ -14,8 +14,11 @@
       background-size: cover;
     }
 
-    /* Anti-zoom: asegura 16px en campos para que iOS no haga zoom automático */
-    input, textarea, select {
+    /* Evitar zoom en iOS al enfocar inputs */
+    #content input,
+    #content textarea,
+    #content select,
+    #content button {
       font-size: 16px;
     }
 
@@ -50,6 +53,7 @@
       text-align: center;
     }
 
+    /* ✅ Logo flotante restaurado */
     .floating-logo {
       position: fixed;
       bottom: 20px;
@@ -59,6 +63,7 @@
       z-index: 1000;
       opacity: 0.9;
       animation: rotate 6s linear infinite;
+      pointer-events: none; /* no tapa clics del UI */
     }
 
     @keyframes rotate {
@@ -114,39 +119,7 @@
     }
   </script>
 
-  <!-- Anti-zoom móvil: bloquea el zoom al enfocar inputs y lo restaura al salir -->
-  <script>
-    (function () {
-      const vp = document.querySelector('meta[name="viewport"]');
-      if (!vp) return;
-      const original = vp.getAttribute('content') || 'width=device-width, initial-scale=1.0';
-      const locked = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
-      let isLocked = false;
-
-      const isTextInput = (el) => {
-        if (!el) return false;
-        const tag = el.tagName;
-        if (tag === 'TEXTAREA') return true;
-        if (tag !== 'INPUT') return false;
-        const types = ['text','email','number','tel','search','password','url'];
-        return types.includes((el.type || 'text').toLowerCase());
-      };
-
-      document.addEventListener('focusin', (e) => {
-        if (isTextInput(e.target) && !isLocked) {
-          vp.setAttribute('content', locked);
-          isLocked = true;
-        }
-      });
-
-      function restore() {
-        if (isLocked) {
-          vp.setAttribute('content', original);
-          isLocked = false;
-        }
-      }
-
-      document.addEventListener('focusout', () => setTimeout(restore, 200));
-
-      // Si el usuario toca fuera de un input, intenta restaurar
-      document.addEventListener('touchend',
+  <!-- ✅ LOGO GIRATORIO -->
+  <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png" alt="Logo PIPJM" class="floating-logo">
+</body>
+</html>
