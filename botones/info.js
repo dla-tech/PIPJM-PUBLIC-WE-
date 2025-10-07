@@ -13,6 +13,7 @@
   contentDiv.style.width = "100%";
   contentDiv.style.height = "100vh";
   contentDiv.style.overflowY = "auto";
+  contentDiv.style.background = "#fff8e7"; // Fondo crema
   contentDiv.innerHTML = "";
 
   // Imagen interactiva con ubicación
@@ -67,10 +68,14 @@
   volverBtn.style.borderRadius = "8px";
   volverBtn.style.boxShadow = "2px 2px 6px rgba(0,0,0,0.3)";
   volverBtn.onclick = () => {
+    // Restaurar menú principal
     contentDiv.innerHTML = "";
     contentDiv.style.display = "none";
     mainMenu.style.display = "flex";
     document.body.style.overflow = "hidden";
+
+    // Eliminar el botón volver para que no quede pegado
+    document.body.removeChild(volverBtn);
   };
   document.body.appendChild(volverBtn);
 })();
