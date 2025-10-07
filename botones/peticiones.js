@@ -1,5 +1,6 @@
-// peticiones.js (versión completa con EmailJS, congregación y botón flotante inferior izquierdo)
+// peticiones.js (versión completa con botón Volver flotante corregido)
 
+// Inicializar EmailJS al cargar
 (() => {
   const scriptEmailJS = document.createElement('script');
   scriptEmailJS.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
@@ -8,96 +9,121 @@
   };
   document.head.appendChild(scriptEmailJS);
 
+  const originalBodyBg = getComputedStyle(document.body).backgroundImage || '';
   const contentDiv = document.getElementById("content");
   const mainMenu = document.getElementById("mainMenu");
-  const originalBodyBg = getComputedStyle(document.body).backgroundImage || '';
-  if (!contentDiv) return;
+  if (!contentDiv || !mainMenu) return;
 
-  contentDiv.style.display = "flex";
-  contentDiv.style.flexDirection = "column";
-  contentDiv.style.alignItems = "center";
+  document.body.style.overflow = "hidden";
+  contentDiv.style.display = "block";
   contentDiv.style.background = "#fff8e7";
   contentDiv.style.width = "100%";
   contentDiv.style.height = "100vh";
   contentDiv.style.overflowY = "auto";
   contentDiv.style.padding = "30px 20px";
   contentDiv.style.boxSizing = "border-box";
+  contentDiv.style.display = "flex";
+  contentDiv.style.flexDirection = "column";
+  contentDiv.style.alignItems = "center";
+  mainMenu.style.display = "none";
 
-  if (mainMenu) mainMenu.style.display = "none";
-  document.body.style.overflow = "hidden";
+  let etapa = 0, ultimaEtapa = 0;
 
-  let etapa = 0;
-  let ultimaEtapa = 0;
-
-  function crearBotonVolver() {
+  function agregarBotonVolverFlotante() {
+    if (document.getElementById("btnVolverFlotante")) return;
     const btn = document.createElement("button");
+    btn.id = "btnVolverFlotante";
     btn.textContent = "⬅️ Volver";
-    btn.onclick = goBack;
     btn.style.cssText = `
       position: fixed;
       bottom: 20px;
       left: 20px;
       padding: 10px 20px;
-      font-size: 16px;
       background: #333;
       color: white;
       border: none;
       border-radius: 8px;
-      z-index: 1000;
+      font-size: 16px;
+      z-index: 9999;
     `;
-    btn.id = "botonVolverPeticiones";
+    btn.onclick = goBack;
     document.body.appendChild(btn);
   }
 
   function eliminarBotonVolver() {
-    const btn = document.getElementById("botonVolverPeticiones");
+    const btn = document.getElementById("btnVolverFlotante");
     if (btn) btn.remove();
   }
 
   function mostrarPreguntaInicial() {
     etapa = 0;
     contentDiv.innerHTML = `
-      <h2 style="margin-bottom:10px;">🙏 Petición o Necesidad</h2>
-      <p style="font-size:18px;margin-bottom:10px;">¿Asistes a una congregación?</p>
-      <div style="display:flex;gap:20px;">
-        <button id="btnSi">Sí</button>
-        <button id="btnNo">No</button>
+      <h2 style="text-align:center;font-size:24px;margin-top:8px;">🙏 Petición o Necesidad</h2>
+      <p style="font-size:18px;margin-top:12px;">¿Asistes a una congregación?</p>
+      <div style="display:flex;gap:20px;justify-content:center;margin-top:14px;">
+        <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
+        <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
       </div>
     `;
-    crearBotonVolver();
-    document.getElementById("btnSi").onclick = () => {
-      ultimaEtapa = etapa;
-      etapa = 2;
-      renderFormSi();
-    };
-    document.getElementById("btnNo").onclick = () => {
-      ultimaEtapa = etapa;
-      etapa = 1;
-      renderOpciones();
-    };
+    document.getElementById("btnSi").onclick = () => { ultimaEtapa = etapa; etapa = 2; renderFormSi(); };
+    document.getElementById("btnNo").onclick = () => { ultimaEtapa = etapa; etapa = 1; renderOpciones(); };
+    agregarBotonVolverFlotante();
   }
 
   function renderFormSi() {
     etapa = 2;
     contentDiv.innerHTML = `
-      <h2 style="margin-bottom:10px;">🙏 Petición o Necesidad</h2>
-      <label>Nombre completo:</label>
-      <input type="text" id="nombre" required style="width:100%;margin-bottom:10px;">
+      <h2 style="margin-top:8px;">🙏 Petición o Necesidad</h2>
+      <div style="width:100%;max-width:700px;margin-top:12px;">
+        <label>Nombre completo (requerido):</label>
+        <input type="text" id="nombre" style="width:100%;margin-bottom:10px;padding:8px;" required>
 
-      <label>Nombre de tu congregación:</label>
-      <input type="text" id="congregacion" style="width:100%;margin-bottom:10px;">
+        <label>Nombre de tu congregación:</label>
+        <input type="text" id="congregacion" style="width:100%;margin-bottom:10px;padding:8px;">
 
-      <label>Petición o necesidad:</label>
-      <textarea id="peticion" rows="4" style="width:100%;margin-bottom:10px;"></textarea>
+        <label>Escribe tu petición o necesidad:</label>
+        <textarea id="peticion" rows="5" style="width:100%;margin-bottom:10px;padding:8px;"></textarea>
 
-      <label>Teléfono (opcional):</label>
-      <input type="text" id="telefono" style="width:100%;margin-bottom:20px;">
+        <label>Número telefónico (opcional):</label>
+        <input type="text" id="telefono" style="width:100%;margin-bottom:10px;padding:8px;">
 
-      <button id="enviarBtn" disabled>Enviar</button>
+        <div style="text-align:center;margin-top:14px;">
+          <button id="enviarBtn" style="padding:10px 20px;background:#0b74de;color:white;border:none;border-radius:8px;" disabled>Enviar</button>
+        </div>
+      </div>
     `;
-    document.getElementById("nombre").oninput = activarBtnEnviar;
-    document.getElementById("peticion").oninput = activarBtnEnviar;
-    document.getElementById("enviarBtn").onclick = () => enviarPeticion();
+    const nombreInput = document.getElementById("nombre");
+    const peticionInput = document.getElementById("peticion");
+    const enviarBtn = document.getElementById("enviarBtn");
+
+    function validar() {
+      enviarBtn.disabled = !(nombreInput.value.trim() && peticionInput.value.trim());
+    }
+
+    nombreInput.oninput = validar;
+    peticionInput.oninput = validar;
+
+    enviarBtn.onclick = () => {
+      const nombre = nombreInput.value.trim();
+      const congregacion = document.getElementById("congregacion").value.trim();
+      const peticion = peticionInput.value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      enviarBtn.disabled = true;
+      enviarBtn.textContent = "Enviando...";
+      emailjs.send('service_wjbpiik', 'template_89ugs9a', {
+        nombre, congregacion, mensaje: peticion, telefono, razon: "Formulario completo"
+      }).then(() => {
+        alert("✅ ¡Petición enviada!");
+        mostrarPreguntaInicial();
+      }).catch(err => {
+        console.error(err);
+        alert("❌ Error al enviar");
+      }).finally(() => {
+        enviarBtn.disabled = false;
+        enviarBtn.textContent = "Enviar";
+      });
+    };
+    agregarBotonVolverFlotante();
   }
 
   function renderOpciones() {
@@ -112,85 +138,105 @@
       "Oración por reconciliación",
       "Otros"
     ];
-    contentDiv.innerHTML = `<h2 style="margin-bottom:10px;">🙏 Petición o Necesidad</h2>`;
+    contentDiv.innerHTML = `<h2 style="margin-top:8px;">🙏 Petición o Necesidad</h2>`;
     const contenedor = document.createElement("div");
-    opciones.forEach(txt => {
+    contenedor.style.width = "100%";
+    contenedor.style.maxWidth = "700px";
+    contenedor.style.marginTop = "12px";
+    contenedor.style.display = "flex";
+    contenedor.style.flexDirection = "column";
+    contenedor.style.gap = "12px";
+    contentDiv.appendChild(contenedor);
+
+    opciones.forEach(op => {
       const btn = document.createElement("button");
-      btn.textContent = txt;
-      btn.style.cssText = "margin:8px;padding:10px;width:100%;";
-      btn.onclick = () => renderCustom(txt);
+      btn.textContent = op;
+      btn.style.cssText = "padding:16px;font-size:16px;border-radius:8px;";
+      btn.onclick = () => renderCustom(op);
       contenedor.appendChild(btn);
     });
-    contentDiv.appendChild(contenedor);
+    agregarBotonVolverFlotante();
   }
 
   function renderCustom(razon) {
     etapa = 2;
-    const extra = razon === "Otros" ?
-      `<label>Escribe tu necesidad:</label><textarea id="peticion"></textarea>` :
-      `<div style="margin-bottom:10px;">${razon}</div>`;
-
+    const obligatorioTel = ["Oración por salvación", "Oración por reconciliación"].includes(razon);
     contentDiv.innerHTML = `
-      <h2 style="margin-bottom:10px;">🙏 Petición o Necesidad</h2>
-      ${extra}
-      <label>Nombre completo:</label>
-      <input type="text" id="nombre" required>
-
-      <label>Teléfono (opcional):</label>
-      <input type="text" id="telefono">
-
-      <button id="enviarBtn" disabled>Enviar</button>
+      <h2 style="margin-top:8px;">🙏 ${razon}</h2>
+      <div style="width:100%;max-width:700px;margin-top:12px;">
+        ${razon === "Otros" ? `<label>Necesidad:</label><textarea id="peticion" rows="4" style="width:100%;margin-bottom:10px;padding:8px;"></textarea>` : ''}
+        <label>Nombre completo:</label>
+        <input type="text" id="nombre" style="width:100%;margin-bottom:10px;padding:8px;" required>
+        <label>Teléfono ${obligatorioTel ? "(requerido)" : "(opcional)"}:</label>
+        <input type="text" id="telefono" ${obligatorioTel ? "required" : ""} style="width:100%;margin-bottom:10px;padding:8px;">
+        <div style="text-align:center;margin-top:14px;">
+          <button id="enviarBtn" style="padding:10px 20px;background:#0b74de;color:white;border:none;border-radius:8px;" disabled>Enviar</button>
+        </div>
+      </div>
     `;
-    document.getElementById("nombre").oninput = activarBtnEnviar;
-    if (razon === "Otros") document.getElementById("peticion").oninput = activarBtnEnviar;
-    document.getElementById("enviarBtn").onclick = () => enviarPeticion(razon);
-  }
-
-  function activarBtnEnviar() {
-    const nombre = document.getElementById("nombre")?.value.trim();
-    const peticion = document.getElementById("peticion")?.value.trim();
+    const nombre = document.getElementById("nombre");
+    const peticion = document.getElementById("peticion");
     const enviarBtn = document.getElementById("enviarBtn");
-    if (!enviarBtn) return;
-    enviarBtn.disabled = !nombre || (document.getElementById("peticion") && !peticion);
+
+    function validar() {
+      const n = nombre.value.trim();
+      const p = peticion ? peticion.value.trim() : "✓";
+      enviarBtn.disabled = !n || !p;
+    }
+
+    nombre.oninput = validar;
+    if (peticion) peticion.oninput = validar;
+
+    enviarBtn.onclick = () => {
+      const telefono = document.getElementById("telefono").value.trim();
+      const mensaje = peticion ? peticion.value.trim() : razon;
+      const nombreVal = nombre.value.trim();
+      if (mensaje.toLowerCase().includes("suicidio") && telefono === "") {
+        alert("Por seguridad, incluye tu teléfono.");
+        return;
+      }
+      enviarBtn.disabled = true;
+      enviarBtn.textContent = "Enviando...";
+      emailjs.send('service_wjbpiik', 'template_89ugs9a', {
+        nombre: nombreVal,
+        mensaje,
+        telefono,
+        razon
+      }).then(() => {
+        alert("✅ ¡Petición enviada!");
+        mostrarPreguntaInicial();
+      }).catch(() => {
+        alert("❌ Error al enviar");
+      }).finally(() => {
+        enviarBtn.disabled = false;
+        enviarBtn.textContent = "Enviar";
+      });
+    };
+    agregarBotonVolverFlotante();
   }
 
-  function enviarPeticion(razon) {
-    const nombre = document.getElementById("nombre")?.value.trim();
-    const congregacion = document.getElementById("congregacion")?.value.trim() || "";
-    const peticion = document.getElementById("peticion")?.value.trim() || razon || "";
-    const telefono = document.getElementById("telefono")?.value.trim() || "";
-
-    emailjs.send('service_wjbpiik', 'template_89ugs9a', {
-      nombre, congregacion, mensaje: peticion, telefono, razon: razon || "Petición directa"
-    }).then(() => {
-      alert("✅ Petición enviada con éxito");
+  window.goBack = function () {
+    if (etapa === 2) {
+      if (ultimaEtapa === 1) renderOpciones();
+      else mostrarPreguntaInicial();
+    } else if (etapa === 1) {
       mostrarPreguntaInicial();
-    }).catch(err => {
-      console.error(err);
-      alert("❌ Error al enviar. Intenta más tarde.");
-    });
-  }
-
-  function goBack() {
-    if (etapa === 2) etapa = ultimaEtapa === 1 ? renderOpciones() : mostrarPreguntaInicial();
-    else if (etapa === 1) mostrarPreguntaInicial();
-    else volverAlMenu();
-  }
+    } else {
+      volverAlMenu();
+    }
+  };
 
   function volverAlMenu() {
     contentDiv.innerHTML = "";
     contentDiv.style.display = "none";
-    document.body.style.background = originalBodyBg || "url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed";
-    document.body.style.backgroundSize = "cover";
+    mainMenu.style.display = "flex";
+    document.body.style.background = originalBodyBg || "#fff";
     document.body.style.overflow = "hidden";
-    if (mainMenu) mainMenu.style.display = "flex";
+    eliminarBotonVolver();
     etapa = 0;
     ultimaEtapa = 0;
-    eliminarBotonVolver();
   }
 
-  window.goBack = goBack;
   window.volverAlMenu = volverAlMenu;
-
   mostrarPreguntaInicial();
 })();
