@@ -35,7 +35,7 @@
           <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
           <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
         </div>
-        <small style="color:#6b7280">“Solicitamos los campos obligatorios para poder dar un mejor seguimiento y brindarle un servicio más cálido y acorde a sus necesidades.”</small>
+        <small <strong style="color:#6b7280">“Los campos solicitados nos permiten brindarle un mejor servicio acorde a sus necesidades. Le agradecemos completar todos ellos, si es posible. ¡Gracias!”<\strong/</small>
       </div>
     `;
     agregarBotonVolver();
