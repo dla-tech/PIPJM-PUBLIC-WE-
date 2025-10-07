@@ -31,13 +31,31 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 30px;
+      gap: 22px; /* compacto */
       background-color: rgba(0, 0, 0, 0.5);
+      padding: 16px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    /* Título del templo: azul oscuro + contorno blanco */
+    .temple-title {
+      max-width: 900px;
+      color: #0b3d91;                 /* 🔵 azul oscuro */
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 4px 12px 6px;
+      padding: 0 8px;
+      -webkit-text-stroke: 1px #ffffff;
+      text-shadow:
+        0 0 1px #ffffff,
+        0 0 2px #ffffff;
+      font-size: clamp(18px, 3.2vw, 28px);
     }
 
     .main-menu button {
-      font-size: 16px;
-      padding: 16px 24px;
+      font-size: 14px;                 /* un poco más pequeño */
+      padding: 12px 18px;              /* un poco más pequeño */
       border-radius: 12px;
       color: white;
       cursor: pointer;
@@ -49,11 +67,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       text-align: center;
     }
 
-    /* ✅ Logo flotante restaurado */
+    /* Logo flotante */
     .floating-logo {
       position: fixed;
       bottom: 20px;
@@ -63,7 +81,7 @@
       z-index: 1000;
       opacity: 0.9;
       animation: rotate 6s linear infinite;
-      pointer-events: none; /* no tapa clics del UI */
+      pointer-events: none;
     }
 
     @keyframes rotate {
@@ -76,23 +94,29 @@
 
   <!-- MENÚ PRINCIPAL -->
   <div class="main-menu" id="mainMenu">
+
+    <!-- 🏛️ Título del templo -->
+    <h1 class="temple-title">
+      Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc
+    </h1>
+
     <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/programacion.js')">
-      <span style="font-size: 40px;">📅</span><br>
+      <span style="font-size: 34px;">📅</span><br>
       <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver programación de Cultos</span>
     </button>
 
     <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/info.js')">
-      <span style="font-size: 40px;">📜</span><br>
+      <span style="font-size: 34px;">📜</span><br>
       <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Info del templo y Congregación</span>
     </button>
 
     <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/peticiones.js')">
-      <span style="font-size: 40px;">🙏</span><br>
+      <span style="font-size: 34px;">🙏</span><br>
       <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Peticiones o Necesidad</span>
     </button>
 
     <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/vercultos.js')">
-      <span style="font-size: 40px;">🎞️</span><br>
+      <span style="font-size: 34px;">🎞️</span><br>
       <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver cultos o En vivos</span>
     </button>
   </div>
@@ -119,7 +143,7 @@
     }
   </script>
 
-  <!-- ✅ LOGO GIRATORIO -->
+  <!-- LOGO GIRATORIO -->
   <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png" alt="Logo PIPJM" class="floating-logo">
 </body>
 </html>
