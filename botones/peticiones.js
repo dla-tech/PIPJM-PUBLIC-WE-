@@ -28,7 +28,7 @@
     etapa = 0;
     contentDiv.innerHTML = `
       <div style="text-align:center;">
-      <h4 style="margin-bottom: 20px;">Pastora: Nélida Brito Morales Copastor: Marcos River</h4>
+      <h3 style="margin-bottom: 20px;">Pastora: Nélida Brito Morales Copastor: Marcos River</h3>
         <h2>🙏 Petición o Necesidad</h2>
         <p style="font-size:18px;">¿Asistes a una congregación?</p>
         <div style="margin:20px;">
