@@ -26,7 +26,7 @@ function cargarCultos() {
 
   // Crear estructura base (sin el botón aquí)
   contentDiv.innerHTML = `
-  <h3 style="margin-bottom: 20px;">Pastora: Nélida Brito Morales Copastor: Marcos River</h3>
+    <h3 style="text-align:center; font-size: 24px;">Pastora: Nélida Brito Morales Copastor: Marcos Rivera</h3>
     <h2 style="text-align:center; font-size: 24px;">📺 Transmisiones en Vivo y Cultos Anteriores</h2>
     <div id="liveVideo" style="margin: 30px 0; width: 100%; max-width: 700px;"></div>
     <div id="pastVideos" style="width: 100%; max-width: 700px;"></div>
