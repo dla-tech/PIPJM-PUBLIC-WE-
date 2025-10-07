@@ -3,94 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Selecciona idioma</title>
+  <title>Seleccione idioma</title>
   <style>
-    /* Fondo a pantalla completa, sin barras blancas */
     html, body {
-      margin: 0; padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background: #000;
-      font-family: Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      overscroll-behavior: none;
+      margin: 0; padding: 0; height: 100%;
+      overflow: hidden; background:#000; font-family: Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
     }
+    /* Fondo full cover sin bordes */
     body::before{
-      content:"";
-      position: fixed;
-      inset: 0;
-      background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') center/cover no-repeat;
-      z-index: -1;
+      content:""; position:fixed; inset:0;
+      background:url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') center/cover no-repeat;
+      z-index:-1;
     }
-
-    /* Contenedor del gate */
     .gate{
-      position: absolute;
-      inset: 0;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-      background: rgba(0,0,0,0.45);
-      box-sizing: border-box;
-      padding: 16px;
-      text-align: center;
+      position:absolute; inset:0; min-height:100dvh;
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      gap:18px; padding:16px; text-align:center; background:rgba(0,0,0,.45);
+      box-sizing:border-box;
     }
-    @supports not (height: 100dvh){
-      .gate{ min-height: 100vh; }
-    }
+    @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
 
-    /* Texto negro con offset blanco 100% */
-    .outline {
-      color: #000;               /* negro */
-      -webkit-text-stroke: 1.6px #fff; /* contorno blanco sólido */
-      paint-order: stroke fill;
-    }
-    /* Fallback si no hay text-stroke */
-    @supports not (-webkit-text-stroke: 1px white) {
-      .outline {
+    /* Texto negro con contorno blanco 100% */
+    .outline { color:#000; -webkit-text-stroke:1.6px #fff; paint-order:stroke fill; }
+    @supports not (-webkit-text-stroke: 1px white){
+      .outline{
         text-shadow:
           1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
           1px 1px #fff, -1px 1px #fff, 1px -1px #fff, -1px -1px #fff;
       }
     }
+    h1{ margin:0 0 8px; font-size:clamp(20px,4.5vw,28px); }
+    p.sub{ margin:0 0 12px; font-size:clamp(14px,3.8vw,18px); }
 
-    h1 {
-      margin: 0 0 8px 0;
-      font-size: clamp(20px, 4.5vw, 28px);
+    .btns{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+    .btn{
+      display:inline-block; min-width:140px; padding:12px 18px;
+      font-size:16px; font-weight:700; cursor:pointer; text-decoration:none;
+      color:#000; -webkit-text-stroke:1.4px #fff; paint-order:stroke fill;
+      background:rgba(255,255,255,.20); border:2px solid rgba(255,255,255,.65);
+      border-radius:12px; backdrop-filter:blur(2px);
+      transition:transform .08s ease, background .15s ease;
     }
-    p.sub {
-      margin: 0 0 12px 0;
-      font-size: clamp(14px, 3.8vw, 18px);
-    }
-
-    .btns{
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .btn {
-      background: rgba(255,255,255,0.20);
-      border: 2px solid rgba(255,255,255,0.65);
-      border-radius: 12px;
-      padding: 12px 18px;
-      font-size: 16px;       /* >=16px evita zoom en iOS */
-      font-weight: 700;
-      cursor: pointer;
-      backdrop-filter: blur(2px);
-      transition: transform .08s ease, background .15s ease;
-      color: #000;
-      -webkit-text-stroke: 1.4px #fff;
-      text-decoration: none;
-      display: inline-block;
-      min-width: 140px;
-    }
-    .btn:active { transform: scale(0.98); }
-    .btn:hover  { background: rgba(255,255,255,0.28); }
+    .btn:hover{ background:rgba(255,255,255,.28); }
+    .btn:active{ transform:scale(.98); }
   </style>
 </head>
 <body>
@@ -98,10 +54,32 @@
     <h1 class="outline">Seleccione idioma / Select language</h1>
     <p class="sub outline">Elige tu preferencia para continuar</p>
     <div class="btns">
-      <!-- RUTAS: español en /es/index.html y inglés en /en/index.html -->
-      <a class="btn outline" href="./es/index.html">Español</a>
-      <a class="btn outline" href="./en/index.html">English</a>
+      <button class="btn outline" onclick="goES()">Español</button>
+      <button class="btn outline" onclick="goEN()">English</button>
     </div>
   </div>
+
+  <script>
+    // Redirección robusta: prueba varias rutas hasta encontrar una válida (200 OK)
+    async function jump(candidates){
+      for (const path of candidates){
+        try{
+          const res = await fetch(path, { method:'HEAD', cache:'no-store' });
+          if (res.ok){ location.href = path; return; }
+        }catch(e){ /* sigue con la siguiente */ }
+      }
+      alert('No se encontró ninguna de las rutas:\n' + candidates.join('\n'));
+    }
+
+    // ⚠️ Usa EXACTAMENTE tus rutas de la captura
+    function goEN(){
+      // En tu repo: carpeta 'en' (minúscula) + 'Index.html' (I mayúscula)
+      jump(['en/Index.html','En/Index.html','en/index.html']);
+    }
+    function goES(){
+      // Pon primero la que estés usando. Aquí dejo ambas variantes.
+      jump(['Es/Index.html','es/index.html','ES/Index.html','index_es.html']);
+    }
+  </script>
 </body>
 </html>
