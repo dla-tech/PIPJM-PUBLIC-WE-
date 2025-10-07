@@ -35,7 +35,7 @@
           <button id="btnSi" style="padding:12px 24px;font-size:16px;">Sí</button>
           <button id="btnNo" style="padding:12px 24px;font-size:16px;">No</button>
         </div>
-        <small style="color:#6b7280">Tu nombre es obligatorio; número telefónico opcional salvo casos especiales.</small>
+        <small style="color:#6b7280">“Solicitamos los campos obligatorios para poder dar un mejor seguimiento y brindarle un servicio más cálido y acorde a sus necesidades.”</small>
       </div>
     `;
     agregarBotonVolver();
