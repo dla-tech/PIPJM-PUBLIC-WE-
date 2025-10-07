@@ -3,69 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Selecciona idioma</title>
+  <title>Iglesia</title>
   <style>
-    /* Fondo a pantalla completa */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center;
-      background-size: cover;
+    html, body { margin:0; padding:0; overflow:hidden; font-family: Arial, sans-serif; background:#000; }
+    body::before{
+      content:""; position:fixed; inset:0;
+      background:url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') center/cover no-repeat;
+      z-index:-1;
     }
-
-    /* Capa oscura y centrado del contenido */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      min-height: 100svh; /* ayuda a evitar bordes en Safari */
-      background: rgba(0,0,0,0.55);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 22px;
-      text-align: center;
-    }
-
-    .overlay h2 {
-      margin: 0 20px 6px;
-      font-size: 22px;
-      color: #fff;
-      /* contorno blanco 100% para buena lectura */
-      text-shadow:
-        1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
-        1px 1px #fff, -1px 1px #fff, 1px -1px #fff, -1px -1px #fff;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .buttons a {
-      text-decoration: none;
-      color: #fff;
-      font-weight: bold;
-      font-size: 16px;
-      padding: 12px 18px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.55);
-      transition: transform .08s ease;
-    }
-    .buttons a:active { transform: scale(0.98); }
+    .gate{min-height:100dvh; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:18px; background:rgba(0,0,0,.5); text-align:center; padding:16px;}
+    .gate h2{margin:0 0 6px; color:#fff; font-size:22px; text-shadow:1px 0 #fff,-1px 0 #fff,0 1px #fff,0 -1px #fff,1px 1px #fff,-1px 1px #fff,1px -1px #fff,-1px -1px #fff;}
+    .btns{display:flex; gap:12px; flex-wrap:wrap; justify-content:center;}
+    .btns a{display:inline-block; padding:12px 18px; font-size:16px; color:#fff; text-decoration:none; border:none; border-radius:10px; background:rgba(0,0,0,.55); font-weight:bold}
   </style>
 </head>
 <body>
-  <div class="overlay">
+  <div class="gate">
     <h2>Seleccione idioma / Select language</h2>
-    <div class="buttons">
-      <!-- ⚠️ Ajusta estas rutas si tus archivos tienen otros nombres -->
-      <a href="./index_es.html">Español</a>
-      <a href="./index_en.html">English</a>
+    <div class="btns">
+      <a href="./es/">Español</a>
+      <a href="./en/">English</a>
     </div>
   </div>
 </body>
