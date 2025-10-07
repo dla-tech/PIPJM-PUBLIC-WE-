@@ -74,17 +74,33 @@
     const peticionInput = document.getElementById("peticion");
     const enviarBtn = document.getElementById("enviarBtn");
 
-    function validar() {
-      enviarBtn.disabled = nombreInput.value.trim() === "" || peticionInput.value.trim() === "";
+  function validar() {
+  if (peticionInput) {
+    if (nombreInput.value.trim() !== "" && peticionInput.value.trim() !== "") {
+      enviarBtn.disabled = false;
+      enviarBtn.style.backgroundColor = "#28a745";
+      enviarBtn.style.color = "#fff";
+      enviarBtn.style.cursor = "pointer";
+    } else {
+      enviarBtn.disabled = true;
+      enviarBtn.style.backgroundColor = "";
+      enviarBtn.style.color = "";
+      enviarBtn.style.cursor = "";
     }
-    nombreInput.addEventListener("input", validar);
-    peticionInput.addEventListener("input", validar);
-
-    enviarBtn.addEventListener("click", () => {
-      enviarPeticion();
-    });
+  } else {
+    if (nombreInput.value.trim() !== "") {
+      enviarBtn.disabled = false;
+      enviarBtn.style.backgroundColor = "#28a745";
+      enviarBtn.style.color = "#fff";
+      enviarBtn.style.cursor = "pointer";
+    } else {
+      enviarBtn.disabled = true;
+      enviarBtn.style.backgroundColor = "";
+      enviarBtn.style.color = "";
+      enviarBtn.style.cursor = "";
+    }
   }
-
+}
   function renderOpciones() {
     etapa = 1;
     contentDiv.innerHTML = `<h2>🙏 Petición o Necesidad</h2><p>Selecciona tu necesidad:</p>`;
