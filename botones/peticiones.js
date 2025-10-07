@@ -54,13 +54,13 @@
     etapa = 2;
     contentDiv.innerHTML = `
       <h2>🙏 Petición o Necesidad</h2>
-      <label>Nombre completo (requerido):</label>
+      <label>Nombre completo (oblogatorio):</label>
       <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
 
-      <label>Nombre de tu congregación:</label>
+      <label>Nombre de tu congregación (opcional):</label>
       <input type="text" id="congregacion" style="width:100%;margin-bottom:10px;">
 
-      <label>Escribe tu petición o necesidad:</label>
+      <label>Escribe tu petición o necesidad (obligatorio):</label>
       <textarea id="peticion" rows="5" style="width:100%;margin-bottom:10px;"></textarea>
 
       <label>Número telefónico (opcional):</label>
@@ -128,7 +128,7 @@
     contentDiv.innerHTML = `
       <h2>🙏 Petición o Necesidad</h2>
       ${extra}
-      <label>Nombre completo (requerido):</label>
+      <label>Nombre completo (obligatorio):</label>
       <input type="text" id="nombre" style="width:100%;margin-bottom:10px;" required>
 
       <label>Número telefónico ${telLabel}:</label>
