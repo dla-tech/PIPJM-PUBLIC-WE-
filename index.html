@@ -16,6 +16,7 @@
       background:url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') center/cover no-repeat;
       z-index:-1;
     }
+
     .gate{
       position:absolute; inset:0; min-height:100dvh;
       display:flex; flex-direction:column; justify-content:center; align-items:center;
@@ -34,7 +35,6 @@
       }
     }
     h1{ margin:0 0 8px; font-size:clamp(20px,4.5vw,28px); }
-    p.sub{ margin:0 0 12px; font-size:clamp(14px,3.8vw,18px); }
 
     .btns{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
     .btn{
@@ -52,7 +52,6 @@
 <body>
   <div class="gate">
     <h1 class="outline">Seleccione idioma / Select language</h1>
-    <p class="sub outline">Elige tu preferencia para continuar</p>
     <div class="btns">
       <button class="btn outline" onclick="goES()">Español</button>
       <button class="btn outline" onclick="goEN()">English</button>
@@ -60,26 +59,8 @@
   </div>
 
   <script>
-    // Redirección robusta: prueba varias rutas hasta encontrar una válida (200 OK)
-    async function jump(candidates){
-      for (const path of candidates){
-        try{
-          const res = await fetch(path, { method:'HEAD', cache:'no-store' });
-          if (res.ok){ location.href = path; return; }
-        }catch(e){ /* sigue con la siguiente */ }
-      }
-      alert('No se encontró ninguna de las rutas:\n' + candidates.join('\n'));
-    }
-
-    // ⚠️ Usa EXACTAMENTE tus rutas de la captura
-    function goEN(){
-      // En tu repo: carpeta 'en' (minúscula) + 'Index.html' (I mayúscula)
-      jump(['en/Index.html','En/Index.html','en/index.html']);
-    }
-    function goES(){
-      // Pon primero la que estés usando. Aquí dejo ambas variantes.
-      jump(['Es/Index.html','es/index.html','ES/Index.html','index_es.html']);
-    }
+    function goES(){ location.href = 'es/Index.html'; }
+    function goEN(){ location.href = 'en/Index.html'; }
   </script>
 </body>
 </html>
