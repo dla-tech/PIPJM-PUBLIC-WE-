@@ -96,7 +96,7 @@ function cargarCultos() {
 
           const videoCard = document.createElement("div");
           videoCard.style.marginBottom = "30px";
-          videoCard.style.background = "#ffdddd";
+          videoCard.style.background = "#c90808";
           videoCard.style.padding = "10px";
           videoCard.style.borderRadius = "10px";
           videoCard.style.textAlign = "center";
