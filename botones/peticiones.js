@@ -137,6 +137,10 @@
       <label>Número telefónico ${telLabel}:</label>
       <input type="text" id="telefono" ${telReqAttr} style="width:100%;margin-bottom:10px;">
 
+      <!-- 🆕 CAMPO NUEVO DETALLES -->
+      <label>Detalles (situación o enfermedad específica) <span style="color:#007a00">(opcional)</span>:</label>
+      <textarea id="detalles" rows="4" placeholder="Escriba aquí su situación o enfermedad..." style="width:100%;margin-bottom:10px;"></textarea>
+
       <button id="enviarBtn" disabled style="background:#d1d5db;color:white;padding:10px 20px;border:none;border-radius:8px;">Enviar</button>
     `;
     agregarBotonVolver();
@@ -177,6 +181,7 @@
     const peticion = document.getElementById("peticion")?.value.trim() || razon || "";
     const telefono = document.getElementById("telefono")?.value.trim() || "";
     const congregacion = document.getElementById("congregacion")?.value.trim() || "";
+    const detalles = document.getElementById("detalles")?.value.trim() || ""; // 🆕 nuevo campo
 
     if (!nombre || !peticion) {
       alert("Por favor completa los campos requeridos.");
@@ -197,6 +202,7 @@
       telefono,
       razon: razon || "Petición directa",
       mensaje: peticion,
+      detalles, // 🆕 agregado al envío
       congregacion
     }).then(() => {
       alert("✅ ¡Petición enviada con éxito!");
