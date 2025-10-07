@@ -82,10 +82,10 @@
     function validar() {
       if (nombreInput.value.trim() !== "" && peticionInput.value.trim() !== "") {
         enviarBtn.disabled = false;
-        enviarBtn.style.backgroundColor = "#0b74de"; // active blue
+        enviarBtn.style.backgroundColor = "#0b74de";
       } else {
         enviarBtn.disabled = true;
-        enviarBtn.style.backgroundColor = "#d1d5db"; // disabled gray
+        enviarBtn.style.backgroundColor = "#d1d5db";
       }
     }
     nombreInput.addEventListener("input", validar);
@@ -114,7 +114,7 @@
       b.textContent = op;
       b.style.cssText = "display:block;width:100%;padding:15px;margin:8px 0;font-size:16px;";
       b.onclick = () => {
-        ultimaEtapa = etapa; // remember we came from this list
+        ultimaEtapa = etapa;
         renderFormularioPredeterminado(op);
       };
       contentDiv.appendChild(b);
@@ -141,6 +141,10 @@
       <label>Phone number ${telLabel}:</label>
       <input type="text" id="telefono" ${telReqAttr} style="width:100%;margin-bottom:10px;">
 
+      <!-- unified field so EmailJS receives it as 'mensaje' -->
+      <label>Details (specific situation or illness) <span style="color:#007a00">(optional)</span>:</label>
+      <textarea id="peticion" rows="4" placeholder="Write your specific situation or illness here..." style="width:100%;margin-bottom:10px;"></textarea>
+
       <button id="enviarBtn" disabled style="background:#d1d5db;color:white;padding:10px 20px;border:none;border-radius:8px;">Send</button>
     `;
     agregarBotonVolver();
@@ -153,10 +157,10 @@
       if (peticionInput) {
         if (nombreInput.value.trim() !== "" && peticionInput.value.trim() !== "") {
           enviarBtn.disabled = false;
-          enviarBtn.style.backgroundColor = "#0b74de"; // active blue
+          enviarBtn.style.backgroundColor = "#0b74de";
         } else {
           enviarBtn.disabled = true;
-          enviarBtn.style.backgroundColor = "#d1d5db"; // disabled gray
+          enviarBtn.style.backgroundColor = "#d1d5db";
         }
       } else {
         if (nombreInput.value.trim() !== "") {
