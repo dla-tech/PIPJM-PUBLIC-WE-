@@ -37,6 +37,7 @@
       <p style="margin:6px 0 14px 0;text-align:center;color:#444;">Tap the image to open the location in Google Maps.</p>
       <a href="${MAP_URL}" target="_blank" rel="noopener" style="display:block">
         <img src="${IMG_URL}" alt="Temple Location" style="width:100%;height:auto;border-radius:10px;display:block;">
+            <h6 style="text-align:center; font-size: 24px;">Pastor: Nélida Brito Morales Co-Pastor: Marcos Rivera</h6>
       </a>
     </div>
 
