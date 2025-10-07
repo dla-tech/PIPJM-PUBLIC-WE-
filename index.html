@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iglesia</title>
   <style>
-    body, html {
+    /* Fondo base */
+    html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
       font-family: Arial, sans-serif;
       background: url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') no-repeat center center fixed;
       background-size: cover;
+      height: 100%;
     }
 
     /* Evitar zoom en iOS al enfocar inputs */
@@ -22,22 +24,76 @@
       font-size: 16px;
     }
 
-    .main-menu {
+    /* Gate de idioma */
+    .lang-gate {
       position: absolute;
-      top: 0; left: 0;
+      inset: 0;
       width: 100vw;
       height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 30px;
+      gap: 22px;
+      background-color: rgba(0,0,0,0.55);
+    }
+    .lang-gate h2 {
+      margin: 0 20px 6px 20px;
+      text-align: center;
+      font-size: 22px;
+      color: #fff;
+      /* Offset blanco 100% (contorno) */
+      text-shadow:
+        1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
+        1px 1px #fff, -1px 1px #fff, 1px -1px #fff, -1px -1px #fff;
+    }
+    .lang-gate .lang-buttons {
+      display: flex;
+      gap: 14px;
+    }
+    .lang-gate .lang-buttons button {
+      font-size: 16px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.55);
+      border: none;
+      font-weight: bold;
+    }
+
+    /* Menú principal */
+    .main-menu {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;            /* oculto hasta elegir idioma */
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
       background-color: rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    /* Nombre del templo (azul oscuro con contorno blanco) */
+    .church-name {
+      color: #0b2e74; /* azul oscuro */
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 16px 8px 16px;
+      line-height: 1.35;
+      text-align: center;
+      /* Offset/blanco 100% (contorno) */
+      text-shadow:
+        1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
+        1px 1px #fff, -1px 1px #fff, 1px -1px #fff, -1px -1px #fff;
     }
 
     .main-menu button {
       font-size: 16px;
-      padding: 16px 24px;
+      padding: 14px 22px;       /* un poco más pequeños */
       border-radius: 12px;
       color: white;
       cursor: pointer;
@@ -63,216 +119,147 @@
       z-index: 1000;
       opacity: 0.9;
       animation: rotate 6s linear infinite;
-      pointer-events: none;
+      pointer-events: none; /* no bloquea clics */
     }
     @keyframes rotate {
       from { transform: rotateY(0deg); }
       to { transform: rotateY(360deg); }
     }
-
-    /* Overlay de idioma */
-    .lang-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-    .lang-card {
-      background: rgba(255,255,255,0.95);
-      border-radius: 16px;
-      padding: 24px 28px;
-      max-width: 420px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    .lang-card h3 {
-      margin: 0 0 10px 0;
-      font-size: 20px;
-      color: #0b3a70;
-    }
-    .lang-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      margin-top: 14px;
-    }
-    .lang-btn {
-      flex: 1;
-      padding: 14px 18px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      color: white;
-      background: #0b74de;
-    }
-    .lang-btn.secondary {
-      background: #1f2937;
-    }
-    .lang-note {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #4b5563;
-    }
   </style>
 </head>
 <body>
 
-  <!-- MENÚ PRINCIPAL -->
-  <div class="main-menu" id="mainMenu">
-    <!-- Título del templo -->
-    <div style="text-align:center; margin-bottom: 10px;">
-      <div style="
-        font-size: 20px;
-        color: #0c2d62;
-        text-shadow:
-          1px 0 0 #ffffff, -1px 0 0 #ffffff,
-          0 1px 0 #ffffff, 0 -1px 0 #ffffff,
-          1px 1px 0 #ffffff, -1px -1px 0 #ffffff,
-          1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
-        ">
-        Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc
-      </div>
+  <!-- Selector de idioma -->
+  <div id="langGate" class="lang-gate">
+    <h2>Seleccione idioma / Select language</h2>
+    <div class="lang-buttons">
+      <button onclick="chooseLang('es')">Español</button>
+      <button onclick="chooseLang('en')">English</button>
     </div>
+  </div>
 
-    <button onclick="openSection('programacion')">
-      <span style="font-size: 40px;">📅</span><br>
-      <span id="labelProgramacion" style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver programación de Cultos</span>
-    </button>
-
-    <button onclick="openSection('info')">
-      <span style="font-size: 40px;">📜</span><br>
-      <span id="labelInfo" style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Info del templo y Congregación</span>
-    </button>
-
-    <button onclick="openSection('peticiones')">
-      <span style="font-size: 40px;">🙏</span><br>
-      <span id="labelPeticiones" style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Peticiones o Necesidad</span>
-    </button>
-
-    <button onclick="openSection('vercultos')">
-      <span style="font-size: 40px;">🎞️</span><br>
-      <span id="labelVercultos" style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">Ver cultos o En vivos</span>
-    </button>
+  <!-- MENÚ PRINCIPAL (se llena según idioma) -->
+  <div class="main-menu" id="mainMenu">
+    <!-- Se inyecta vía JS el nombre del templo y los botones -->
   </div>
 
   <!-- ÁREA PARA CARGAR LOS ARCHIVOS .JS -->
   <div id="content" style="display: none;"></div>
 
-  <!-- OVERLAY DE IDIOMA -->
-  <div id="langOverlay" class="lang-overlay" style="display:none;">
-    <div class="lang-card">
-      <h3 id="langTitle">Selecciona tu idioma / Select your language</h3>
-      <div class="lang-actions">
-        <button class="lang-btn" onclick="selectLanguage('es')">Español</button>
-        <button class="lang-btn secondary" onclick="selectLanguage('en')">English</button>
-      </div>
-      <div class="lang-note" id="langNote">
-        Podrás cambiarlo más tarde borrando los datos del sitio (localStorage).
-      </div>
-    </div>
-  </div>
-
-  <!-- FUNCIONES -->
+  <!-- SCRIPTS -->
   <script>
-    // Rutas por idioma (ajusta las inglesas cuando tengas los JS en /botones_en/)
-    const ROUTES = {
+    // Bases por idioma
+    const BASES = {
+      es: 'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/',
+      en: 'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/'
+    };
+
+    // Archivos por idioma
+    const FILES = {
       es: {
-        programacion: 'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/programacion.js',
-        info:         'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/info.js',
-        peticiones:   'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/peticiones.js',
-        vercultos:    'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/vercultos.js',
+        programacion: 'programacion.js',
+        info: 'info.js',
+        peticiones: 'peticiones.js',
+        vercultos: 'vercultos.js'
       },
       en: {
-        programacion: 'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/programacion.js',
-        info:         'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/info.js',
-        peticiones:   'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/peticiones.js',
-        vercultos:    'https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones_en/vercultos.js',
+        programacion: 'programacion_en.js',
+        info: 'info_en.js',
+        peticiones: 'peticiones_en.js',
+        vercultos: 'vercultos_en.js'
       }
     };
 
+    // Etiquetas por idioma
     const LABELS = {
       es: {
+        churchName: 'Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc',
         programacion: 'Ver programación de Cultos',
-        info:         'Info del templo y Congregación',
-        peticiones:   'Peticiones o Necesidad',
-        vercultos:    'Ver cultos o En vivos',
+        info: 'Info del templo y Congregación',
+        peticiones: 'Peticiones o Necesidad',
+        vercultos: 'Ver cultos o En vivos',
+        icons: ['📅','📜','🙏','🎞️']
       },
       en: {
+        churchName: 'First Pentecostal Church of Jesus Christ of Maunabo, P.R. Inc.',
         programacion: 'View Service Schedule',
-        info:         'Temple & Congregation Info',
-        peticiones:   'Prayer Requests or Needs',
-        vercultos:    'Watch Services / Live',
+        info: 'Temple & Congregation Info',
+        peticiones: 'Prayer Requests',
+        vercultos: 'Watch Services & Live',
+        icons: ['📅','📜','🙏','🎞️']
       }
     };
 
-    function applyLanguage(lang) {
-      // Actualiza etiquetas del menú principal
-      document.getElementById('labelProgramacion').textContent = LABELS[lang].programacion;
-      document.getElementById('labelInfo').textContent = LABELS[lang].info;
-      document.getElementById('labelPeticiones').textContent = LABELS[lang].peticiones;
-      document.getElementById('labelVercultos').textContent = LABELS[lang].vercultos;
+    let currentLang = null;
 
-      // Cambia el atributo lang del HTML (accesibilidad/SEO)
-      document.documentElement.setAttribute('lang', lang === 'en' ? 'en' : 'es');
+    function chooseLang(lang) {
+      currentLang = lang;
+      document.getElementById('langGate').style.display = 'none';
+      buildMainMenu(lang);
+      document.getElementById('mainMenu').style.display = 'flex';
     }
 
-    function selectLanguage(lang) {
-      localStorage.setItem('lang', lang);
-      applyLanguage(lang);
-      document.getElementById('langOverlay').style.display = 'none';
+    function buildMainMenu(lang) {
+      const L = LABELS[lang];
+      const mm = document.getElementById('mainMenu');
+
+      mm.innerHTML = `
+        <div class="church-name">${L.churchName}</div>
+
+        <button onclick="loadScript('programacion')">
+          <span style="font-size: 40px;">${L.icons[0]}</span><br>
+          <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">${L.programacion}</span>
+        </button>
+
+        <button onclick="loadScript('info')">
+          <span style="font-size: 40px;">${L.icons[1]}</span><br>
+          <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">${L.info}</span>
+        </button>
+
+        <button onclick="loadScript('peticiones')">
+          <span style="font-size: 40px;">${L.icons[2]}</span><br>
+          <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">${L.peticiones}</span>
+        </button>
+
+        <button onclick="loadScript('vercultos')">
+          <span style="font-size: 40px;">${L.icons[3]}</span><br>
+          <span style="font-size: 18px; color: white; text-shadow: 1px 1px 3px black;">${L.vercultos}</span>
+        </button>
+      `;
     }
 
-    function initLanguageOverlay() {
-      const saved = localStorage.getItem('lang');
-      if (!saved) {
-        document.getElementById('langOverlay').style.display = 'flex';
-      } else {
-        applyLanguage(saved);
-      }
-    }
+    function loadScript(key) {
+      const content = document.getElementById("content");
+      const mainMenu = document.getElementById("mainMenu");
 
-    // Carga de secciones según idioma
-    function openSection(key) {
-      const lang = localStorage.getItem('lang') || 'es';
-      const url = ROUTES[lang]?.[key];
-      if (!url) {
-        alert(lang === 'en'
-          ? 'This section is not available in English yet.'
-          : 'Esta sección aún no está disponible en el idioma seleccionado.'
-        );
-        return;
-      }
-      loadScript(url);
-    }
+      mainMenu.style.display = "none";
+      content.style.display = "block";
+      content.innerHTML = ""; // limpiar antes
 
-    // Tu loader original (sin cambios de lógica)
-    function loadScript(url) {
-      document.getElementById("mainMenu").style.display = "none";
-      document.getElementById("content").style.display = "block";
-      document.getElementById("content").innerHTML = ""; // limpiar antes
+      const base = BASES[currentLang];
+      const file = FILES[currentLang][key];
+
       const script = document.createElement('script');
-      script.src = url;
+      script.src = base + file;
       script.type = 'text/javascript';
       document.body.appendChild(script);
     }
 
-    // Tu volver original (sin cambios)
+    // Usado por los .js externos para volver al menú (en el idioma elegido)
     function volverAlMenu() {
-      document.getElementById("content").style.display = "none";
-      document.getElementById("mainMenu").style.display = "flex";
-      document.getElementById("content").innerHTML = "";
+      const content = document.getElementById("content");
+      const mainMenu = document.getElementById("mainMenu");
+      content.style.display = "none";
+      content.innerHTML = "";
+      mainMenu.style.display = "flex";
     }
-
-    // Inicializar selección de idioma al cargar
-    initLanguageOverlay();
   </script>
 
   <!-- LOGO GIRATORIO -->
-  <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png" alt="Logo PIPJM" class="floating-logo">
+  <img
+    src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png"
+    alt="Logo PIPJM"
+    class="floating-logo"
+  />
 </body>
 </html>
