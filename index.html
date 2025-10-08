@@ -7,13 +7,13 @@
   <style>
     html, body {
       margin: 0; padding: 0; height: 100%;
-      overflow: hidden; background:#000; font-family: Arial, sans-serif;
+      overflow: hidden; background:#fff; font-family: Arial, sans-serif;
       -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
     }
-    /* Fondo full cover sin bordes */
+    /* Fondo blanco (sin imagen de fondo) */
     body::before{
       content:""; position:fixed; inset:0;
-      background:url('https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/IMG_8023.jpeg') center/cover no-repeat;
+      background:#fff;
       z-index:-1;
     }
 
@@ -24,6 +24,15 @@
       box-sizing:border-box;
     }
     @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
+
+    /* Logo centrado */
+    .center-logo{
+      width: clamp(160px, 45vmin, 360px);
+      height: auto;
+      display:block;
+      margin: 0 auto 10px auto;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,.15));
+    }
 
     /* Texto negro con contorno blanco 100% */
     .outline { color:#000; -webkit-text-stroke:1.6px #fff; paint-order:stroke fill; }
@@ -51,6 +60,13 @@
 </head>
 <body>
   <div class="gate">
+    <!-- Logo centrado -->
+    <img
+      class="center-logo"
+      src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM%20(8.5%20x%209%20in)%20(8.5%20x%2011%20in)%20(11%20x%2011%20in).png"
+      alt="Logo PIPJM"
+    >
+
     <h1 class="outline">Seleccione idioma / Select language</h1>
     <div class="btns">
       <button class="btn outline" onclick="goES()">Español</button>
