@@ -10,7 +10,7 @@
       overflow: hidden; background:#fff; font-family: Arial, sans-serif;
       -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
     }
-    /* Fondo blanco (sin imagen de fondo) */
+    /* Fondo blanco fijo */
     body::before{
       content:""; position:fixed; inset:0;
       background:#fff;
@@ -25,7 +25,7 @@
     }
     @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
 
-    /* Logo centrado */
+    /* Logo en la pantalla de selección (puedes quitarlo si no lo quieres aquí) */
     .center-logo{
       width: clamp(160px, 45vmin, 360px);
       height: auto;
@@ -56,11 +56,32 @@
     }
     .btn:hover{ background:rgba(255,255,255,.28); }
     .btn:active{ transform:scale(.98); }
+
+    /* Splash de transición */
+    .splash {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: none;            /* visible al seleccionar idioma */
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      opacity: 0;
+      transition: opacity .25s ease; /* pequeño fade-in */
+    }
+    .splash.show { display: flex; opacity: 1; }
+
+    .splash img {
+      width: clamp(160px, 45vmin, 360px);
+      height: auto;
+      display:block;
+    }
   </style>
 </head>
 <body>
+  <!-- Pantalla de selección -->
   <div class="gate">
-    <!-- Logo centrado -->
+    <!-- Logo centrado arriba del selector (opcional) -->
     <img
       class="center-logo"
       src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM%20(8.5%20x%209%20in)%20(8.5%20x%2011%20in)%20(11%20x%2011%20in).png"
@@ -74,9 +95,33 @@
     </div>
   </div>
 
+  <!-- Splash de 5s con logo sobre fondo negro -->
+  <div id="splash" class="splash" aria-hidden="true">
+    <img
+      src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM-2.png"
+      alt="Logo PIPJM"
+    >
+  </div>
+
   <script>
-    function goES(){ location.href = 'es/Index.html'; }
-    function goEN(){ location.href = 'en/Index.html'; }
+    const SPLASH_MS = 5000; // 5 segundos
+
+    function showSplashAndGo(url){
+      const splash = document.getElementById('splash');
+      // Evitar dobles clics
+      if (splash.dataset.locked === '1') return;
+      splash.dataset.locked = '1';
+
+      splash.classList.add('show');
+
+      // Navega después de 5s
+      setTimeout(() => {
+        location.href = url;
+      }, SPLASH_MS);
+    }
+
+    function goES(){ showSplashAndGo('es/Index.html'); }
+    function goEN(){ showSplashAndGo('en/Index.html'); }
   </script>
 </body>
 </html>
