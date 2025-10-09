@@ -10,6 +10,7 @@
       overflow: hidden; background:#fff; font-family: Arial, sans-serif;
       -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
     }
+
     body::before{
       content:""; position:fixed; inset:0;
       background:#fff;
@@ -24,28 +25,29 @@
     }
     @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
 
-    /* Promo encima del logo */
+    /* === PROMO === */
     .promo-banner{
       position:absolute;
-      top:15%;
+      top:10%;
       width:90%;
-      max-width:600px;
+      max-width:650px;
+      height:auto;
       text-align:center;
       z-index:10;
-      color:#fff;
-      background:rgba(220,0,0,0.9);
-      font-size:clamp(20px,4vw,32px);
-      font-weight:bold;
-      padding:20px 30px;
-      border-radius:16px;
-      box-shadow:0 8px 25px rgba(0,0,0,0.4);
-      animation: pulse 2s infinite ease-in-out;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 10px 25px rgba(0,0,0,0.45);
+      background:#000;
     }
-    @keyframes pulse {
-      0%,100%{ transform:scale(1); opacity:1; }
-      50%{ transform:scale(1.05); opacity:0.9; }
+    .promo-banner img{
+      width:100%;
+      height:auto;
+      display:block;
+      pointer-events:none; /* No clics ni selección */
+      user-select:none;
     }
 
+    /* === LOGO === */
     .center-logo{
       width: clamp(160px, 45vmin, 360px);
       height: auto;
@@ -54,6 +56,7 @@
       filter: drop-shadow(0 2px 6px rgba(0,0,0,.15));
     }
 
+    /* === TEXTO Y BOTONES === */
     .outline { color:#000; -webkit-text-stroke:1.6px #fff; paint-order:stroke fill; }
     @supports not (-webkit-text-stroke: 1px white){
       .outline{
@@ -80,18 +83,19 @@
 <body>
   <div class="gate">
 
-    <!-- Promo visible sobre el logo -->
+    <!-- 🖼️ PROMO — SOLO CAMBIA LA URL DE LA IMAGEN -->
     <div class="promo-banner">
-      🔥 SPECIAL PROMO — Watch our live service this Sunday at 11:30 AM!
+      <img src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/promos/promo1.jpg" alt="Promo PIPJM">
     </div>
 
-    <!-- Logo centrado -->
+    <!-- LOGO -->
     <img
       class="center-logo"
       src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM%20(8.5%20x%209%20in)%20(8.5%20x%2011%20in)%20(11%20x%2011%20in).png"
       alt="Logo PIPJM"
     >
 
+    <!-- TEXTO -->
     <h1 class="outline">Seleccione idioma / Select language</h1>
     <div class="btns">
       <button class="btn outline" onclick="goES()">Español</button>
