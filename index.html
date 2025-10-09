@@ -11,7 +11,6 @@
       -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
     }
 
-    /* Fondo blanco */
     body::before{
       content:""; position:fixed; inset:0;
       background:#fff;
@@ -26,7 +25,6 @@
     }
     @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
 
-    /* Logo */
     .center-logo{
       width: clamp(160px, 45vmin, 360px);
       height: auto;
@@ -35,7 +33,6 @@
       filter: drop-shadow(0 2px 6px rgba(0,0,0,.15));
     }
 
-    /* Texto con borde blanco */
     .outline { color:#000; -webkit-text-stroke:1.6px #fff; paint-order:stroke fill; }
     @supports not (-webkit-text-stroke: 1px white){
       .outline{
@@ -69,7 +66,7 @@
       border-radius:20px;
       overflow:hidden;
       box-shadow:0 10px 25px rgba(0,0,0,0.45);
-      background:transparent; /* evita fondo negro */
+      background:transparent;
     }
 
     .promo-banner img{
@@ -79,13 +76,17 @@
       border-radius:20px;
     }
 
-    /* Sección inferior (botones + texto) */
+    /* Botones y texto más abajo */
     .lower-section{
-      margin-top:50px;
+      margin-top:380px; /* 👈 bajado para que la promo no tape los botones */
       display:flex;
       flex-direction:column;
       align-items:center;
       gap:12px;
+    }
+
+    @media (max-height:700px){
+      .lower-section{ margin-top:320px; }
     }
   </style>
 </head>
@@ -114,8 +115,8 @@
   </div>
 
   <script>
-    // Cambia esta URL o déjala vacía
-    const promoUrl = "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/image000001.jpeg"; 
+    // 👉 Cambia esta URL o déjala vacía
+    const promoUrl = "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/promos/promo_octubre.jpg";
     const promoBanner = document.getElementById("promoBanner");
 
     if (promoUrl.trim() !== "") {
