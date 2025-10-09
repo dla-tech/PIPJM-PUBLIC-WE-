@@ -11,8 +11,12 @@
   contentDiv.style.padding = "20px";
   contentDiv.style.boxSizing = "border-box";
   contentDiv.style.width = "100%";
+  // 👇 Garantizar scroll interno
   contentDiv.style.height = "100vh";
+  contentDiv.style.maxHeight = "100vh";
   contentDiv.style.overflowY = "auto";
+  contentDiv.style.overflowX = "hidden";
+  contentDiv.style.WebkitOverflowScrolling = "touch"; // iOS smooth scroll
   contentDiv.style.background = "#fff8e7";
   contentDiv.innerHTML = "";
 
@@ -73,7 +77,6 @@
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7037.jpg",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7040.jpg",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7041.jpg",
-    // Última, como pediste:
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_9079.JPG"
   ];
 
@@ -91,7 +94,6 @@
     "Hoy, la Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc. continúa escribiendo su historia con fe, esperanza y gratitud. Celebra con gozo el legado de los que comenzaron esta obra, honra a quienes la han dirigido a lo largo de las décadas y mira al futuro confiando en que el Dios que comenzó la buena obra será fiel en perfeccionarla hasta el día de Jesucristo."
   ];
 
-  // Construcción del HTML de la historia con inserción de fotos
   let fotoIdx = 0;
   let historiaHTML = `
     <div style="background:#f8f9fa; padding:16px 18px;">
@@ -122,14 +124,12 @@
     `;
   }
 
-  // Inserta 2 fotos después de párrafos pares y 1 foto después de impares (alternado)
   parrafos.forEach((p, i) => {
     historiaHTML += `<p style="color:#374151; line-height:1.65; margin:10px 0;">${p}</p>`;
-    const n = (i % 2 === 0) ? 2 : 1; // 2,1,2,1,...
+    const n = (i % 2 === 0) ? 2 : 1; // patrón 2,1,2,1...
     historiaHTML += bloqueFotos(n);
   });
 
-  // Si quedaron fotos, colócalas al final como cierre
   if (fotoIdx < fotos.length) {
     historiaHTML += `
       <div style="margin-top:10px;color:#6b7280;">Galería final</div>
@@ -138,7 +138,6 @@
   }
 
   historiaHTML += `</div>`;
-
   historiaCard.innerHTML = historiaHTML;
   contentDiv.appendChild(historiaCard);
 
