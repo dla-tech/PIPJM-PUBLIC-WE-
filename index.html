@@ -34,13 +34,13 @@
       .gate { min-height:100vh; }
     }
 
-    /* LOGO CENTRADO */
+    /* 🔥 LOGO CENTRADO (más grande y un poco más arriba) */
     .center-logo {
       position: absolute;
-      top: 50%;
+      top: calc(50% - 30px); /* 🔹 subido unos 30 px */
       left: 50%;
       transform: translate(-50%, -50%);
-      width: clamp(200px, 55vmin, 460px);
+      width: clamp(220px, 60vmin, 500px); /* 🔹 ligeramente más grande */
       height: auto;
       display:block;
       filter: drop-shadow(0 3px 8px rgba(0,0,0,.25));
