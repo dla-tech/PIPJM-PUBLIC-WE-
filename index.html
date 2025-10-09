@@ -10,7 +10,6 @@
       overflow: hidden; background:#fff; font-family: Arial, sans-serif;
       -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
     }
-    /* Fondo blanco (sin imagen de fondo) */
     body::before{
       content:""; position:fixed; inset:0;
       background:#fff;
@@ -25,7 +24,28 @@
     }
     @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
 
-    /* Logo centrado */
+    /* Promo encima del logo */
+    .promo-banner{
+      position:absolute;
+      top:15%;
+      width:90%;
+      max-width:600px;
+      text-align:center;
+      z-index:10;
+      color:#fff;
+      background:rgba(220,0,0,0.9);
+      font-size:clamp(20px,4vw,32px);
+      font-weight:bold;
+      padding:20px 30px;
+      border-radius:16px;
+      box-shadow:0 8px 25px rgba(0,0,0,0.4);
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%,100%{ transform:scale(1); opacity:1; }
+      50%{ transform:scale(1.05); opacity:0.9; }
+    }
+
     .center-logo{
       width: clamp(160px, 45vmin, 360px);
       height: auto;
@@ -34,7 +54,6 @@
       filter: drop-shadow(0 2px 6px rgba(0,0,0,.15));
     }
 
-    /* Texto negro con contorno blanco 100% */
     .outline { color:#000; -webkit-text-stroke:1.6px #fff; paint-order:stroke fill; }
     @supports not (-webkit-text-stroke: 1px white){
       .outline{
@@ -60,6 +79,12 @@
 </head>
 <body>
   <div class="gate">
+
+    <!-- Promo visible sobre el logo -->
+    <div class="promo-banner">
+      🔥 SPECIAL PROMO — Watch our live service this Sunday at 11:30 AM!
+    </div>
+
     <!-- Logo centrado -->
     <img
       class="center-logo"
