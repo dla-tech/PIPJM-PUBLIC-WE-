@@ -9,10 +9,10 @@
   contentDiv.style.display = "flex";
   contentDiv.style.flexDirection = "column";
   contentDiv.style.alignItems = "center";
-  contentDiv.style.padding = "0";                          // <- sin padding aquí
+  contentDiv.style.padding = "0";
   contentDiv.style.boxSizing = "border-box";
   contentDiv.style.width = "100%";
-  contentDiv.style.height = "100dvh";                      // <- dinámico móvil
+  contentDiv.style.height = "100dvh";
   contentDiv.style.maxHeight = "100dvh";
   contentDiv.style.background = "#fff8e7";
 
@@ -25,9 +25,9 @@
   scrollArea.style.flex = "1 1 auto";
   scrollArea.style.overflowY = "auto";
   scrollArea.style.overflowX = "hidden";
-  scrollArea.style.WebkitOverflowScrolling = "touch";      // <- iOS
-  scrollArea.style.overscrollBehavior = "contain";         // <- evita rebotes raros
-  scrollArea.style.paddingBottom = "84px";                 // <- espacio libre para el botón fijo
+  scrollArea.style.WebkitOverflowScrolling = "touch";
+  scrollArea.style.overscrollBehavior = "contain";
+  scrollArea.style.paddingBottom = "84px";
   contentDiv.appendChild(scrollArea);
 
   // Bloquear scroll del BODY (solo se mueve la zona interna)
@@ -71,6 +71,7 @@
   historiaCard.style.overflow = "hidden";
   historiaCard.style.margin = "0 auto 28px";
 
+  // ⚠️ Cambios pedidos: 9072 -> nueva URL (y más pequeña), 9079 -> más grande al final
   const fotos = [
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7029.jpg",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7030.jpg",
@@ -80,7 +81,8 @@
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7034.jpg",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7035.jpg",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_9071.JPG",
-    "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_9072.JPG",
+    // Reemplazo 9072 con la versión .jpg y la haré más pequeña en el render:
+    "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_9072.jpg",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_9073.JPG",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_9074.JPG",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_9075.JPG",
@@ -91,6 +93,7 @@
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7037.jpg",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7040.jpg",
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_7041.jpg",
+    // 9079 se mantiene al final para mostrarla grande
     "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/fotospipjm/IMG_9079.JPG"
   ];
 
@@ -122,6 +125,7 @@
     const end = Math.min(fotoIdx + n, fotos.length);
     const slice = fotos.slice(fotoIdx, end);
     fotoIdx = end;
+
     return `
       <div style="
         display:grid;
@@ -129,11 +133,28 @@
         gap:12px;
         margin:14px 0 20px;
       ">
-        ${slice.map(src => `
-          <figure style="margin:0; background:#fff; border-radius:12px; padding:8px; box-shadow:0 6px 18px rgba(0,0,0,.08);">
-            <img src="${src}" alt="Foto histórica" style="width:100%; height:auto; display:block; border-radius:8px;">
-          </figure>
-        `).join("")}
+        ${slice.map(src => {
+          // Estilos base
+          let figStyle = "margin:0; background:#fff; border-radius:12px; padding:8px; box-shadow:0 6px 18px rgba(0,0,0,.08);";
+          let imgStyle = "width:100%; height:auto; display:block; border-radius:8px;";
+
+          // 9072 → hacerla mucho más pequeña
+          if (src.includes("IMG_9072")) {
+            imgStyle = "width:55%; height:auto; display:block; margin:0 auto; border-radius:8px;";
+          }
+
+          // 9079 → hacerla más grande (que ocupe todo el ancho del grid)
+          if (src.includes("IMG_9079")) {
+            figStyle += " grid-column: 1 / -1;";
+            // ya va a 100% del contenedor (800px máx), suficiente para que se vea más grande
+          }
+
+          return `
+            <figure style="${figStyle}">
+              <img src="${src}" alt="Foto histórica" style="${imgStyle}">
+            </figure>
+          `;
+        }).join("")}
       </div>
     `;
   }
@@ -156,7 +177,6 @@
   scrollArea.appendChild(historiaCard);
 
   // === Botón volver (fijo, fuera del área scrolleable) ===
-  // Elimina uno anterior si existe para evitar duplicados
   document.getElementById("btn-volver-info")?.remove();
 
   const volverBtn = document.createElement("button");
