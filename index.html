@@ -7,27 +7,35 @@
   <style>
     html, body {
       margin: 0; padding: 0; height: 100%;
-      overflow: hidden; background:#fff; font-family: Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
+      overflow: hidden;
+      background:#fff;
+      font-family: Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
     }
 
-    body::before{
-      content:""; position:fixed; inset:0;
+    body::before {
+      content:"";
+      position:fixed; inset:0;
       background:#fff;
       z-index:-1;
     }
 
-    .gate{
+    .gate {
       position:absolute; inset:0; min-height:100dvh;
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      gap:18px; padding:16px; text-align:center; background:rgba(0,0,0,.45);
+      display:flex; flex-direction:column;
+      justify-content:center; align-items:center;
+      gap:18px; padding:16px;
+      text-align:center; background:rgba(0,0,0,.45);
       box-sizing:border-box;
     }
 
-    @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
+    @supports not (height: 100dvh) {
+      .gate { min-height:100vh; }
+    }
 
-    /* LOGO CENTRADO (más grande) */
-    .center-logo{
+    /* LOGO CENTRADO */
+    .center-logo {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -45,20 +53,19 @@
     .outline {
       color:#0046ff;
       -webkit-text-stroke:1.8px #ffffff;
-      text-stroke:1.8px #ffffff;
       paint-order:stroke fill;
-      font-weight: 700;
+      font-weight:700;
+      text-shadow:
+        2px 0 #fff, -2px 0 #fff,
+        0 2px #fff, 0 -2px #fff,
+        2px 2px #fff, -2px 2px #fff,
+        2px -2px #fff, -2px -2px #fff;
     }
 
-    @supports not (-webkit-text-stroke: 1px white){
-      .outline{
-        text-shadow:
-          2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
-          2px 2px #fff, -2px 2px #fff, 2px -2px #fff, -2px -2px #fff;
-      }
+    h1 {
+      margin:0;
+      font-size:clamp(20px,4.5vw,28px);
     }
-
-    h1{ margin:0; font-size:clamp(20px,4.5vw,28px); }
 
     /* 🔹 NOMBRE DE LA IGLESIA */
     .church-name {
@@ -69,43 +76,62 @@
       text-align: center;
       font-size: clamp(18px, 3.5vw, 26px);
       color: #0046ff;
-      -webkit-text-stroke: 1.8px #ffffff;
-      text-stroke: 1.8px #ffffff;
-      font-weight: 700;
+      -webkit-text-stroke:1.8px #ffffff;
+      font-weight:700;
       z-index: 2;
       line-height: 1.3;
+      text-shadow:
+        2px 0 #fff, -2px 0 #fff,
+        0 2px #fff, 0 -2px #fff,
+        2px 2px #fff, -2px 2px #fff,
+        2px -2px #fff, -2px -2px #fff;
     }
 
-    .btns{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
-    .btn{
-      display:inline-block; min-width:140px; padding:12px 18px;
-      font-size:16px; font-weight:700; cursor:pointer; text-decoration:none;
+    .btns {
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top:10px;
+    }
+
+    .btn {
+      display:inline-block;
+      min-width:140px;
+      padding:12px 18px;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+      text-decoration:none;
       color:#0046ff;
-      -webkit-text-stroke:1.4px #fff; paint-order:stroke fill;
+      -webkit-text-stroke:1.4px #fff;
+      paint-order:stroke fill;
       background:rgba(255,255,255,.20);
       border:2px solid rgba(255,255,255,.65);
-      border-radius:12px; backdrop-filter:blur(2px);
+      border-radius:12px;
+      backdrop-filter:blur(2px);
       transition:transform .08s ease, background .15s ease;
     }
 
-    .btn:hover{ background:rgba(255,255,255,.28); }
-    .btn:active{ transform:scale(.98); }
+    .btn:hover { background:rgba(255,255,255,.28); }
+    .btn:active { transform:scale(.98); }
 
     /* PROMO */
-    .promo-banner{
+    .promo-banner {
       position:absolute;
       top:4%;
       width:92%;
       max-width:780px;
       text-align:center;
-      z-index:10;
+      z-index:999;
       border-radius:20px;
       overflow:hidden;
       box-shadow:0 10px 25px rgba(0,0,0,0.45);
       background:transparent;
+      pointer-events:none;
     }
 
-    .promo-banner img{
+    .promo-banner img {
       width:100%;
       height:auto;
       max-height:480px;
@@ -115,7 +141,7 @@
     }
 
     /* Botones justo debajo de la promo */
-    .lower-section{
+    .lower-section {
       position:absolute;
       top:calc(4% + 480px + 10px);
       width:100%;
@@ -126,9 +152,9 @@
       z-index:20;
     }
 
-    @media (max-height:700px){
-      .promo-banner img{ max-height:400px; }
-      .lower-section{ top:calc(4% + 400px + 6px); }
+    @media (max-height:700px) {
+      .promo-banner img { max-height:400px; }
+      .lower-section { top:calc(4% + 400px + 6px); }
     }
   </style>
 </head>
@@ -160,18 +186,18 @@
   </div>
 
   <script>
-    // 🔗 URL de la promo (si está vacía, no se muestra)
-    const promoUrl = "";
+    // 🔗 URL de la promo
+    const promoUrl = "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/image000001.jpeg";
     const promoBanner = document.getElementById("promoBanner");
 
     if (promoUrl.trim() !== "") {
-      promoBanner.innerHTML = `<img src="${promoUrl}" alt="Promo PIPJM">`;
+      promoBanner.innerHTML = '<img src="' + promoUrl + '" alt="Promo PIPJM">';
     } else {
-      promoBanner.style.display = "none"; // desaparece si no hay imagen
+      promoBanner.style.display = "none";
     }
 
-    function goES(){ location.href = 'es/Index.html'; }
-    function goEN(){ location.href = 'en/Index.html'; }
+    function goES(){ window.location.href = 'es/Index.html'; }
+    function goEN(){ window.location.href = 'en/Index.html'; }
   </script>
 </body>
 </html>
