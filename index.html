@@ -11,6 +11,7 @@
       -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
     }
 
+    /* Fondo blanco */
     body::before{
       content:""; position:fixed; inset:0;
       background:#fff;
@@ -20,42 +21,21 @@
     .gate{
       position:absolute; inset:0; min-height:100dvh;
       display:flex; flex-direction:column; justify-content:center; align-items:center;
-      gap:28px; padding:16px; text-align:center; background:rgba(0,0,0,.45);
+      gap:18px; padding:16px; text-align:center; background:rgba(0,0,0,.45);
       box-sizing:border-box;
     }
     @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
 
-    /* === PROMO === */
-    .promo-banner{
-      position:absolute;
-      top:6%;
-      width:92%;
-      max-width:700px;
-      text-align:center;
-      z-index:10;
-      border-radius:20px;
-      overflow:hidden;
-      box-shadow:0 10px 25px rgba(0,0,0,0.45);
-      background:#000;
-    }
-    .promo-banner img{
-      width:100%;
-      height:auto;
-      display:block;
-      pointer-events:none;
-      user-select:none;
-    }
-
-    /* === LOGO === */
+    /* Logo */
     .center-logo{
       width: clamp(160px, 45vmin, 360px);
       height: auto;
       display:block;
-      margin: 220px auto 20px auto; /* Más espacio por la promo arriba */
+      margin: 0 auto 10px auto;
       filter: drop-shadow(0 2px 6px rgba(0,0,0,.15));
     }
 
-    /* === TEXTO Y BOTONES === */
+    /* Texto con borde blanco */
     .outline { color:#000; -webkit-text-stroke:1.6px #fff; paint-order:stroke fill; }
     @supports not (-webkit-text-stroke: 1px white){
       .outline{
@@ -64,11 +44,12 @@
           1px 1px #fff, -1px 1px #fff, 1px -1px #fff, -1px -1px #fff;
       }
     }
+    h1{ margin:0; font-size:clamp(20px,4.5vw,28px); }
 
-    .btns{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:10px; }
+    .btns{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
     .btn{
-      display:inline-block; min-width:150px; padding:14px 22px;
-      font-size:18px; font-weight:700; cursor:pointer; text-decoration:none;
+      display:inline-block; min-width:140px; padding:12px 18px;
+      font-size:16px; font-weight:700; cursor:pointer; text-decoration:none;
       color:#000; -webkit-text-stroke:1.4px #fff; paint-order:stroke fill;
       background:rgba(255,255,255,.20); border:2px solid rgba(255,255,255,.65);
       border-radius:12px; backdrop-filter:blur(2px);
@@ -77,42 +58,72 @@
     .btn:hover{ background:rgba(255,255,255,.28); }
     .btn:active{ transform:scale(.98); }
 
-    h1{
-      margin-top: 0;
-      font-size: clamp(20px,4.5vw,28px);
-      color: white;
-      -webkit-text-stroke: 1.4px black;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    /* PROMO */
+    .promo-banner{
+      position:absolute;
+      top:5%;
+      width:90%;
+      max-width:750px;
+      text-align:center;
+      z-index:10;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 10px 25px rgba(0,0,0,0.45);
+      background:transparent; /* evita fondo negro */
+    }
+
+    .promo-banner img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:20px;
+    }
+
+    /* Sección inferior (botones + texto) */
+    .lower-section{
+      margin-top:50px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
     }
   </style>
 </head>
 <body>
   <div class="gate">
-
-    <!-- 🖼️ PROMO: solo cambia la URL de la imagen -->
-    <div class="promo-banner">
-      <img src="https://" alt=" PIPJM">
+    <!-- 🖼️ PROMO -->
+    <div class="promo-banner" id="promoBanner">
+      <!-- Si hay imagen, se inserta aquí -->
     </div>
 
-    <!-- LOGO -->
+    <!-- Logo -->
     <img
       class="center-logo"
       src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM%20(8.5%20x%209%20in)%20(8.5%20x%2011%20in)%20(11%20x%2011%20in).png"
       alt="Logo PIPJM"
     >
 
-    <!-- BOTONES -->
-    <div class="btns">
-      <button class="btn outline" onclick="goES()">Español</button>
-      <button class="btn outline" onclick="goEN()">English</button>
+    <!-- Botones y texto -->
+    <div class="lower-section">
+      <div class="btns">
+        <button class="btn outline" onclick="goES()">Español</button>
+        <button class="btn outline" onclick="goEN()">English</button>
+      </div>
+      <h1 class="outline">Seleccione idioma / Select language</h1>
     </div>
-
-    <!-- TEXTO BAJO LOS BOTONES -->
-    <h1 class="outline">Seleccione idioma / Select language</h1>
-
   </div>
 
   <script>
+    // Cambia esta URL o déjala vacía
+    const promoUrl = ""; 
+    const promoBanner = document.getElementById("promoBanner");
+
+    if (promoUrl.trim() !== "") {
+      promoBanner.innerHTML = `<img src="${promoUrl}" alt="Promo PIPJM">`;
+    } else {
+      promoBanner.style.display = "none"; // desaparece si no hay imagen
+    }
+
     function goES(){ location.href = 'es/Index.html'; }
     function goEN(){ location.href = 'en/Index.html'; }
   </script>
