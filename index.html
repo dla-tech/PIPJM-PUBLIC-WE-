@@ -25,12 +25,19 @@
     }
     @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
 
+    /* LOGO CENTRADO */
     .center-logo{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: clamp(160px, 45vmin, 360px);
       height: auto;
       display:block;
-      margin: 0 auto 10px auto;
       filter: drop-shadow(0 2px 6px rgba(0,0,0,.15));
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.95;
     }
 
     .outline { color:#000; -webkit-text-stroke:1.6px #fff; paint-order:stroke fill; }
@@ -58,9 +65,9 @@
     /* PROMO */
     .promo-banner{
       position:absolute;
-      top:5%;
-      width:90%;
-      max-width:750px;
+      top:4%;
+      width:92%;
+      max-width:780px;
       text-align:center;
       z-index:10;
       border-radius:20px;
@@ -72,21 +79,27 @@
     .promo-banner img{
       width:100%;
       height:auto;
+      max-height:480px; /* 🔸 más alta verticalmente */
+      object-fit:cover;
       display:block;
       border-radius:20px;
     }
 
-    /* Botones y texto más abajo */
+    /* Botones justo debajo de la promo */
     .lower-section{
-      margin-top:380px; /* 👈 bajado para que la promo no tape los botones */
+      position:absolute;
+      top:calc(4% + 480px + 10px); /* comienza justo después de la promo */
+      width:100%;
       display:flex;
       flex-direction:column;
       align-items:center;
       gap:12px;
+      z-index:20;
     }
 
     @media (max-height:700px){
-      .lower-section{ margin-top:320px; }
+      .promo-banner img{ max-height:400px; }
+      .lower-section{ top:calc(4% + 400px + 6px); }
     }
   </style>
 </head>
@@ -94,17 +107,17 @@
   <div class="gate">
     <!-- 🖼️ PROMO -->
     <div class="promo-banner" id="promoBanner">
-      <!-- Si hay imagen, se inserta aquí -->
+      <!-- Imagen cargada dinámicamente -->
     </div>
 
-    <!-- Logo -->
+    <!-- LOGO DE FONDO (centrado) -->
     <img
       class="center-logo"
       src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM%20(8.5%20x%209%20in)%20(8.5%20x%2011%20in)%20(11%20x%2011%20in).png"
       alt="Logo PIPJM"
     >
 
-    <!-- Botones y texto -->
+    <!-- BOTONES Y TEXTO -->
     <div class="lower-section">
       <div class="btns">
         <button class="btn outline" onclick="goES()">Español</button>
@@ -115,7 +128,7 @@
   </div>
 
   <script>
-    // 👉 Cambia esta URL o déjala vacía
+    // 🔗 URL de la promo (si está vacía, no se muestra)
     const promoUrl = "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/image000001.jpeg";
     const promoBanner = document.getElementById("promoBanner");
 
