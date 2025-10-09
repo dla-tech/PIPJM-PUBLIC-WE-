@@ -23,6 +23,7 @@
       gap:18px; padding:16px; text-align:center; background:rgba(0,0,0,.45);
       box-sizing:border-box;
     }
+
     @supports not (height: 100dvh){ .gate{ min-height:100vh; } }
 
     /* LOGO CENTRADO (más grande) */
@@ -31,7 +32,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: clamp(200px, 55vmin, 460px); /* 🔸 aumentado */
+      width: clamp(200px, 55vmin, 460px);
       height: auto;
       display:block;
       filter: drop-shadow(0 3px 8px rgba(0,0,0,.25));
@@ -40,9 +41,9 @@
       opacity: 0.96;
     }
 
-    /* Texto azul con borde blanco fuerte */
+    /* Texto azul con borde blanco */
     .outline {
-      color:#0046ff; /* azul sólido */
+      color:#0046ff;
       -webkit-text-stroke:1.8px #ffffff;
       text-stroke:1.8px #ffffff;
       paint-order:stroke fill;
@@ -59,17 +60,34 @@
 
     h1{ margin:0; font-size:clamp(20px,4.5vw,28px); }
 
+    /* 🔹 NOMBRE DE LA IGLESIA */
+    .church-name {
+      position: absolute;
+      top: 6%;
+      width: 90%;
+      max-width: 800px;
+      text-align: center;
+      font-size: clamp(18px, 3.5vw, 26px);
+      color: #0046ff;
+      -webkit-text-stroke: 1.8px #ffffff;
+      text-stroke: 1.8px #ffffff;
+      font-weight: 700;
+      z-index: 2;
+      line-height: 1.3;
+    }
+
     .btns{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
     .btn{
       display:inline-block; min-width:140px; padding:12px 18px;
       font-size:16px; font-weight:700; cursor:pointer; text-decoration:none;
-      color:#0046ff; /* azul texto */
+      color:#0046ff;
       -webkit-text-stroke:1.4px #fff; paint-order:stroke fill;
       background:rgba(255,255,255,.20);
       border:2px solid rgba(255,255,255,.65);
       border-radius:12px; backdrop-filter:blur(2px);
       transition:transform .08s ease, background .15s ease;
     }
+
     .btn:hover{ background:rgba(255,255,255,.28); }
     .btn:active{ transform:scale(.98); }
 
@@ -116,19 +134,22 @@
 </head>
 <body>
   <div class="gate">
-    <!-- 🖼️ PROMO -->
-    <div class="promo-banner" id="promoBanner">
-      <!-- Imagen cargada dinámicamente -->
+    <!-- 🕊️ Nombre de la iglesia -->
+    <div class="church-name outline">
+      Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc.
     </div>
 
-    <!-- LOGO DE FONDO (centrado) -->
+    <!-- 🖼️ PROMO -->
+    <div class="promo-banner" id="promoBanner"></div>
+
+    <!-- 🔥 LOGO DE FONDO -->
     <img
       class="center-logo"
       src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM%20(8.5%20x%209%20in)%20(8.5%20x%2011%20in)%20(11%20x%2011%20in).png"
       alt="Logo PIPJM"
     >
 
-    <!-- BOTONES Y TEXTO -->
+    <!-- 🌍 BOTONES Y TEXTO -->
     <div class="lower-section">
       <div class="btns">
         <button class="btn outline" onclick="goES()">Español</button>
@@ -140,7 +161,7 @@
 
   <script>
     // 🔗 URL de la promo (si está vacía, no se muestra)
-    const promoUrl = "";
+    const promoUrl = "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/image000001.jpeg";
     const promoBanner = document.getElementById("promoBanner");
 
     if (promoUrl.trim() !== "") {
