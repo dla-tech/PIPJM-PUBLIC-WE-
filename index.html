@@ -31,13 +31,12 @@
       box-sizing:border-box;
     }
 
-    /* 🔥 LOGO CENTRADO (ajustable) */
     .center-logo {
       position: absolute;
-      top: 46%; /* se mantiene visualmente centrado */
+      top: 46%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: clamp(260px, 38vw, 540px); /* ahora escala perfecto PC/cel */
+      width: clamp(260px, 38vw, 540px);
       height: auto;
       display:block;
       filter: drop-shadow(0 3px 8px rgba(0,0,0,.25));
@@ -46,7 +45,6 @@
       opacity: 0.96;
     }
 
-    /* Texto azul con borde blanco */
     .outline {
       color:#0046ff;
       -webkit-text-stroke:1.8px #ffffff;
@@ -64,7 +62,6 @@
       font-size:clamp(20px,4vw,30px);
     }
 
-    /* 🔹 NOMBRE DE LA IGLESIA */
     .church-name {
       position: absolute;
       top: 6%;
@@ -113,31 +110,29 @@
     .btn:hover { background:rgba(255,255,255,.28); }
     .btn:active { transform:scale(.98); }
 
-    /* 🖼️ PROMO */
+    /* 🖼️ PROMO sin fondo */
     .promo-banner {
       position:absolute;
       top:4%;
       width:92%;
-      max-width: min(90vw, 900px); /* escala en PC */
+      max-width: min(90vw, 900px);
       text-align:center;
       z-index:999;
       border-radius:20px;
       overflow:hidden;
       box-shadow:0 10px 25px rgba(0,0,0,0.45);
-      background:transparent;
       pointer-events:none;
     }
 
     .promo-banner img {
       width:100%;
       height:auto;
-      max-height: clamp(340px, 50vh, 520px); /* 🔹 se adapta según pantalla */
-      object-fit:contain; /* mantiene todo visible */
+      max-height: clamp(340px, 50vh, 520px);
+      object-fit:contain;
       display:block;
       border-radius:20px;
     }
 
-    /* Botones justo debajo de la promo */
     .lower-section {
       position:absolute;
       top:calc(4% + clamp(340px, 50vh, 520px) + 10px);
@@ -149,13 +144,11 @@
       z-index:20;
     }
 
-    /* 📱 Ajuste fino móvil */
     @media (max-width:700px) {
       .promo-banner img { max-height: 360px; }
       .lower-section { top:calc(4% + 360px + 10px); }
     }
 
-    /* 💻 Ajuste fino escritorio grande */
     @media (min-width:1200px) {
       .promo-banner img { max-height:520px; }
       .lower-section { top:calc(4% + 520px + 12px); }
@@ -165,22 +158,18 @@
 </head>
 <body>
   <div class="gate">
-    <!-- 🕊️ Nombre de la iglesia -->
     <div class="church-name outline">
       Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc.
     </div>
 
-    <!-- 🖼️ PROMO -->
     <div class="promo-banner" id="promoBanner"></div>
 
-    <!-- 🔥 LOGO DE FONDO -->
     <img
       class="center-logo"
       src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM%20(8.5%20x%209%20in)%20(8.5%20x%2011%20in)%20(11%20x%2011%20in).png"
       alt="Logo PIPJM"
     >
 
-    <!-- 🌍 BOTONES Y TEXTO -->
     <div class="lower-section">
       <div class="btns">
         <button class="btn outline" onclick="goES()">Español</button>
@@ -191,7 +180,6 @@
   </div>
 
   <script>
-    // 🔗 URL de la promo
     const promoUrl = "https://cdn.jsdelivr.net/gh/dla-tech/Media-privada@main/image000001.jpeg";
     const promoBanner = document.getElementById("promoBanner");
 
