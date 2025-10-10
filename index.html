@@ -7,7 +7,8 @@
   <style>
     html, body {
       margin: 0; padding: 0; height: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       background:#fff;
       font-family: Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
@@ -30,17 +31,13 @@
       box-sizing:border-box;
     }
 
-    @supports not (height: 100dvh) {
-      .gate { min-height:100vh; }
-    }
-
-    /* 🔥 LOGO CENTRADO (más grande y un poco más arriba) */
+    /* 🔥 LOGO CENTRADO (ajustable) */
     .center-logo {
       position: absolute;
-      top: calc(45% - 30px); /* 🔹 subido unos 30 px */
+      top: 46%; /* se mantiene visualmente centrado */
       left: 50%;
       transform: translate(-50%, -50%);
-      width: clamp(260px, 100vmin, 540px); /* 🔹 ligeramente más grande */
+      width: clamp(260px, 38vw, 540px); /* ahora escala perfecto PC/cel */
       height: auto;
       display:block;
       filter: drop-shadow(0 3px 8px rgba(0,0,0,.25));
@@ -64,7 +61,7 @@
 
     h1 {
       margin:0;
-      font-size:clamp(20px,4.5vw,28px);
+      font-size:clamp(20px,4vw,30px);
     }
 
     /* 🔹 NOMBRE DE LA IGLESIA */
@@ -74,7 +71,7 @@
       width: 90%;
       max-width: 800px;
       text-align: center;
-      font-size: clamp(18px, 3.5vw, 26px);
+      font-size: clamp(18px, 2.8vw, 26px);
       color: #0046ff;
       -webkit-text-stroke:1.8px #ffffff;
       font-weight:700;
@@ -99,7 +96,7 @@
       display:inline-block;
       min-width:140px;
       padding:12px 18px;
-      font-size:16px;
+      font-size:clamp(15px,1.8vw,18px);
       font-weight:700;
       cursor:pointer;
       text-decoration:none;
@@ -116,12 +113,12 @@
     .btn:hover { background:rgba(255,255,255,.28); }
     .btn:active { transform:scale(.98); }
 
-    /* PROMO */
+    /* 🖼️ PROMO */
     .promo-banner {
       position:absolute;
       top:4%;
       width:92%;
-      max-width:780px;
+      max-width: min(90vw, 900px); /* escala en PC */
       text-align:center;
       z-index:999;
       border-radius:20px;
@@ -134,18 +131,16 @@
     .promo-banner img {
       width:100%;
       height:auto;
-      max-height:480px;
-      object-fit:contain; /* ✅ No se corta nunca */
-      object-position:center center; /* centrado */
+      max-height: clamp(340px, 50vh, 520px); /* 🔹 se adapta según pantalla */
+      object-fit:contain; /* mantiene todo visible */
       display:block;
       border-radius:20px;
-      background-color:#000; /* opcional: relleno si hay espacio vacío */
     }
 
     /* Botones justo debajo de la promo */
     .lower-section {
       position:absolute;
-      top:calc(4% + 480px + 10px);
+      top:calc(4% + clamp(340px, 50vh, 520px) + 10px);
       width:100%;
       display:flex;
       flex-direction:column;
@@ -154,14 +149,17 @@
       z-index:20;
     }
 
-    @media (max-height:700px) {
-      .promo-banner img { max-height:400px; }
-      .lower-section { top:calc(4% + 400px + 6px); }
+    /* 📱 Ajuste fino móvil */
+    @media (max-width:700px) {
+      .promo-banner img { max-height: 360px; }
+      .lower-section { top:calc(4% + 360px + 10px); }
     }
 
-    @media (max-width:600px) {
-      .promo-banner img { max-height:300px; }
-      .lower-section { top:calc(4% + 300px + 6px); }
+    /* 💻 Ajuste fino escritorio grande */
+    @media (min-width:1200px) {
+      .promo-banner img { max-height:520px; }
+      .lower-section { top:calc(4% + 520px + 12px); }
+      .center-logo { width: 500px; top: 46%; }
     }
   </style>
 </head>
