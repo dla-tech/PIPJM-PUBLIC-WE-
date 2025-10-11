@@ -30,8 +30,8 @@ document.getElementById("content").innerHTML = `
       <p><strong>Wednesday:</strong> Evangelistic Service — 7:00 p.m. on the streets</p>
       <p><strong>Thursday:</strong> Prayer Service / Bible Study / Children's Society — 7:00 p.m.</p>
       <p><strong>Friday:</strong> Worship Service / Women's Society / Men's Society — 7:00 p.m.</p>
-      <p><strong>Saturday:</strong> Family Altar all day / Congregational Fast (1 Saturday per month) — 6:00 a.m.</p>
-      <p><strong>Sunday:</strong> Prayer — 6:00 a.m. / Bible School — 8:45 a.m. / Closing — 10:45 a.m. / Worship Service — 11:30 a.m.</p>
+      <p><strong>Saturday:</strong> Family Altar (all day) / Congregational Fasting (1 Saturday per month) — 6:00 a.m.</p>
+      <p><strong>Sunday:</strong> Prayer — 6:00 a.m. / Bible School — 8:45 a.m. / Ending of Bible School — 10:45 a.m. / Worship Service — 11:30 a.m.</p>
     </div>
 
     <button onclick="volverAlMenu()" style="
