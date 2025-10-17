@@ -233,39 +233,48 @@
   </div>
 
   <script>
-    // 🔗 Lista de promos
-    const promos = [
-      { url: "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/image000001.jpeg", titulo: "Damas y Caballeros" },
-      { url: "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/culto%20un%20iformada.JPG", titulo: "Culto de Uniformada" },
-      { url: "https://cdn.jsdelivr.net/gh/dla-tech/Media-privada@main/image000003.jpeg", titulo: "Domingo de Adoración" }
-    ];
-
     const promoGrid = document.getElementById("promoGrid");
+    const jsonURL = "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Promo/Promos.json";
 
-    if (promos.length > 0) {
-      promoGrid.innerHTML = promos.map(p => `
-        <div class="promo-card">
-          <img src="${p.url}" alt="Promo">
-          <p>${p.titulo}</p>
-        </div>
-      `).join('');
-    } else {
-      promoGrid.style.display = "none";
-    }
+    // 🔄 Cargar automáticamente desde JSON remoto
+    fetch(jsonURL)
+      .then(res => res.json())
+      .then(promos => {
+        // Filtrar solo las activas y con imagen válida
+        const activas = promos.filter(p => p.active && p.imageUrl && p.imageUrl.trim() !== "");
+        if (activas.length === 0) {
+          promoGrid.style.display = "none";
+          return;
+        }
 
-    // 🎬 Efecto zoom
-    promoGrid.addEventListener("click", (e) => {
-      const card = e.target.closest(".promo-card");
-      if (!card) return;
-      if (card.classList.contains("promo-fullscreen")) {
-        card.classList.remove("promo-fullscreen");
-        document.body.style.overflow = "auto";
-      } else {
-        document.querySelectorAll(".promo-fullscreen").forEach(el => el.classList.remove("promo-fullscreen"));
-        card.classList.add("promo-fullscreen");
-        document.body.style.overflow = "hidden";
-      }
-    });
+        // Ordenar por "order"
+        activas.sort((a,b) => (a.order || 0) - (b.order || 0));
+
+        // Renderizar
+        promoGrid.innerHTML = activas.map(p => `
+          <div class="promo-card">
+            <img src="${p.imageUrl}" alt="Promo">
+            <p>${p.title || "Evento"}</p>
+          </div>
+        `).join('');
+
+        // 🎬 Efecto zoom
+        promoGrid.addEventListener("click", (e) => {
+          const card = e.target.closest(".promo-card");
+          if (!card) return;
+          if (card.classList.contains("promo-fullscreen")) {
+            card.classList.remove("promo-fullscreen");
+            document.body.style.overflow = "auto";
+          } else {
+            document.querySelectorAll(".promo-fullscreen").forEach(el => el.classList.remove("promo-fullscreen"));
+            card.classList.add("promo-fullscreen");
+            document.body.style.overflow = "hidden";
+          }
+        });
+      })
+      .catch(err => {
+        console.error("Error cargando Promos.json:", err);
+      });
 
     function goES(){ window.location.href = 'es/Index.html'; }
     function goEN(){ window.location.href = 'en/Index.html'; }
