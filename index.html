@@ -30,9 +30,7 @@
       box-sizing:border-box;
     }
 
-    @supports not (height: 100dvh) {
-      .gate { min-height:100vh; }
-    }
+    @supports not (height: 100dvh) { .gate { min-height:100vh; } }
 
     /* 🔥 LOGO CENTRADO */
     .center-logo {
@@ -61,10 +59,7 @@
         2px -2px #fff, -2px -2px #fff;
     }
 
-    h1 {
-      margin:0;
-      font-size:clamp(20px,4.5vw,28px);
-    }
+    h1 { margin:0; font-size:clamp(20px,4.5vw,28px); }
 
     .church-name {
       position: absolute;
@@ -110,14 +105,13 @@
       backdrop-filter:blur(2px);
       transition:transform .08s ease, background .15s ease;
     }
-
     .btn:hover { background:rgba(255,255,255,.28); }
     .btn:active { transform:scale(.98); }
 
-    /* 🔹 CONTENEDOR DE PROMOS */
+    /* 🔹 CONTENEDOR DE PROMOS (encima de los botones) */
     .promo-grid {
       position:absolute;
-      bottom:160px; /* 👈 justo encima de los botones */
+      bottom:160px;              /* ⬅️ justo sobre los botones */
       width:92%;
       max-width:900px;
       display:grid;
@@ -136,7 +130,6 @@
       transition:transform 0.3s ease;
       position:relative;
     }
-
     .promo-card img {
       width:100%;
       height:auto;
@@ -144,52 +137,39 @@
       object-fit:cover;
       transition:transform 0.3s ease, box-shadow 0.3s ease;
     }
-
     .promo-card p {
       margin:0;
       padding:8px 10px;
       background:rgba(0,0,0,0.5);
-      color:#fff;
-      font-weight:600;
+      color:#fff; font-weight:600;
       text-shadow:0 1px 3px rgba(0,0,0,0.7);
       font-size:14px;
     }
 
-    /* 🔍 Estado expandido */
+    /* 🔍 Pantalla completa: ahora la IMAGEN también ocupa toda la pantalla */
     .promo-fullscreen {
       position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
+      inset: 0 !important;
       z-index: 99999 !important;
       background: rgba(0,0,0,0.95) !important;
       border-radius: 0 !important;
       box-shadow: none !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.4s ease-in-out;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
-
     .promo-fullscreen img {
       width: 100vw !important;
       height: 100vh !important;
-      object-fit: contain !important;
+      object-fit: contain !important; /* 🔸 sin recortar, visible completa */
       border-radius: 0 !important;
-      box-shadow: 0 0 30px rgba(255,255,255,0.3);
-      transform: scale(1.05);
-      transition: transform 0.4s ease-in-out;
+      box-shadow: 0 0 30px rgba(255,255,255,0.25);
+      transform: none !important;
     }
 
     @media (max-width:600px){
-      .promo-grid{
-        grid-template-columns: 1fr;
-        max-width: 95%;
-      }
-      .promo-card img{ max-height: 400px; }
+      .promo-grid{ grid-template-columns: 1fr; max-width:95%; }
     }
-
   </style>
 </head>
 <body>
@@ -198,15 +178,17 @@
       Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc.
     </div>
 
-    <!-- 🖼️ CONTENEDOR DE PROMOS -->
+    <!-- 🖼️ PROMOS -->
     <div class="promo-grid" id="promoGrid"></div>
 
+    <!-- 🔥 LOGO DE FONDO -->
     <img
       class="center-logo"
       src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM%20(8.5%20x%209%20in)%20(8.5%20x%2011%20in)%20(11%20x%2011%20in).png"
       alt="Logo PIPJM"
     >
 
+    <!-- 🌍 BOTONES -->
     <div class="lower-section">
       <div class="btns">
         <button class="btn outline" onclick="goES()">Español</button>
@@ -217,14 +199,13 @@
   </div>
 
   <script>
-    // 🔗 Cargar las promos desde tu JSON remoto
+    // Carga las promos desde tu JSON en GitHub
     const promoGrid = document.getElementById("promoGrid");
-
     fetch("https://cdn.jsdelivr.net/gh/dla-tech/Media-privada@main/Promo/Promos.json")
-      .then(res => res.json())
+      .then(r => r.json())
       .then(promos => {
         const activas = promos.filter(p => p.active && p.imageUrl);
-        if (activas.length > 0) {
+        if (activas.length) {
           promoGrid.innerHTML = activas.map(p => `
             <div class="promo-card">
               <img src="${p.imageUrl}" alt="Promo">
@@ -236,18 +217,18 @@
         }
       });
 
-    // 🎬 Efecto zoom por clic
+    // Click: expandir/contraer
     promoGrid.addEventListener("click", (e) => {
       const card = e.target.closest(".promo-card");
       if (!card) return;
-
-      if (card.classList.contains("promo-fullscreen")) {
-        card.classList.remove("promo-fullscreen");
-        document.body.style.overflow = "auto";
-      } else {
-        document.querySelectorAll(".promo-fullscreen").forEach(el => el.classList.remove("promo-fullscreen"));
-        card.classList.add("promo-fullscreen");
+      const open = card.classList.toggle("promo-fullscreen");
+      if (open) {
+        // Cerrar cualquier otra abierta
+        document.querySelectorAll(".promo-card.promo-fullscreen")
+          .forEach(el => { if (el !== card) el.classList.remove("promo-fullscreen"); });
         document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
       }
     });
 
