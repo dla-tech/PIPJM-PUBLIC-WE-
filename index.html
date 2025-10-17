@@ -34,6 +34,7 @@
       .gate { min-height:100vh; }
     }
 
+    /* 🔥 LOGO CENTRADO */
     .center-logo {
       position: absolute;
       top: calc(45% - 30px);
@@ -113,29 +114,45 @@
     .btn:hover { background:rgba(255,255,255,.28); }
     .btn:active { transform:scale(.98); }
 
-    .promo-banner {
+    /* 🔹 CONTENEDOR DE PROMOS */
+    .promo-grid {
       position:absolute;
       top:4%;
       width:92%;
-      max-width:780px;
-      text-align:center;
+      max-width:900px;
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:16px;
+      justify-content:center;
       z-index:999;
+    }
+
+    .promo-card {
       border-radius:20px;
       overflow:hidden;
       box-shadow:0 10px 25px rgba(0,0,0,0.45);
       background:transparent;
       cursor:pointer;
       transition:transform 0.3s ease;
+      position:relative;
     }
 
-    .promo-banner img {
+    .promo-card img {
       width:100%;
       height:auto;
-      max-height:480px;
-      object-fit:cover;
       display:block;
-      border-radius:20px;
+      object-fit:cover;
       transition:transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .promo-card p {
+      margin:0;
+      padding:8px 10px;
+      background:rgba(0,0,0,0.5);
+      color:#fff;
+      font-weight:600;
+      text-shadow:0 1px 3px rgba(0,0,0,0.7);
+      font-size:14px;
     }
 
     /* 🔍 Estado expandido */
@@ -145,8 +162,6 @@
       left: 0 !important;
       width: 100vw !important;
       height: 100vh !important;
-      max-width: none !important;
-      max-height: none !important;
       z-index: 99999 !important;
       background: rgba(0,0,0,0.95) !important;
       border-radius: 0 !important;
@@ -166,7 +181,7 @@
 
     .lower-section {
       position:absolute;
-      top:calc(4% + 480px + 10px);
+      top:calc(4% + 500px + 30px);
       width:100%;
       display:flex;
       flex-direction:column;
@@ -175,9 +190,16 @@
       z-index:20;
     }
 
-    @media (max-height:700px) {
-      .promo-banner img { max-height:400px; }
-      .lower-section { top:calc(4% + 400px + 6px); }
+    @media (max-width:600px){
+      .promo-grid{
+        grid-template-columns: 1fr;
+        max-width: 95%;
+      }
+      .promo-card img{ max-height: 400px; }
+    }
+
+    @media (max-height:700px){
+      .lower-section{ top:calc(4% + 400px + 30px); }
     }
   </style>
 </head>
@@ -187,7 +209,8 @@
       Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc.
     </div>
 
-    <div class="promo-banner" id="promoBanner"></div>
+    <!-- 🖼️ CONTENEDOR DE PROMOS -->
+    <div class="promo-grid" id="promoGrid"></div>
 
     <img
       class="center-logo"
@@ -205,23 +228,40 @@
   </div>
 
   <script>
-    const promoUrl = "https://cdn.jsdelivr.net/gh/dla-tech/Media-privada@main/image000001.jpeg";
-    const promoBanner = document.getElementById("promoBanner");
+    // 🔗 Lista de promos
+    const promos = [
+      { url: "https://cdn.jsdelivr.net/gh/dla-tech/Media-privada@main/image000001.jpeg", titulo: "Campaña Evangelística" },
+      { url: "https://cdn.jsdelivr.net/gh/dla-tech/Media-privada@main/image000002.jpeg", titulo: "Culto Especial de Jóvenes" },
+      { url: "https://cdn.jsdelivr.net/gh/dla-tech/Media-privada@main/image000003.jpeg", titulo: "Domingo de Adoración" }
+    ];
 
-    if (promoUrl.trim() !== "") {
-      promoBanner.innerHTML = '<img src="' + promoUrl + '" alt="Promo PIPJM">';
+    const promoGrid = document.getElementById("promoGrid");
+
+    if (promos.length > 0) {
+      promoGrid.innerHTML = promos.map(p => `
+        <div class="promo-card">
+          <img src="${p.url}" alt="Promo">
+          <p>${p.titulo}</p>
+        </div>
+      `).join('');
     } else {
-      promoBanner.style.display = "none";
+      promoGrid.style.display = "none";
     }
 
-    // 🌌 Efecto de zoom
-    promoBanner.addEventListener("click", () => {
-      if (!promoBanner.classList.contains("promo-fullscreen")) {
-        promoBanner.classList.add("promo-fullscreen");
-        document.body.style.overflow = "hidden";
-      } else {
-        promoBanner.classList.remove("promo-fullscreen");
+    // 🎬 Efecto zoom por clic
+    promoGrid.addEventListener("click", (e) => {
+      const card = e.target.closest(".promo-card");
+      if (!card) return;
+
+      // Si ya está expandida, la cerramos
+      if (card.classList.contains("promo-fullscreen")) {
+        card.classList.remove("promo-fullscreen");
         document.body.style.overflow = "auto";
+      } else {
+        // Cerrar cualquier otra que esté abierta
+        document.querySelectorAll(".promo-fullscreen").forEach(el => el.classList.remove("promo-fullscreen"));
+        card.classList.add("promo-fullscreen");
+        document.body.style.overflow = "hidden";
       }
     });
 
