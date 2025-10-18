@@ -123,7 +123,7 @@
       max-height:220px;
       object-fit:cover;
       display:block;
-      transition:transform 0.4s ease;
+      transition:all 0.35s ease;
     }
 
     .promo-card p {
@@ -136,27 +136,26 @@
       font-size:13px;
     }
 
-    /* 🔍 Estado expandido */
+    /* 🔍 Estado expandido: solo agranda imagen */
     .promo-fullscreen {
       position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      z-index: 99999 !important;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 99999;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: transparent !important;
-      box-shadow: none !important;
+      background: transparent;
     }
 
     .promo-fullscreen img {
-      width: auto !important;
-      height: 100vh !important;
-      max-width: 100vw !important;
-      border-radius: 0 !important;
-      transform: scale(1.02);
+      width: auto;
+      height: 100vh;
+      max-width: 100vw;
+      border-radius: 0;
+      object-fit: contain;
     }
 
     /* 🔹 BOTONES Y TEXTO ABAJO */
@@ -209,19 +208,16 @@
       Primera Iglesia Pentecostal de Jesucristo de Maunabo, P.R. Inc.
     </div>
 
-    <!-- 🔹 PROMOS -->
     <div class="promo-area">
       <div class="promo-grid" id="promoGrid"></div>
     </div>
 
-    <!-- 🔥 LOGO -->
     <img
       class="center-logo"
       src="https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Logo%20de%20la%20iglesia%20PIPJM%20(8.5%20x%209%20in)%20(8.5%20x%2011%20in)%20(11%20x%2011%20in).png"
       alt="Logo PIPJM"
     >
 
-    <!-- 🌍 BOTONES -->
     <div class="lower-section">
       <div class="btns">
         <button class="btn outline" onclick="goES()">Español</button>
@@ -235,7 +231,6 @@
     const promoGrid = document.getElementById("promoGrid");
     const jsonURL = "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Promo/Promos.json";
 
-    // 🔄 Cargar automáticamente desde JSON remoto
     fetch(jsonURL)
       .then(res => res.json())
       .then(promos => {
@@ -254,10 +249,11 @@
           </div>
         `).join('');
 
-        // 🎬 Efecto zoom (solo agranda la imagen)
+        // 🎬 Al tocar: la promo se agranda o minimiza
         promoGrid.addEventListener("click", (e) => {
           const card = e.target.closest(".promo-card");
           if (!card) return;
+          const img = card.querySelector("img");
 
           if (card.classList.contains("promo-fullscreen")) {
             card.classList.remove("promo-fullscreen");
