@@ -64,7 +64,6 @@
       font-size:clamp(20px,4.5vw,28px);
     }
 
-    /* 🔹 NOMBRE DE LA IGLESIA */
     .church-name {
       position: absolute;
       top: 4%;
@@ -84,7 +83,6 @@
         2px -2px #fff, -2px -2px #fff;
     }
 
-    /* 🔹 CONTENEDOR DE PROMOS */
     .promo-area {
       width: 100%;
       flex: 1;
@@ -123,7 +121,7 @@
       max-height:220px;
       object-fit:cover;
       display:block;
-      transition:all 0.35s ease;
+      transition:transform 0.4s ease;
     }
 
     .promo-card p {
@@ -136,29 +134,29 @@
       font-size:13px;
     }
 
-    /* 🔍 Estado expandido: solo agranda imagen */
-    .promo-fullscreen {
+    /* 🖼️ Imagen en pantalla completa */
+    .promo-expanded {
       position: fixed !important;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 99999;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 10000 !important;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: transparent;
+      margin: 0 !important;
     }
 
-    .promo-fullscreen img {
-      width: auto;
-      height: 100vh;
-      max-width: 100vw;
-      border-radius: 0;
+    .promo-expanded img {
+      width: auto !important;
+      height: 100vh !important;
+      max-width: 100vw !important;
       object-fit: contain;
+      border-radius: 0;
     }
 
-    /* 🔹 BOTONES Y TEXTO ABAJO */
     .lower-section {
       width:100%;
       display:flex;
@@ -249,18 +247,19 @@
           </div>
         `).join('');
 
-        // 🎬 Al tocar: la promo se agranda o minimiza
+        // 🎬 Efecto: agrandar solo esa promo
         promoGrid.addEventListener("click", (e) => {
           const card = e.target.closest(".promo-card");
           if (!card) return;
-          const img = card.querySelector("img");
 
-          if (card.classList.contains("promo-fullscreen")) {
-            card.classList.remove("promo-fullscreen");
+          // Si ya está expandida, restaurarla
+          if (card.classList.contains("promo-expanded")) {
+            card.classList.remove("promo-expanded");
             document.body.style.overflow = "auto";
           } else {
-            document.querySelectorAll(".promo-fullscreen").forEach(el => el.classList.remove("promo-fullscreen"));
-            card.classList.add("promo-fullscreen");
+            // Cerrar cualquier otra expandida
+            document.querySelectorAll(".promo-expanded").forEach(el => el.classList.remove("promo-expanded"));
+            card.classList.add("promo-expanded");
             document.body.style.overflow = "hidden";
           }
         });
