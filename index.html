@@ -59,10 +59,7 @@
         2px -2px #fff, -2px -2px #fff;
     }
 
-    h1 {
-      margin:0;
-      font-size:clamp(20px,4.5vw,28px);
-    }
+    h1 { margin:0; font-size:clamp(20px,4.5vw,28px); }
 
     .church-name {
       position: absolute;
@@ -83,6 +80,7 @@
         2px -2px #fff, -2px -2px #fff;
     }
 
+    /* ÁREA PROMOS */
     .promo-area {
       width: 100%;
       flex: 1;
@@ -121,7 +119,7 @@
       max-height:220px;
       object-fit:cover;
       display:block;
-      transition:transform 0.4s ease, width 0.4s ease, height 0.4s ease;
+      transition:transform 0.4s ease;
     }
 
     .promo-card p {
@@ -134,32 +132,7 @@
       font-size:13px;
     }
 
-    /* 🖼️ Imagen expandida correctamente */
-    .promo-expanded {
-      position: fixed !important;
-      top: 0;
-      left: 0;
-      width: 100vw !important;
-      height: 100vh !important;
-      z-index: 99999 !important;
-      margin: 0 !important;
-      background: transparent !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden !important;
-    }
-
-    .promo-expanded img {
-      width: 100vw !important;
-      height: 100vh !important;
-      object-fit: contain !important;
-      border-radius: 0 !important;
-      max-height: none !important;
-      max-width: none !important;
-      transition: all 0.4s ease;
-    }
-
+    /* BOTONES ABAJO */
     .lower-section {
       width:100%;
       display:flex;
@@ -169,37 +142,49 @@
       z-index:20;
       margin-bottom: 18px;
     }
-
     .btns {
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      justify-content:center;
+      display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
     }
-
     .btn {
-      display:inline-block;
-      min-width:140px;
-      padding:12px 18px;
-      font-size:16px;
-      font-weight:700;
-      cursor:pointer;
-      text-decoration:none;
-      color:#0046ff;
-      -webkit-text-stroke:1.4px #fff;
-      paint-order:stroke fill;
-      background:rgba(255,255,255,.20);
-      border:2px solid rgba(255,255,255,.65);
+      display:inline-block; min-width:140px; padding:12px 18px;
+      font-size:16px; font-weight:700; cursor:pointer; text-decoration:none;
+      color:#0046ff; -webkit-text-stroke:1.4px #fff; paint-order:stroke fill;
+      background:rgba(255,255,255,.20); border:2px solid rgba(255,255,255,.65);
       border-radius:12px; backdrop-filter:blur(2px);
       transition:transform .08s ease, background .15s ease;
     }
-
     .btn:hover { background:rgba(255,255,255,.28); }
     .btn:active { transform:scale(.98); }
 
     @media (max-width:600px){
       .promo-grid{ grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
       .promo-card img{ max-height:180px; }
+    }
+
+    /* 🧊 OVERLAY A PANTALLA COMPLETA PARA LA PROMO CLICADA */
+    .promo-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999999; /* por encima de TODO */
+      background: transparent; /* sin oscurecer el fondo */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+    }
+    .promo-overlay img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain; /* que no se deforme */
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      /* pequeña animación opcional */
+      animation: pop 120ms ease-out;
+    }
+    @keyframes pop {
+      from { transform: scale(.98); opacity: .9; }
+      to   { transform: scale(1);   opacity: 1; }
     }
   </style>
 </head>
@@ -232,6 +217,7 @@
     const promoGrid = document.getElementById("promoGrid");
     const jsonURL = "https://raw.githubusercontent.com/dla-tech/Media-privada/refs/heads/main/Promo/Promos.json";
 
+    // Cargar promos desde JSON
     fetch(jsonURL)
       .then(res => res.json())
       .then(promos => {
@@ -240,32 +226,39 @@
           promoGrid.style.display = "none";
           return;
         }
-
         activas.sort((a,b) => (a.order || 0) - (b.order || 0));
-
         promoGrid.innerHTML = activas.map(p => `
-          <div class="promo-card">
+          <div class="promo-card" data-src="${p.imageUrl}">
             <img src="${p.imageUrl}" alt="Promo">
             <p>${p.title || "Evento"}</p>
           </div>
         `).join('');
-
-        // 🎬 Al hacer clic en una promo
-        promoGrid.addEventListener("click", (e) => {
-          const card = e.target.closest(".promo-card");
-          if (!card) return;
-
-          if (card.classList.contains("promo-expanded")) {
-            card.classList.remove("promo-expanded");
-            document.body.style.overflow = "auto";
-          } else {
-            document.querySelectorAll(".promo-expanded").forEach(el => el.classList.remove("promo-expanded"));
-            card.classList.add("promo-expanded");
-            document.body.style.overflow = "hidden";
-          }
-        });
       })
       .catch(err => console.error("Error cargando Promos.json:", err));
+
+    // Al clic en una promo: abrir overlay con esa imagen a pantalla completa
+    promoGrid.addEventListener("click", (e) => {
+      const card = e.target.closest(".promo-card");
+      if (!card) return;
+
+      const src = card.getAttribute("data-src");
+      if (!src) return;
+
+      // Crear overlay
+      const overlay = document.createElement("div");
+      overlay.className = "promo-overlay";
+      overlay.innerHTML = `<img src="${src}" alt="Promo ampliada">`;
+
+      // Cerrar al tocar/clickear
+      overlay.addEventListener("click", () => {
+        overlay.remove();
+        document.body.style.overflow = "hidden"; // mantener tu diseño sin scroll
+      });
+
+      // Mostrar
+      document.body.appendChild(overlay);
+      document.body.style.overflow = "hidden"; // bloquear scroll detrás
+    });
 
     function goES(){ window.location.href = 'es/Index.html'; }
     function goEN(){ window.location.href = 'en/Index.html'; }
