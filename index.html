@@ -145,14 +145,14 @@
     .btns {
       display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
     }
-    .btn color:#ff0000; /* 🔴 texto rojo */
-
--webkit-text-stroke:1.4px #ffffff; 
-paint-order:stroke fill;
-
-background:rgba(255, 255, 0, 0.20); /* 🟡 mismo efecto translúcido pero amarillo */
-
-border:2px solid rgba(255, 215, 0, 0.85); /* 🟡 marco amarillo fuerte */
+    .btn {
+      display:inline-block; min-width:140px; padding:12px 18px;
+      font-size:16px; font-weight:700; cursor:pointer; text-decoration:none;
+      color:#f50505; -webkit-text-stroke:1.4px #fff; paint-order:stroke fill;
+      background:rgba(255,255,255,.20); border:2px solid rgba(255,255,255,.65);
+      border-radius:12px; backdrop-filter:blur(2px);
+      transition:transform .08s ease, background .15s ease;
+    }
     .btn:hover { background:rgba(255,255,255,.28); }
     .btn:active { transform:scale(.98); }
 
