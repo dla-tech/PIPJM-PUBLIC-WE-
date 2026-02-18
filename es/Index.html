@@ -115,22 +115,23 @@
       Jesucristo de Maunabo, P.R. Inc
     </h1>
 
-    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/programacion.js')">
+    <!-- 🔁 Ahora navega por hash (historial real) -->
+    <button onclick="go('#programacion')">
       <span style="font-size: 40px;">📅</span>
       <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Ver programación de Cultos</span>
     </button>
 
-    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/info.js')">
+    <button onclick="go('#info')">
       <span style="font-size: 40px;">📜</span>
       <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Info del templo y Congregación</span>
     </button>
 
-    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/peticiones.js')">
+    <button onclick="go('#peticiones')">
       <span style="font-size: 40px;">🙏</span>
       <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Peticiones o Necesidad</span>
     </button>
 
-    <button onclick="loadScript('https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/vercultos.js')">
+    <button onclick="go('#vercultos')">
       <span style="font-size: 40px;">🎞️</span>
       <span style="font-size: 18px; text-shadow: 1px 1px 3px black;">Ver cultos o En vivos</span>
     </button>
@@ -139,29 +140,86 @@
   <!-- ÁREA PARA CARGAR LOS ARCHIVOS .JS -->
   <div id="content" style="display:none;"></div>
 
-  <!-- CARGA DE SCRIPTS DE CADA SECCIÓN -->
+  <!-- ROUTER + CARGA DE SCRIPTS DE CADA SECCIÓN -->
   <script>
-    function loadScript(url) {
+    // ✅ Mapa de rutas (hash -> script)
+    const ROUTES = {
+      "#menu": null,
+      "#programacion": "https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/programacion.js",
+      "#info":         "https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/info.js",
+      "#peticiones":   "https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/peticiones.js",
+      "#vercultos":    "https://dla-tech.github.io/PIPJM-PUBLIC-WE-/botones/vercultos.js"
+    };
+
+    // Track del script actual para no duplicar y poder removerlo
+    let currentScriptEl = null;
+
+    function go(hash){
+      // Esto crea un "paso" en el historial (Atrás/Forward)
+      location.hash = hash;
+    }
+
+    function renderRoute(hash){
       const mainMenu = document.getElementById("mainMenu");
       const content  = document.getElementById("content");
 
+      // Normaliza hash
+      if (!hash || !ROUTES.hasOwnProperty(hash)) {
+        hash = "#menu";
+      }
+
+      // Si es menú, muestra menú y limpia contenido
+      if (hash === "#menu") {
+        content.style.display = "none";
+        content.innerHTML = "";
+        mainMenu.style.display = "flex";
+
+        // Quitar script anterior si existe
+        if (currentScriptEl) {
+          currentScriptEl.remove();
+          currentScriptEl = null;
+        }
+        return;
+      }
+
+      // Si es una sección, oculta menú y carga script correspondiente
       mainMenu.style.display = "none";
       content.style.display  = "block";
       content.innerHTML = "";
 
-      const script = document.createElement('script');
+      // Remueve el script anterior para evitar duplicados/efectos raros
+      if (currentScriptEl) {
+        currentScriptEl.remove();
+        currentScriptEl = null;
+      }
+
+      const url = ROUTES[hash];
+      if (!url) return;
+
+      const script = document.createElement("script");
       script.src = url;
-      script.type = 'text/javascript';
+      script.type = "text/javascript";
+      script.dataset.routeScript = hash;
       document.body.appendChild(script);
+
+      currentScriptEl = script;
     }
 
+    // Tu función global de volver, ahora vuelve al menú interno
     function volverAlMenu() {
-      const mainMenu = document.getElementById("mainMenu");
-      const content  = document.getElementById("content");
-      content.style.display = "none";
-      content.innerHTML = "";
-      mainMenu.style.display = "flex";
+      location.hash = "#menu";
     }
+
+    // Al cargar, si no hay hash, manda a menú
+    window.addEventListener("load", () => {
+      if (!location.hash) location.hash = "#menu";
+      renderRoute(location.hash);
+    });
+
+    // Cuando cambie el hash (click o Atrás/Forward), renderiza
+    window.addEventListener("hashchange", () => {
+      renderRoute(location.hash);
+    });
   </script>
 
   <!-- LOGO GIRATORIO -->
